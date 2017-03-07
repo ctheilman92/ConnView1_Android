@@ -1,63 +1,67 @@
 package com.example.milkymac.connview_main;
 
 import android.content.Context;
+import android.content.Intent;
+import android.app.FragmentTransaction;
+import android.support.v4.app.FragmentManager;
+import android.widget.AdapterView.OnItemClickListener;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import android.widget.TextView;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 
 /**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link NetscanFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link NetscanFragment#newInstance} factory method to
- * create an instance of this fragment.
+ * **TODO: implement customeArrayAdapter class for an ArrayList<devices>
  */
+
+
 public class NetscanFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
+    private ListView lvDev;
+    private  List<String> listDevs;
+    private List<devices> listDeviceObjs;
+    private ArrayAdapter<String> arrayAdapter;
     private OnFragmentInteractionListener mListener;
+    private Context mContext;
+
+
+    //dummy content replace later
+    public String[] dummyDevs = new String[] {
+            "DEVICE 1",
+            "DEVICE 2",
+            "DEVICE 3",
+            "DEVICE 4",
+            "DEVICE 5",
+            "DEVICE 6",
+            "DEVICE 7",
+            "DEVICE 8",
+            "DEVICE 9",
+            "DEVICE 10",
+            "DEVICE 11",
+    };
 
     public NetscanFragment() {
         // Required empty public constructor
+
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment NetscanFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static NetscanFragment newInstance(String param1, String param2) {
-        NetscanFragment fragment = new NetscanFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+
+
+
     }
 
     @Override
@@ -67,7 +71,82 @@ public class NetscanFragment extends Fragment {
             return null;
         }
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_netscan, container, false);
+        View v = inflater.inflate(R.layout.fragment_netscan, container, false);
+
+        //databind listview
+        lvDev = (ListView) v.findViewById(R.id.lvDevices);
+        listDevs = new ArrayList<String>(Arrays.asList(dummyDevs));
+//        getDevicetoList();
+
+        getarrayadaptersetup();
+        lvDev.setAdapter(arrayAdapter);
+
+        lvDev.setOnItemClickListener(new OnItemClickListener()
+        {
+            @Override
+            public void onItemClick(AdapterView<?> adapter, View v, int position, long arg3)
+            {
+                String value = (String)adapter.getItemAtPosition(position);
+                // assuming string and if you want to get the value on click of list item
+                // do what you intend to do on click of listview row
+                launchDevDetail();
+            }
+        });
+
+        return v;
+    }
+
+    public void launchDevDetail() {
+        Intent intent = new Intent(getActivity(), DeviceDetailsActivity.class);
+        startActivity(intent);
+
+//        ToolsFragment devdetailfragment = new ToolsFragment();
+//        FragmentManager fm = getFragmentManager();
+//
+//        fm.beginTransaction().replace(R.id.container, devdetailfragment).addToBackStack(null).commit();
+    }
+
+    public void getDevicetoList() {
+
+        //DUMMY DATA FOR NOW
+
+        listDeviceObjs = new ArrayList<devices>();
+        listDeviceObjs.add(new devices(1));
+        listDeviceObjs.add(new devices(2));
+        listDeviceObjs.add(new devices(3));
+        listDeviceObjs.add(new devices(4));
+        listDeviceObjs.add(new devices(5));
+        listDeviceObjs.add(new devices(6));
+        listDeviceObjs.add(new devices(7));
+        listDeviceObjs.add(new devices(8));
+    }
+
+    public void getarrayObjectAdapterSetup() {
+    }
+
+    public void getarrayadaptersetup() {
+
+//        getDevicetoList();
+        arrayAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, listDevs) {
+            @Override
+            public View getView(int position, View convertView, ViewGroup parent) {
+                // Get the Item from ListView
+                View view = super.getView(position, convertView, parent);
+
+                // Initialize a TextView for ListView each Item
+                TextView tvNAME = (TextView) view.findViewById(android.R.id.text1);
+//                TextView tvIP = (TextView) view.findViewById(android.R.id.text2);
+
+
+
+                // Set the text color of TextView (ListView Item)
+                tvNAME.setTextColor(getResources().getColor(R.color.textContent));
+//                tvIP.setTextColor(getResources().getColor(R.color.textContent));
+
+                // Generate ListView Item using TextView
+                return view;
+            }
+        };
     }
 
     // TODO: Rename method, update argument and hook method into UI event

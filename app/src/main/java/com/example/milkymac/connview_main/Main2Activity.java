@@ -84,41 +84,6 @@ public class Main2Activity extends AppCompatActivity {
     }
 
 
-
-    /**
-     * A placeholder fragment containing a simple view.
-     */
-//    public static class PlaceholderFragment extends Fragment {
-//        /**
-//         * The fragment argument representing the section number for this
-//         * fragment.
-//         */
-//        private static final String ARG_SECTION_NUMBER = "section_number";
-//
-//        public PlaceholderFragment() {
-//        }
-//
-//        /**
-//         * Returns a new instance of this fragment for the given section
-//         * number.
-//         */
-//        public static PlaceholderFragment newInstance(int sectionNumber) {
-//            PlaceholderFragment fragment = new PlaceholderFragment();
-//            Bundle args = new Bundle();
-//            args.putInt(ARG_SECTION_NUMBER, sectionNumber);
-//            fragment.setArguments(args);
-//            return fragment;
-//        }
-//
-//
-//        //create content per view here
-//        @Override
-//        public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-//            View IPInfoView = inflater.inflate(R.layout.fragment_ipinfo, container, false);
-//            return IPInfoView;
-//        }
-//    }
-
     /**
      * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
      * one of the sections/tabs/pages.
@@ -136,13 +101,15 @@ public class Main2Activity extends AppCompatActivity {
                     return new IPInfoFragment();
                 case 1:
                     return new NetscanFragment();
+                case 2:
+                    return new ToolsFragment();
             }
             return null;
         }
 
         @Override
         public int getCount() {
-            return 2;
+            return 3;
         }
 
         @Override
@@ -152,6 +119,8 @@ public class Main2Activity extends AppCompatActivity {
                     return getText(R.string.title_fragment_IPINFO);
                 case 1:
                     return getText(R.string.title_fragment_NETSCAN);
+                case 2:
+                    return getText(R.string.title_fragment_UTILITIES);
             }
             return "Page " + position;
 

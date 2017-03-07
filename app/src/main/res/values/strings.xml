@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">Connview</string>
+    <string name="action_settings">Settings</string>
+    <string name="section_format">Hello World from section: %1$d</string>
+    <string name="loginPasswordPL">***********</string>
+    <string name="loginUNPL">Username</string>
+    <string name="title_activity_main2">Main2Activity</string>
+    <string name="title_activity_profile">Profile</string>
+    <string name="title_fragment_IPINFO">IP Info</string>
+    <string name="title_fragment_NETSCAN">Net Scan</string>
+    <string name="txtIsConnected">Connected!</string>
+    <string name="txtIsNotConnected">No Connection!</string>
+
+
+
+</resources>

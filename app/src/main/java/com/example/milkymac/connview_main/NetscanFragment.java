@@ -2,9 +2,6 @@ package com.example.milkymac.connview_main;
 
 import android.content.Context;
 import android.content.Intent;
-import android.app.FragmentTransaction;
-import android.support.v4.app.FragmentManager;
-import android.widget.AdapterView.OnItemClickListener;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -12,9 +9,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -99,11 +98,6 @@ public class NetscanFragment extends Fragment {
     public void launchDevDetail() {
         Intent intent = new Intent(getActivity(), DeviceDetailsActivity.class);
         startActivity(intent);
-
-//        ToolsFragment devdetailfragment = new ToolsFragment();
-//        FragmentManager fm = getFragmentManager();
-//
-//        fm.beginTransaction().replace(R.id.container, devdetailfragment).addToBackStack(null).commit();
     }
 
     public void getDevicetoList() {
@@ -149,12 +143,6 @@ public class NetscanFragment extends Fragment {
         };
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }
 
     @Override
     public void onAttach(Context context) {

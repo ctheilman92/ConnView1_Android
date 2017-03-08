@@ -3,13 +3,7 @@ package com.example.milkymac.connview_main;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
-
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
-import android.support.design.widget.TabLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,7 +17,6 @@ public class IPInfoFragment extends Fragment {
     public IPInfoFragment() {
         // Required empty public constructor
     }
-
 
 
 

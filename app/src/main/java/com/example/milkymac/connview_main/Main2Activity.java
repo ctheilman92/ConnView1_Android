@@ -1,19 +1,17 @@
 package com.example.milkymac.connview_main;
 
+import android.content.Intent;
+import android.os.Bundle;
 import android.support.design.widget.TabLayout;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.os.Bundle;
-import android.view.LayoutInflater;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.content.Intent;
-import android.view.View;
-import android.view.ViewGroup;
 
 public class Main2Activity extends AppCompatActivity {
 
@@ -26,6 +24,7 @@ public class Main2Activity extends AppCompatActivity {
      * {@link android.support.v4.app.FragmentStatePagerAdapter}.
      */
     private SectionsPagerAdapter mSectionsPagerAdapter;
+
 
     /**
      * The {@link ViewPager} that will host the section contents.
@@ -45,14 +44,23 @@ public class Main2Activity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
+
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+
 
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
+        //instantiate to fix blank fragments?
+        mSectionsPagerAdapter.instantiateItem(mViewPager, 0);
+        mSectionsPagerAdapter.instantiateItem(mViewPager, 1);
+        mSectionsPagerAdapter.instantiateItem(mViewPager, 2);
         tabLayout.setupWithViewPager(mViewPager);
+
+
+
     }
 
 
@@ -88,7 +96,8 @@ public class Main2Activity extends AppCompatActivity {
      * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
      * one of the sections/tabs/pages.
      */
-    public class SectionsPagerAdapter extends FragmentPagerAdapter {
+    public class SectionsPagerAdapter extends FragmentStatePagerAdapter {
+
 
         public SectionsPagerAdapter(FragmentManager fm) {
             super(fm);
@@ -103,8 +112,9 @@ public class Main2Activity extends AppCompatActivity {
                     return new NetscanFragment();
                 case 2:
                     return new ToolsFragment();
+                default:
+                    return new IPInfoFragment();
             }
-            return null;
         }
 
         @Override

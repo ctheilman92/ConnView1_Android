@@ -4,16 +4,25 @@
     <string name="section_format">Hello World from section: %1$d</string>
     <string name="loginPasswordPL">***********</string>
     <string name="loginUNPL">Username</string>
+    <string name="avatar_des">User Avatar</string>
+
+
+
     <string name="title_activity_main2">Main2Activity</string>
     <string name="title_activity_profile">Profile</string>
+
+
+
     <string name="title_fragment_IPINFO">IP Info</string>
     <string name="title_fragment_NETSCAN">Net Scan</string>
     <string name="title_fragment_UTILITIES">Tools</string>
+    <string name="title_fragment_PROFILE">Profile</string>
+    <string name="title_fragment_CONFIGS">Configurations</string>
+
+
+
     <string name="txtIsConnected">Connected!</string>
     <string name="txtIsNotConnected">No Connection!</string>
-
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-
-
 </resources>

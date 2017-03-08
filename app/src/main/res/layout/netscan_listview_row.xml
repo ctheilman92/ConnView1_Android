@@ -3,6 +3,7 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <!-- FOR LATER USE -->
     <TextView
         android:id="@+id/tvDeviceName"
         android:layout_width="match_parent"

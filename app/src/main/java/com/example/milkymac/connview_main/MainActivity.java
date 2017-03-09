@@ -26,7 +26,8 @@ import com.example.milkymac.connview_main.dummy.DummyContent;
 public class MainActivity extends AppCompatActivity
         implements devicesFragment.OnListFragmentInteractionListener,
                     IPInfoFragment.OnFragmentInteractionListener,
-                    ToolsFragment.OnFragmentInteractionListener
+                    ToolsFragment.OnFragmentInteractionListener,
+                    LaunchToolFragment.OnFragmentInteractionListener
 {
 
     /**

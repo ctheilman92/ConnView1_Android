@@ -74,7 +74,11 @@ public class ToolsFragment extends Fragment {
         btnPing.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+//                FragmentTransaction ts = getChildFragmentManager().beginTransaction();
+//                ts.add(R.id.flToolLauncher, LaunchToolFragment.newInstance(1), "This Tool").commit();
+//                ts.addToBackStack(null);
 
+                //TODO: NOT WORKING CAN'T FIND id.flToolLauncher
             }
         });
 
@@ -108,11 +112,11 @@ public class ToolsFragment extends Fragment {
     }
 
     public static ToolsFragment newInstance(int sectionNumber) {
-        ToolsFragment fragment = new ToolsFragment();
-        Bundle args = new Bundle();
-        args.putInt(ARG_SECTION_NUMBER, sectionNumber);
-        fragment.setArguments(args);
-        return fragment;
+            ToolsFragment fragment = new ToolsFragment();
+            Bundle args = new Bundle();
+            args.putInt(ARG_SECTION_NUMBER, sectionNumber);
+            fragment.setArguments(args);
+            return fragment;
     }
 
     @Override

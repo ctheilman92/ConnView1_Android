@@ -1,10 +1,13 @@
 package com.example.milkymac.connview_main;
 
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.content.Context;
+
 
 import com.example.milkymac.connview_main.devicesFragment.OnListFragmentInteractionListener;
 import com.example.milkymac.connview_main.dummy.DummyContent.DummyItem;
@@ -18,6 +21,7 @@ import java.util.List;
  */
 public class MydevicesRecyclerViewAdapter extends RecyclerView.Adapter<MydevicesRecyclerViewAdapter.ViewHolder> {
 
+    private Context context;
     private final List<DummyItem> mValues;
     private final OnListFragmentInteractionListener mListener;
 
@@ -25,6 +29,8 @@ public class MydevicesRecyclerViewAdapter extends RecyclerView.Adapter<Mydevices
         mValues = items;
         mListener = listener;
     }
+
+
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -46,6 +52,7 @@ public class MydevicesRecyclerViewAdapter extends RecyclerView.Adapter<Mydevices
                     // Notify the active callbacks interface (the activity, if the
                     // fragment is attached to one) that an item has been selected.
                     mListener.onListFragmentInteraction(holder.mItem);
+                    
                 }
             }
         });

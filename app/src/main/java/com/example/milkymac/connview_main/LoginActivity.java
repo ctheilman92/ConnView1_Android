@@ -20,6 +20,8 @@ public class LoginActivity extends AppCompatActivity {
     private EditText etPassword;
     //endregion
 
+    private boolean unIsEdited = false;
+    private boolean pwIsEdited = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +31,7 @@ public class LoginActivity extends AppCompatActivity {
         initVars();
 
         //listeners
+        registerFocusListeners();
         registerTextWatchers();
         registerbuttonListeners();
 
@@ -63,10 +66,19 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-    public void launchMain() {
-        Intent intent = new Intent(this, Main2Activity.class);
-        finish();   //cannot go back to login page
-        startActivity(intent);
+
+    public void registerFocusListeners() {
+        etUsername.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) { if (!unIsEdited) { etUsername.setText(""); unIsEdited = true; }}
+        });
+
+        etPassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!pwIsEdited) { etPassword.setText(""); pwIsEdited = true; }
+            }
+        });
     }
 
     public void registerTextWatchers() {
@@ -107,7 +119,12 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
     }
-
-
     //endregion
+
+
+    public void launchMain() {
+        Intent intent = new Intent(this, MainActivity.class);
+        finish();   //cannot go back to login page (CHANGE LATER BASED ON ACTIVITY TIMER AND CONNECTION
+        startActivity(intent);
+    }
 }

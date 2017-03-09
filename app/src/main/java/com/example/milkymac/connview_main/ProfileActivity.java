@@ -1,18 +1,22 @@
 package com.example.milkymac.connview_main;
 
 import android.content.Context;
-import android.os.Bundle;
+import android.provider.ContactsContract;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+
+import android.widget.TextView;
 
 public class ProfileActivity extends AppCompatActivity {
 
@@ -143,7 +147,7 @@ public class ProfileActivity extends AppCompatActivity {
 
     //endregion
 
-
+    //region PAGER ADAPTER
     /**
      * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
      * one of the sections/tabs/pages.
@@ -185,4 +189,5 @@ public class ProfileActivity extends AppCompatActivity {
             return null;
         }
     }
+    //endregion
 }

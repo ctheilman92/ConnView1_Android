@@ -6,6 +6,11 @@ import android.widget.TextView;
 
 import org.w3c.dom.Text;
 
+
+/*TODO:
+*
+*       Change device details page to inflate fragment instead of standard activity.
+* */
 public class DeviceDetailsActivity extends AppCompatActivity {
 
     private TextView deviceDetailsTemp;

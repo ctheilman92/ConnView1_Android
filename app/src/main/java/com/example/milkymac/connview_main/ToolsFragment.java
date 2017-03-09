@@ -74,9 +74,9 @@ public class ToolsFragment extends Fragment {
         btnPing.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                FragmentTransaction ts = getChildFragmentManager().beginTransaction();
-//                ts.add(R.id.flToolLauncher, LaunchToolFragment.newInstance(1), "This Tool").commit();
-//                ts.addToBackStack(null);
+                FragmentTransaction ts = getChildFragmentManager().beginTransaction();
+                ts.add(R.id.flToolLauncher, LaunchToolFragment.newInstance(1), "This Tool").commit();
+                ts.addToBackStack(null);
 
                 //TODO: NOT WORKING CAN'T FIND id.flToolLauncher
             }

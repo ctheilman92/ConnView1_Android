@@ -1,18 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/backgroundContent"
     android:orientation="vertical" android:layout_width="match_parent"
     android:gravity="center"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:weightSum="1">
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        android:layout_gravity="center"
+        app:srcCompat="@mipmap/launcher_trycon"
+        android:layout_weight="0.21" />
+
 
     <TextView
         android:id="@+id/tvLoginLog0o"
         android:layout_width="match_parent"
-        android:layout_height="150dp"
+        android:layout_height="40dp"
         android:gravity="center"
         android:text="Connview Net"
         android:textColor="@color/textContent"
         android:textSize="30sp"
+        android:textStyle="bold|italic"
+        android:typeface="normal" />
+
+    <TextView
+        android:id="@+id/tvContext"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="30dp"
+        android:gravity="center"
+        android:text="Get to know your network."
+        android:textColor="@color/cardContent"
+        android:textSize="12sp"
         android:textStyle="bold|italic"
         android:typeface="normal" />
 
@@ -21,8 +45,8 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:layout_gravity="center"
-        android:paddingStart="20dp"
-        android:paddingEnd="20dp"
+        android:paddingStart="40dp"
+        android:paddingEnd="40dp"
         android:gravity="center">
 
 
@@ -32,16 +56,21 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
+            android:textColor="@color/textContent"
+            android:layout_marginBottom="5dp"
             android:inputType="textPersonName"
+            android:theme="@style/EditTextTheme"
             android:text="UserName" />
 
         <EditText
             android:id="@+id/etPassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textColor="@color/textContent"
             android:ems="10"
             android:text="**************"
             android:inputType="textPassword"
+            android:theme="@style/EditTextTheme"
             android:layout_marginBottom="30dp"/>
 
         <LinearLayout

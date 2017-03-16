@@ -2,32 +2,23 @@ package com.example.milkymac.connview_main;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Bundle;
 import android.support.design.widget.TabLayout;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.os.Bundle;
-import android.view.LayoutInflater;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-
-import android.widget.TextView;
 
 import com.example.milkymac.connview_main.dummy.DummyContent;
 
 public class MainActivity extends AppCompatActivity
         implements devicesFragment.OnListFragmentInteractionListener,
                     IPInfoFragment.OnFragmentInteractionListener,
-                    ToolsFragment.OnFragmentInteractionListener,
-                    LaunchToolFragment.OnFragmentInteractionListener
+                    ToolsSelectionFragment.OnFragmentInteractionListener
 {
 
     /**
@@ -62,12 +53,6 @@ public class MainActivity extends AppCompatActivity
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
-
-//            //set icons
-//        for (int i = 0; i < tabLayout.getTabCount(); i++) {
-//            tabLayout.getTabAt(i).setIcon(R.drawable.ic_monitor);
-//        }
-
 
     }
 
@@ -142,7 +127,7 @@ public class MainActivity extends AppCompatActivity
                 case 1:
                     return devicesFragment.newInstance(position);
                 case 2:
-                    return ToolsFragment.newInstance(position + 1);
+                    return ToolsSelectionFragment.newInstance(position + 1);
                 default:
                     return IPInfoFragment.newInstance(position + 1);
             }

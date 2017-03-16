@@ -8,6 +8,7 @@
 
     <string name="title_activity_main2">Main2Activity</string>
     <string name="title_activity_profile">Profile</string>
+    <string name="title_activity_tools">Utilities</string>
 
 
     <string name="title_fragment_IPINFO">IP Info</string>
@@ -19,9 +20,10 @@
 
     <string name="txtIsConnected">Connected!</string>
     <string name="txtIsNotConnected">No Connection!</string>
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_main">MainActivity</string>
-    <string name="title_activity_main3">MainActivity</string>
-    <string name="section_format">Hello World from section: %1$d</string>
+    <string name="title_activity_dnslookup">DNSLookup</string>
+    <string name="title_activity_ping">Ping</string>
+    <string name="title_activity_portscan">PortScanner</string>
+    <string name="title_activity_traceroute">TraceRoute</string>
 </resources>

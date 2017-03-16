@@ -35,6 +35,40 @@
             android:name=".MainActivity"
             android:label="@string/title_activity_main"
             android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".PingActivity"
+            android:label="@string/title_activity_ping"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.milkymac.connview_main.MainActivity" />
+        </activity>
+        <activity
+            android:name=".DNSActivity"
+            android:label="@string/title_activity_dnslookup"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.milkymac.connview_main.MainActivity" />
+        </activity>
+        <activity
+            android:name=".PortscanActivity"
+            android:label="@string/title_activity_portscan"
+            android:parentActivityName=".MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.milkymac.connview_main.MainActivity" />
+        </activity>
+        <activity
+            android:name=".TracerouteActivity"
+            android:label="@string/title_activity_traceroute"
+            android:parentActivityName=".MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.milkymac.connview_main.MainActivity" />
+        </activity>
     </application>
 
 </manifest>

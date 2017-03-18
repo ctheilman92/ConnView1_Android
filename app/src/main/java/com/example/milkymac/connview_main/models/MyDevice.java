@@ -3,11 +3,9 @@ import android.content.Context;
 import android.net.Network;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
-import android.support.annotation.NonNull;
 import android.util.Log;
 
 import java.net.Inet4Address;
-import java.net.InterfaceAddress;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
@@ -29,36 +27,27 @@ import java.util.Enumeration;
 *
 */
 
+@org.parceler.Parcel
 public class MyDevice extends devices {
 
-    private ArrayList<NetworkInterface> interfacesList;
-    private ArrayList<String> interfacesDisplayNameList;
-    private NetworkInterface WIFI_INTERFACE;
-    private NetworkInterface CELLULAR_INTERFACE;
+    public transient ArrayList<NetworkInterface> interfacesList;
+    public transient ArrayList<String> interfacesDisplayNameList;
+    public String WIFI_INTERFACE;
+    public String CELLULAR_INTERFACE;
 
 
-    Context myContext;
+    public transient Context myContext;
 
+    //needed for parceler
+    public MyDevice() {}
 
-
-    /*
-        (pass in context) -- Instantiate in activity
-            -->
-            -->     MyDevice mydev = new MyDevice(this);
-            -->
-     */
     public MyDevice(Context myContext) {
        this.myContext = myContext;
 
         //myDevice members
         initMembers();
-
-
-        //init members
-        setListNetworkInterfaces();
-        setInterfacesByDisplayName();
-        getLocalAddresses();
     }
+
 
     public void initMembers() {
         interfacesList = new ArrayList<>();
@@ -74,10 +63,9 @@ public class MyDevice extends devices {
                     interfacesList.add(i);
                     Log.d("NETWORK INTERFACE-->", i.getDisplayName());
 
-                    WIFI_INTERFACE = (WIFI_INTERFACE == null && !i.isLoopback() && (i.getName().equals("wlan0"))) ? i : null;
-                    CELLULAR_INTERFACE = (CELLULAR_INTERFACE == null && !i.isLoopback() && (i.getName().equals("rmnet0"))) ? i : null;
+                    WIFI_INTERFACE = (WIFI_INTERFACE == null && !i.isLoopback() && (i.getName().equals("wlan0"))) ? i.getDisplayName() : null;
+                    CELLULAR_INTERFACE = (CELLULAR_INTERFACE == null && !i.isLoopback() && (i.getName().equals("rmnet0"))) ? i.getDisplayName() : null;
                 }
-
             }
         }
         catch(Exception ex) {
@@ -85,17 +73,30 @@ public class MyDevice extends devices {
         }
     }
 
+    public void getSSIDName() {
+        WifiManager manager = (WifiManager) myContext.getSystemService(Context.WIFI_SERVICE);
+        WifiInfo wInfo = manager.getConnectionInfo();
+        Log.d("SSID_STATE", wInfo.getSSID().toString());
+        Log.d("SUPPLICANT_STATE", wInfo.getSupplicantState().toString());
+
+        String ssid = (!wInfo.getHiddenSSID()) ? wInfo.getSSID().toString() : "<hidden ssid>";
+        String status = wInfo.getSupplicantState().toString();
+
+        setState((status.equals("COMPLETED")));
+        setSSID(ssid);
+    }
+
     public void setInterfacesByDisplayName() {
         for (NetworkInterface i : interfacesList) { interfacesDisplayNameList.add(i.getDisplayName()); }
     }
 
 
-    public void getLocalAddresses() {
+    public void getLocalAddresses(String interfaceName) {
         try {
             for (Enumeration<NetworkInterface> en = NetworkInterface.getNetworkInterfaces(); en.hasMoreElements(); ) {
                 NetworkInterface intf = en.nextElement();
 
-                if (!intf.isLoopback() && intf.isUp() && (intf.getName().equals("wlan0"))) {
+                if (!intf.isLoopback() && intf.isUp() && (intf.getName().equals(interfaceName))) {
                     Log.d("INTERFACE_WLAN0_ADDR", intf.getHardwareAddress().toString());
 
 
@@ -142,4 +143,5 @@ public class MyDevice extends devices {
             Log.e("SRM", ex.toString());
         }
     }
+
 }

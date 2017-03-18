@@ -2,6 +2,8 @@ package com.example.milkymac.connview_main;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.os.StrictMode;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -13,6 +15,9 @@ import android.widget.TextView;
 
 import com.example.milkymac.connview_main.models.MyDevice;
 
+import org.parceler.Parcels;
+
+import java.io.Serializable;
 import java.net.Inet4Address;
 import java.net.InterfaceAddress;
 import java.net.InetAddress;
@@ -23,13 +28,14 @@ import java.util.HashSet;
 import java.util.Set;
 
 
-public class IPInfoFragment extends Fragment {
+public class IPInfoFragment extends Fragment implements Serializable {
 
 
     //region UI VARS
     TextView tvStatus;
     TextView tvPrivateIP;
     TextView tvPrivateMAC;
+    TextView tvConnectionStatus;
     //endregion
 
     public static String PrivateIP;
@@ -41,6 +47,7 @@ public class IPInfoFragment extends Fragment {
     //region FRAGMENT STUFF
     private OnFragmentInteractionListener mListener;
     private static final String ARG_SECTION_NUMBER = "section_number";
+    private static final String MYDEV_KEY = "MyDevices_Key";
 
     public IPInfoFragment() {
         // Required empty public constructor
@@ -50,10 +57,14 @@ public class IPInfoFragment extends Fragment {
      * Returns a new instance of this fragment for the given section
      * number.
      */
-    public static IPInfoFragment newInstance(int sectionNumber) {
+    public static IPInfoFragment newInstance(int sectionNumber, Parcelable wrappedDev) {
         IPInfoFragment fragment = new IPInfoFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_SECTION_NUMBER, sectionNumber);
+        args.putParcelable(MYDEV_KEY, wrappedDev);
+//        args.putSerializable(MYDEV_KEY, thisdev);
+
+
         fragment.setArguments(args);
         return fragment;
     }
@@ -79,7 +90,9 @@ public class IPInfoFragment extends Fragment {
 
         ViewPager mViewPager = (ViewPager) v.findViewById(R.id.container);
 
-        mydev = new MyDevice(this.getContext());
+        mydev = Parcels.unwrap(getArguments().getParcelable(MYDEV_KEY));
+//        mydev = (MyDevice) getArguments().getSerializable(MYDEV_KEY);
+//        mydev = new MyDevice(this.getContext());
         PrivateIP = mydev.getIp();
         PrivateMAC = mydev.getMac();
         initVar(v);
@@ -114,6 +127,8 @@ public class IPInfoFragment extends Fragment {
         tvStatus = (TextView) v.findViewById(R.id.lblisConnected);
         tvPrivateIP = (TextView) v.findViewById(R.id.tvPersonalIP);
         tvPrivateMAC = (TextView) v.findViewById(R.id.tvPersonalMAC);
+        tvConnectionStatus = (TextView) v.findViewById(R.id.lblisConnected);
+
         tvPrivateIP.setText(PrivateIP);
         tvPrivateMAC.setText(PrivateMAC);
     }

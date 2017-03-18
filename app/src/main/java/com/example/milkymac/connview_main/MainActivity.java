@@ -2,7 +2,9 @@ package com.example.milkymac.connview_main;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -14,6 +16,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.example.milkymac.connview_main.dummy.DummyContent;
+import com.example.milkymac.connview_main.models.MyDevice;
+
+import org.parceler.Parcels;
+
+import java.io.Serializable;
 
 public class MainActivity extends AppCompatActivity
         implements devicesFragment.OnListFragmentInteractionListener,
@@ -21,29 +28,22 @@ public class MainActivity extends AppCompatActivity
                     ToolsSelectionFragment.OnFragmentInteractionListener
 {
 
-    /**
-     * The {@link android.support.v4.view.PagerAdapter} that will provide
-     * fragments for each of the sections. We use a
-     * {@link FragmentPagerAdapter} derivative, which will keep every
-     * loaded fragment in memory. If this becomes too memory intensive, it
-     * may be best to switch to a
-     * {@link android.support.v4.app.FragmentStatePagerAdapter}.
-     */
     private SectionsPagerAdapter mSectionsPagerAdapter;
-
-    /**
-     * The {@link ViewPager} that will host the section contents.
-     */
     private ViewPager mViewPager;
+
+    private MyDevice mydev;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        mydev = new MyDevice(this);
+        new NetworkOperation().execute();
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        // Create the adapter that will return a fragment for each of the three
+        // Create the adapter that will return a fragment fors each of the three
         // primary sections of the activity.
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
@@ -89,6 +89,24 @@ public class MainActivity extends AppCompatActivity
     }
     //endregion
 
+    //region ASYNCTASK_RUNNER
+
+    //HANDLE BACKGROUND NETWORK OPERATIONS HERE
+    private class NetworkOperation extends AsyncTask {
+
+        @Override
+        protected Object doInBackground(Object[] params) {
+
+            mydev.setListNetworkInterfaces();
+            mydev.setInterfacesByDisplayName();
+            mydev.getSSIDName();
+            mydev.getLocalAddresses("wlan0");
+
+            return this;
+        }
+    }
+    //endregion
+
     //region FRAGMENT INTERACTION IMPLEMENTERS
     @Override
     public void onListFragmentInteraction(DummyContent.DummyItem item) {
@@ -123,13 +141,15 @@ public class MainActivity extends AppCompatActivity
             // Return a PlaceholderFragment (defined as a static inner class below).
             switch (position) {
                 case 0:
-                    return IPInfoFragment.newInstance(position + 1);
+                    Parcelable wrapped = Parcels.wrap(mydev);
+                    return IPInfoFragment.newInstance(position + 1, wrapped);
                 case 1:
                     return devicesFragment.newInstance(position);
                 case 2:
                     return ToolsSelectionFragment.newInstance(position + 1);
                 default:
-                    return IPInfoFragment.newInstance(position + 1);
+                    Parcelable wrappeddefault = Parcels.wrap(mydev);
+                    return IPInfoFragment.newInstance(position + 1, wrappeddefault);
             }
         }
 

@@ -1,18 +1,44 @@
 package com.example.milkymac.connview_main;
 
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.util.Log;
+import android.widget.TextView;
+
+import com.example.milkymac.connview_main.models.MyDevice;
+
+import java.net.Inet4Address;
+import java.net.InterfaceAddress;
+import java.net.InetAddress;
+import java.net.NetworkInterface;
+import java.net.SocketException;
+import java.util.Enumeration;
+import java.util.HashSet;
+import java.util.Set;
 
 
 public class IPInfoFragment extends Fragment {
 
 
+    //region UI VARS
+    TextView tvStatus;
+    TextView tvPrivateIP;
+    TextView tvPrivateMAC;
+    //endregion
+
+    public static String PrivateIP;
+    public static String PrivateMAC;
+    public MyDevice mydev;
+
+
+
+    //region FRAGMENT STUFF
     private OnFragmentInteractionListener mListener;
     private static final String ARG_SECTION_NUMBER = "section_number";
 
@@ -37,6 +63,8 @@ public class IPInfoFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
     }
 
     @Override
@@ -50,6 +78,11 @@ public class IPInfoFragment extends Fragment {
         ((MainActivity) getActivity()).setActionBarTitle("IP Info");
 
         ViewPager mViewPager = (ViewPager) v.findViewById(R.id.container);
+
+        mydev = new MyDevice(this.getContext());
+        PrivateIP = mydev.getIp();
+        PrivateMAC = mydev.getMac();
+        initVar(v);
 
         return v;
     }
@@ -70,18 +103,52 @@ public class IPInfoFragment extends Fragment {
         mListener = null;
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(String title);
     }
+    //endregion
+
+
+    public void initVar(View v) {
+        tvStatus = (TextView) v.findViewById(R.id.lblisConnected);
+        tvPrivateIP = (TextView) v.findViewById(R.id.tvPersonalIP);
+        tvPrivateMAC = (TextView) v.findViewById(R.id.tvPersonalMAC);
+        tvPrivateIP.setText(PrivateIP);
+        tvPrivateMAC.setText(PrivateMAC);
+    }
+
+    //region INET-STUFF
+
+
+
+
+    //gets ipv6
+    public String getLocalIpAddress()
+    {
+        try
+        {
+            for (Enumeration<NetworkInterface> en = NetworkInterface.getNetworkInterfaces(); en.hasMoreElements();)
+            {
+                NetworkInterface intf = en.nextElement();
+
+
+                for (Enumeration<InetAddress> enumIpAddr = intf.getInetAddresses(); enumIpAddr.hasMoreElements();)
+                {
+                    InetAddress inetAddress = enumIpAddr.nextElement();
+                    if (!inetAddress.isLoopbackAddress())
+                    {
+                        return inetAddress.getHostAddress().toString();
+
+                    }
+                }
+            }
+        }
+        catch (SocketException ex)
+        {
+            Log.e("SRM", ex.toString());
+        }
+        return null;
+    }
+    //endregion
 }

@@ -17,31 +17,81 @@
             android:layout_height="match_parent"
             android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/lblStatus"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="Status: "
-                android:textAppearance="@style/TextAppearance.AppCompat.Display1"
-                android:textColor="@color/textContent"
-                android:textStyle="bold"
-                android:typeface="normal" />
+            <GridLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
-            <TextView
-                android:id="@+id/lblisConnected"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="@string/txtIsConnected"
-                android:textAppearance="@style/TextAppearance.AppCompat.Display1"
-                android:textColor="@color/textContent"
-                android:textSize="32sp"
-                android:typeface="normal" />
+                <TextView
+                    android:id="@+id/lblStatus"
+                    android:layout_row="1"
+                    android:layout_column="1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="Status: "
+                    android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+                    android:textColor="@color/textContent"
+                    android:textStyle="bold"
+                    android:typeface="normal" />
+
+                <TextView
+                    android:id="@+id/lblisConnected"
+                    android:layout_row="1"
+                    android:layout_column="2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="@string/txtIsConnected"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+                    android:textColor="@color/textContent"
+                    android:textSize="32sp"
+                    android:typeface="normal" />
+
+                <TextView
+                    android:id="@+id/tvLabelIP"
+                    android:layout_row="2"
+                    android:layout_column="1"
+                    android:textColor="@color/textContent"
+                    android:textSize="@dimen/text_conform1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/tvTitleIP" />
+
+                <TextView
+                    android:id="@+id/tvPersonalIP"
+                    android:layout_row="2"
+                    android:layout_column="2"
+                    android:textColor="@color/textContent"
+                    android:textSize="@dimen/text_conform1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Disc" />
+
+
+                <TextView
+                    android:id="@+id/tvLabelMAC"
+                    android:layout_row="3"
+                    android:layout_column="1"
+                    android:textColor="@color/textContent"
+                    android:textSize="@dimen/text_conform1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/tvTitleMAC" />
+
+                <TextView
+                    android:id="@+id/tvPersonalMAC"
+                    android:layout_row="3"
+                    android:layout_column="2"
+                    android:textColor="@color/textContent"
+                    android:textSize="@dimen/text_conform1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Disc" />
+
+            </GridLayout>
+
         </LinearLayout>
 
     </ScrollView>
-
-
 
 </FrameLayout>

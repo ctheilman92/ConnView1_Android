@@ -4,6 +4,13 @@
     <string name="loginPasswordPL">***********</string>
     <string name="loginUNPL">Username</string>
     <string name="avatar_des">User Avatar</string>
+    <string name="tvPacketCount">Count: </string>
+    <string name="tvPacketSize">Size: </string>
+    <string name="tvTargetPing">Target IP:</string>
+    <string name="targetPingPlaceHolder">127.0.0.1</string>
+    <string name="tvTitleIP">Internal IP:</string>
+    <string name="tvTitlePubIP">External IP:</string>
+    <string name="tvTitleMAC">MAC Address:</string>
 
 
     <string name="title_activity_main2">Main2Activity</string>
@@ -23,7 +30,8 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_main">MainActivity</string>
     <string name="title_activity_dnslookup">DNSLookup</string>
-    <string name="title_activity_ping">Ping</string>
+    <string name="title_activity_ping">Pinger</string>
     <string name="title_activity_portscan">PortScanner</string>
     <string name="title_activity_traceroute">TraceRoute</string>
+
 </resources>

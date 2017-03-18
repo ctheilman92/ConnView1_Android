@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:orientation="vertical"
     android:background="@color/backgroundContent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
@@ -18,11 +19,144 @@
         <android.support.v7.widget.Toolbar
             android:id="@+id/ping_toolbar"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
+            android:layout_height="match_parent"
             android:background="?attr/colorPrimary"
             app:layout_scrollFlags="scroll|enterAlways"
             app:popupTheme="@style/AppTheme.PopupOverlay"></android.support.v7.widget.Toolbar>
 
     </android.support.design.widget.AppBarLayout>
 
-</android.support.constraint.ConstraintLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="10dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tvPingTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:text="@string/title_activity_ping"
+            android:textColor="@color/textContent"
+            android:textSize="32sp"
+            android:textStyle="bold|italic" />
+
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardBackgroundColor="@color/cardContent">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="30dp"
+                android:layout_marginTop="10dp"
+                android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tvTargetPing"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/textContent"
+                    android:paddingEnd="8dp"
+                    android:text="@string/tvTargetPing"
+                    android:textSize="@dimen/text_conform1"/>
+
+                <EditText
+                    android:id="@+id/etTarget"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ems="6"
+                    android:paddingStart="8dp"
+                    android:inputType="textPersonName"
+                    android:layout_marginEnd="25dp"
+                    android:text="@string/targetPingPlaceHolder"
+                    android:theme="@style/EditTextTheme"
+                    android:textColor="@color/textContent"
+                    android:textSize="@dimen/text_conform1" />
+
+                <ImageButton
+                    android:id="@+id/btnPingTarget"
+                    style="@android:style/Widget.Material.ImageButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight=".5"
+                    android:background="@color/cardContent"
+                    android:cropToPadding="true"
+                    android:scaleType="fitCenter"
+                    android:tint="?android:attr/colorPressedHighlight"
+                    app:srcCompat="@android:drawable/ic_menu_compass" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginStart="40dp"
+                android:layout_marginTop="8dp">
+
+                <TextView
+                    android:id="@+id/tvPacketSize"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/textContent"
+                    android:textSize="@dimen/text_conform1"
+                    android:text="@string/tvPacketSize" />
+
+                <EditText
+                    android:id="@+id/etPacketSize"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="30dp"
+                    android:layout_marginStart="10dp"
+                    android:ems="3"
+                    android:paddingStart="8dp"
+                    android:inputType="number"
+                    android:text="64"
+                    android:textColor="@color/textContent"
+                    android:textSize="@dimen/text_conform1"
+                    android:theme="@style/EditTextTheme" />
+
+                <TextView
+                    android:id="@+id/tvPacketCount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/textContent"
+                    android:textSize="@dimen/text_conform1"
+                    android:text="@string/tvPacketCount" />
+
+                <EditText
+                    android:id="@+id/etPingCount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:ems="3"
+                    android:paddingStart="8dp"
+                    android:inputType="number"
+                    android:text="10"
+                    android:textColor="@color/textContent"
+                    android:textSize="@dimen/text_conform1"
+                    android:theme="@style/EditTextTheme" />
+
+            </LinearLayout>
+            </LinearLayout>
+        </android.support.v7.widget.CardView>
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ListView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"></ListView>
+        </ScrollView>
+    </LinearLayout>
+
+
+</LinearLayout>

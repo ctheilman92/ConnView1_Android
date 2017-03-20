@@ -23,6 +23,11 @@ public class LoginActivity extends AppCompatActivity {
     private boolean unIsEdited = false;
     private boolean pwIsEdited = false;
 
+    private String UN;
+    private String PW;
+
+    private
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,9 +51,11 @@ public class LoginActivity extends AppCompatActivity {
         etPassword = (EditText) findViewById(R.id.etPassword);
     }
 
-
     //region LISTENERS
     public void registerbuttonListeners() {
+
+
+
         //LOGIN
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override

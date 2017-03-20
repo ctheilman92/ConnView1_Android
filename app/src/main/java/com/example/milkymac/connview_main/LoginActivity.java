@@ -10,6 +10,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.example.milkymac.connview_main.models.User;
+
 public class LoginActivity extends AppCompatActivity {
 
     //region UI
@@ -26,7 +28,7 @@ public class LoginActivity extends AppCompatActivity {
     private String UN;
     private String PW;
 
-    private
+    private User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

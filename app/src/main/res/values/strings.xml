@@ -33,5 +33,11 @@
     <string name="title_activity_ping">Pinger</string>
     <string name="title_activity_portscan">PortScanner</string>
     <string name="title_activity_traceroute">TraceRoute</string>
+    <string name="loginEmailPL">Email</string>
+    <string name="lblRegistration">Register Your Account!</string>
+    <string name="loginContextLabel">Get to know your network.</string>
+    <string name="pwRegisterPL">password</string>
+    <string name="etRegisterName">Name</string>
+    <string name="etRegisterEmail">Email</string>
 
 </resources>

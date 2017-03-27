@@ -2,15 +2,14 @@ package com.example.milkymac.connview_main;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.os.Parcel;
 import android.os.Parcelable;
 import android.os.StrictMode;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.util.Log;
 import android.widget.TextView;
 
 import com.example.milkymac.connview_main.models.MyDevice;
@@ -18,14 +17,10 @@ import com.example.milkymac.connview_main.models.MyDevice;
 import org.parceler.Parcels;
 
 import java.io.Serializable;
-import java.net.Inet4Address;
-import java.net.InterfaceAddress;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.util.Enumeration;
-import java.util.HashSet;
-import java.util.Set;
 
 
 public class IPInfoFragment extends Fragment implements Serializable {
@@ -91,8 +86,7 @@ public class IPInfoFragment extends Fragment implements Serializable {
         ViewPager mViewPager = (ViewPager) v.findViewById(R.id.container);
 
         mydev = Parcels.unwrap(getArguments().getParcelable(MYDEV_KEY));
-//        mydev = (MyDevice) getArguments().getSerializable(MYDEV_KEY);
-//        mydev = new MyDevice(this.getContext());
+
         PrivateIP = mydev.getIp();
         PrivateMAC = mydev.getMac();
         initVar(v);

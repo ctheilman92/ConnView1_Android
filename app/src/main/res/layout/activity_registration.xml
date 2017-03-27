@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:background="@color/backgroundContent"
+    android:layout_height="match_parent"
+    tools:context="com.example.milkymac.connview_main.RegistrationActivity">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:orientation="vertical"
+        android:paddingEnd="40dp"
+        android:paddingStart="40dp">
+
+
+        <TextView
+            android:id="@+id/regName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="50dp"
+            android:gravity="center_horizontal"
+            android:text="@string/lblRegistration"
+            android:textColor="@color/textContent"
+            android:textSize="@dimen/registerLogoTextSize"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/etRegName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:text="@string/etRegisterName"
+            android:textColor="@color/textContent"
+            android:theme="@style/EditTextTheme" />
+
+        <EditText
+            android:id="@+id/etRegEmail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:text="@string/etRegisterEmail"
+            android:textColor="@color/textContent"
+            android:theme="@style/EditTextTheme" />
+
+        <EditText
+            android:id="@+id/etRegPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ems="10"
+            android:inputType="textPassword"
+            android:text="@string/pwRegisterPL"
+            android:textColor="@color/textContent"
+            android:theme="@style/EditTextTheme" />
+
+        <EditText
+            android:id="@+id/etPasswordVerif"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ems="10"
+            android:inputType="textPassword"
+            android:text="@string/pwRegisterPL"
+            android:textColor="@color/textContent"
+            android:theme="@style/EditTextTheme" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"></LinearLayout>
+
+        <Button
+            android:id="@+id/btnRegister"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="45dp"
+            android:layout_weight="2.43"
+            android:background="@color/colorPrimary"
+            android:padding="20dp"
+            android:text="Register"
+            android:textColor="@color/textContent"
+            android:textSize="18sp" />
+    </LinearLayout>
+
+
+</LinearLayout>

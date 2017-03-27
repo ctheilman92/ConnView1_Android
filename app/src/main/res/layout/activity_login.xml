@@ -34,7 +34,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="30dp"
         android:gravity="center"
-        android:text="Get to know your network."
+        android:text="@string/loginContextLabel"
         android:textColor="@color/cardContent"
         android:textSize="12sp"
         android:textStyle="bold|italic"
@@ -52,7 +52,7 @@
 
 
         <EditText
-            android:id="@+id/etUsername"
+            android:id="@+id/etEmail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
@@ -60,7 +60,7 @@
             android:layout_marginBottom="5dp"
             android:inputType="textPersonName"
             android:theme="@style/EditTextTheme"
-            android:text="UserName" />
+            android:text="@string/loginEmailPL" />
 
         <EditText
             android:id="@+id/etPassword"

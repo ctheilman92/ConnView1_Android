@@ -6,12 +6,23 @@ package com.example.milkymac.connview_main.models;
 
 public class User {
 
+    /* TODO: salt password */
+
     private int UID;
     private String Name;
     private String Email;
     private String Password;
+//    private Date lastActive;
 
     public User() {
+
+    }
+
+    public User(int id, String name, String email, String password) {
+
+    }
+
+    public User(String name, String email, String password) {
 
     }
 

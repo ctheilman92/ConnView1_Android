@@ -20,8 +20,6 @@ import com.example.milkymac.connview_main.models.MyDevice;
 
 import org.parceler.Parcels;
 
-import java.io.Serializable;
-
 public class MainActivity extends AppCompatActivity
         implements devicesFragment.OnListFragmentInteractionListener,
                     IPInfoFragment.OnFragmentInteractionListener,
@@ -53,7 +51,6 @@ public class MainActivity extends AppCompatActivity
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
-
     }
 
     public void setActionBarTitle(String title){

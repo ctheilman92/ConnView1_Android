@@ -93,7 +93,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return userList;
     }
 
+
     public void addUser(User user) {
+
+
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
@@ -149,7 +152,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     /* BY EMAIL ONLY */
-    public boolean checkUserExists(String email) {
+    public boolean checkUserExistsEmail(String email) {
         SQLiteDatabase db = this.getReadableDatabase();
 
 

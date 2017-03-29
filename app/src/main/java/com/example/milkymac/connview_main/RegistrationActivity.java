@@ -1,11 +1,14 @@
 package com.example.milkymac.connview_main;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
+import android.preference.EditTextPreference;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.ContentFrameLayout;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -70,9 +73,6 @@ public class RegistrationActivity extends AppCompatActivity {
         password2IsEdited = false;
     }
 
-    public boolean checkEmail(CharSequence e) {
-        return !android.util.Patterns.EMAIL_ADDRESS.matcher(e).matches();
-    }
 
     public void registerListeners() {
         etName.setOnClickListener(new View.OnClickListener() {
@@ -133,23 +133,26 @@ public class RegistrationActivity extends AppCompatActivity {
     public void registerNewUser() {
         if (validateForm()) {
             try {
-                if (dbhelper.checkUserExists(etEmail.toString())) {
+                if (dbhelper.checkUserExistsEmail(etEmail.toString().trim())) {
                     Toast.makeText(context, "A user is already present in Database.", Toast.LENGTH_SHORT).show();
+                    return;
                 }
-
                 else {
                     try {
-                        newUser = new User(etName.getText().toString(), etEmail.getText().toString(), etPassword.getText().toString());
+                        newUser = new User(etName.getText().toString().trim(), etEmail.getText().toString().trim(), etPassword.getText().toString().trim());
                         dbhelper.addUser(newUser);
+
                         //come back and insert UID for user
                         List<User> tempList = dbhelper.listAllUsers();
                         if (!tempList.isEmpty()) {
                             for (User u : tempList) {
-                                if (u.getEmail() == newUser.getEmail())
+                                if (u.getEmail() == newUser.getEmail()) {
                                     newUser.setUID(u.getUID());
+                                    Toast.makeText(context, "Welecome: " + u.getEmail(), Toast.LENGTH_LONG).show();
+                                }
                             }
                         }
-                        Toast.makeText(context, "WELCOME TO THE FAMILY "+newUser.getName(), Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(context, "WELCOME TO THE FAMILY "+newUser.getName(), Toast.LENGTH_LONG).show();
                         editor.putString("EMAIL_KEY",newUser.getEmail());
                         editor.putInt("UID_KEY", newUser.getUID());
                         editor.putString("USERNAME_KEY", newUser.getName());
@@ -169,17 +172,24 @@ public class RegistrationActivity extends AppCompatActivity {
         else return;
     }
 
+    public boolean checkEmail(CharSequence e) {
+        return !android.util.Patterns.EMAIL_ADDRESS.matcher(e).matches();
+    }
+
     public boolean validateForm() {
         if (TextUtils.isEmpty(etName.getText().toString()) || TextUtils.isEmpty(etEmail.getText().toString()) || TextUtils.isEmpty(etPassword.getText().toString()) || TextUtils.isEmpty(etPassword2.getText().toString())) {
             Toast.makeText(context, "Please fill out the required fields", Toast.LENGTH_SHORT).show();
             return false;
         }
-        else if (!checkEmail(etEmail.getText())) {
+        else if (checkEmail(etEmail.getText())) {
             Toast.makeText(context, "Email must specify the correct format!", Toast.LENGTH_SHORT).show();
             return false;
         }
         else {
-            if (etPassword.getText().toString() != etPassword2.getText().toString()) {
+            String p1 = etPassword.getText().toString().trim();
+            String p2 = etPassword2.getText().toString().trim();
+            if (!p1.equals(p2)) {
+                Log.d("TESTPASSES", "PASS1: "+ p1 + " --PASS2: " + p2);
                 Toast.makeText(context, "Please verify your password - Enter 2x", Toast.LENGTH_SHORT).show();
                 etPassword.setText("");
                 etPassword2.setText("");

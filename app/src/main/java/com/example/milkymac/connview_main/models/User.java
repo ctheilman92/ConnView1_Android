@@ -14,16 +14,19 @@ public class User {
     private String Password;
 //    private Date lastActive;
 
-    public User() {
-
-    }
+    public User() {}
 
     public User(int id, String name, String email, String password) {
-
+        this.UID = id;
+        this.Name = name;
+        this.Email = email;
+        this.Password = password;
     }
 
     public User(String name, String email, String password) {
-
+        this.Name = name;
+        this.Email = email;
+        this.Password = password;
     }
 
     public int getUID() { return UID; }

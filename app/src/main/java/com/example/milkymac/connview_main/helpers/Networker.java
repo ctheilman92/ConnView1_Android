@@ -2,9 +2,16 @@ package com.example.milkymac.connview_main.helpers;
 
 import android.util.Log;
 
+import com.stealthcopter.networktools.Ping;
+import com.stealthcopter.networktools.PortScan;
+import com.stealthcopter.networktools.ping.PingResult;
+import com.stealthcopter.networktools.ping.PingStats;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.UnknownHostException;
+import java.util.ArrayList;
 
 /**
  * Created by milkymac on 3/29/17.
@@ -17,83 +24,40 @@ public class Networker {
 
     }
 
-    //region PING FUNCTIONS
-
     private String pingErr = null;
 
-
     /*
-    RETURNS 0, 1, 2 > std- success, failed, error
-    use only 127.0.0.1 for emulators (will fail otherwise)
-    */
-    public int pinger(String host) throws InterruptedException, IOException {
-        Runtime runtime = Runtime.getRuntime();
-        Process proc = runtime.exec("ping -c 1 " + host);
-        proc.waitFor();
-        return proc.exitValue();
-    }
+        * using stealthCopter's open Source Library
+        * https://github.com/rorist/android-network-discovery
+        * attempts to use native ping binary, if fails -> falls back to TCP echo request on port 7
+        * TODO: try async methods first,
+     */
+    public void pinger(String host, int counter) throws UnknownHostException {
+        Ping.onAddress(host).setDelayMillis(1000).setTimes(counter).doPing(new Ping.PingListener() {
+            @Override
+            public void onResult (PingResult pingResult) {
 
-    public String pingHost(String host) throws IOException, InterruptedException {
-        StringBuffer echo = new StringBuffer();
-        Runtime runtime = Runtime.getRuntime();
-
-        Process proc = runtime.exec("ping -c 1 " + host);
-        proc.waitFor();
-
-        int ret = proc.exitValue();
-
-        //successful ping
-        if (ret == 0) {
-            InputStreamReader isr = new InputStreamReader(proc.getInputStream());
-            BufferedReader buffer = new BufferedReader(isr);
-            String in = "";
-
-            while ((in = buffer.readLine()) != null) {
-                echo.append(in + '\n');
             }
-            String data = getData(echo.toString());
-            Log.d("success_ping:::", data);
-            return data;
-        }
-        else if (ret == 1) { //failed ping
-            pingErr = "Ping failed, status: 1";
-            return null;
-        }
-        else {
-            pingErr = "ping failed, status: 2";
-            return null;
-        }
+
+            @Override
+            public void onFinished(PingStats pingStats) {
+
+            }
+        });
     }
 
+    public void portScan(String host) throws UnknownHostException {
+        PortScan.onAddress(host).setTimeOutMillis(1000).setPortsAll().doScan(new PortScan.PortListener() {
+            @Override
+            public void onResult(int i, boolean b) {
 
-    //interpret ping results from command
-    public String getData(String s) {
-        if (s.contains("0% packet loss")) {
-            //TODO: modify later
-            int start = s.indexOf("/mdev = ");
-            int end = s.indexOf(" ms\n", start);
-            s = s.substring(start + 8, end);
+            }
 
-            String stats[] = s.split("/");
-            return stats[2];
-        }
-        else if (s.contains("100% packet loss")) {
-            pingErr = "100% packet loss";
-            return null;
-        }
-        else if (s.contains("% packet loss")) {
-            pingErr = "partial packet loss";
-            return null;
-        }
-        else if (s.contains("unknown host")) {
-            pingErr = "unknown host";
-            return null;
-        }
-        else {
-            pingErr = "unknown err - data translation";
-            return null;
-        }
+            @Override
+            public void onFinished(ArrayList<Integer> arrayList) {
+
+            }
+        });
     }
 
-    //endregion
 }

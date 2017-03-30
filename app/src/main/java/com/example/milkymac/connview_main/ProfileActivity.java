@@ -71,7 +71,7 @@ public class ProfileActivity extends AppCompatActivity {
 
     /**
      *  embedded fragment classes
-     * */
+     **/
 
     public static class ProfileMainFragment extends Fragment {
         /**

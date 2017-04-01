@@ -47,4 +47,10 @@ public class PortscanActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
     //endregion
+
+
+    public void scanPorts() throws Exception {
+        String host = "127.0.0.1";
+
+    }
 }

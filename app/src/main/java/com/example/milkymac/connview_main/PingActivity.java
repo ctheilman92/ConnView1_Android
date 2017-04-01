@@ -1,37 +1,32 @@
 package com.example.milkymac.connview_main;
 
-import android.content.Intent;
+import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-import com.example.milkymac.connview_main.helpers.Networker;
+import com.stealthcopter.networktools.Ping;
+import com.stealthcopter.networktools.ping.PingResult;
+import com.stealthcopter.networktools.ping.PingStats;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
 import java.lang.Object;
-import java.lang.Runtime;
-
-import org.w3c.dom.Text;
-
-import java.io.IOException;
-import java.io.InterruptedIOException;
-import java.net.InterfaceAddress;
 
 
 public class PingActivity extends AppCompatActivity {
 
     //region UI VARS
     TextView tvPinger;
-    TextView tvTargetPing;
-    TextView tvPacketCount;
-    TextView tvPacketSize;
+    TextView tvPingResult;
+    EditText TargetPing;
+    EditText PacketCount;
     ImageButton btnPing;
     //endregion
 
@@ -55,28 +50,89 @@ public class PingActivity extends AppCompatActivity {
     public void initVars() {
         netHelper = new Networker();
         tvPinger = (TextView) findViewById(R.id.tvPingTitle);
-        tvTargetPing = (TextView) findViewById(R.id.tvTargetPing);
-        tvPacketCount = (TextView) findViewById(R.id.tvPacketCount);
-        tvPacketSize = (TextView) findViewById(R.id.tvPacketSize);
+        tvPingResult = (TextView) findViewById(R.id.tvPingResults);
+        TargetPing = (EditText) findViewById(R.id.etTarget);
+        PacketCount = (EditText) findViewById(R.id.etPingCount);
         btnPing = (ImageButton) findViewById(R.id.btnPingTarget);
 
 
         btnPing.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String host = tvTargetPing.getText().toString().trim();
-                Log.d("BUTTON_PRESSED", "well ok then what now.....");
-                try {
-                    netHelper.pingHost(host);
-                }
-                catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                catch (IOException e) {
-                    e.printStackTrace();
-                }
+                new tasker().execute();
             }
         });
+    }
+
+
+    public class tasker extends AsyncTask {
+
+        @Override
+        protected Object doInBackground(Object[] params) {
+            try {
+                pinger();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+    }
+
+    public void appendResults(final String s) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                tvPingResult.append(s + "\n");
+            }
+        });
+    }
+
+
+
+    public void pinger() throws Exception {
+        String host = TargetPing.getText().toString();
+        Log.d("HOST_TAG", host);
+        String c = PacketCount.getText().toString();
+        int count = Integer.parseInt(c);
+
+        if (TextUtils.isEmpty(host)) {
+            appendResults("invalid host!");
+        }
+        if (count <= 0) {
+            appendResults("invalid count specified");
+        }
+
+        //synchronous for first time
+        PingResult pr = Ping.onAddress(host).setTimeOutMillis(1000).doPing();
+
+        appendResults("pinging "+ pr.getAddress().getHostAddress());
+        appendResults("Hostname: "+ pr.getAddress().getHostName());
+        appendResults(String.format("%.2f ms", pr.getTimeTaken()));
+
+
+        //async for running ping
+        Ping.onAddress(host).setTimeOutMillis(1000).setTimes(count).doPing(new Ping.PingListener() {
+            @Override
+            public void onResult(PingResult pingResult) {
+                appendResults(String.format("%.2f", pingResult.getTimeTaken()));
+            }
+
+            @Override
+            public void onFinished(PingStats pingStats) {
+                appendResults(String.format("\nPings: %d, Packets lost: %d",
+                        pingStats.getNoPings(), pingStats.getPacketsLost()));
+
+                appendResults(String.format("Min/Avg/Max Time Taken: %.2f/%.2f/%.2f ms",
+                        pingStats.getMinTimeTaken(),
+                        pingStats.getAverageTimeTaken(),
+                        pingStats.getMaxTimeTaken()));
+            }
+        });
+
+
+
+
+
     }
 
 

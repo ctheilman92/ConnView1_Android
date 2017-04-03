@@ -129,9 +129,6 @@ public class IPInfoFragment extends Fragment implements Serializable {
 
     //region INET-STUFF
 
-
-
-
     //gets ipv6
     public String getLocalIpAddress()
     {

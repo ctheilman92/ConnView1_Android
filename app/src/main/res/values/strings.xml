@@ -43,6 +43,9 @@
     <string name="tvPortScanResultsPL2">Ready to scan <b>Single port</b>.</string>
     <string name="tvSinglePort">Target Port:</string>
     <string name="TargetPortPL">443</string>
+    <string name="TargetDnsNamePL">google.com</string>
+    <string name="tvTargetDnsName">Target Name:</string>
+    <string name="dnsResults">Awaiting DNS Query...</string>
 
 
 </resources>

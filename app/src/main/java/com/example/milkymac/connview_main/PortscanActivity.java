@@ -17,6 +17,9 @@ import android.widget.TextView;
 
 import com.stealthcopter.networktools.PortScan;
 
+import org.xbill.DNS.Address;
+
+import java.net.InetAddress;
 import java.util.ArrayList;
 
 
@@ -108,12 +111,15 @@ public class PortscanActivity extends AppCompatActivity {
     public void PortScanner() throws Exception {
         String host = targetIP.getText().toString().trim();
 
+        InetAddress addr = InetAddress.getByName(host);
+        String canonicalHostName = addr.getCanonicalHostName();
+
         if (TextUtils.isEmpty(host)) {
             appendResults("\nInvalid Ip Address");
             return;
         }
 
-        appendResults("\n--Scanning IP: "+ host);
+        appendResults("\n--Scanning IP: "+ host + " (" + canonicalHostName + ")...");
 
         if (isScanSingleMode) {
             int port = Integer.parseInt(targetPort.getText().toString().trim());

@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/backgroundContent"
     android:fitsSystemWindows="true"
+    android:orientation="vertical"
     tools:context="com.example.milkymac.connview_main.DNSActivity">
 
     <android.support.design.widget.AppBarLayout
@@ -24,5 +25,103 @@
             app:popupTheme="@style/AppTheme.PopupOverlay"></android.support.v7.widget.Toolbar>
 
     </android.support.design.widget.AppBarLayout>
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        app:cardBackgroundColor="@color/cardContent">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="10dp"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tvTargetDnsHost"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingEnd="8dp"
+                    android:text="@string/tvTargetDnsName"
+                    android:textColor="@color/textContent"
+                    android:textSize="@dimen/text_conform1" />
+
+
+                <EditText
+                    android:id="@+id/etTargetDNS"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="25dp"
+                    android:ems="6"
+                    android:inputType="textPersonName"
+                    android:paddingStart="8dp"
+                    android:text="@string/TargetDnsNamePL"
+                    android:textColor="@color/textContent"
+                    android:textSize="@dimen/text_conform1"
+                    android:theme="@style/EditTextTheme" />
+
+                <ImageButton
+                    android:id="@+id/btnQueryDNS"
+                    style="@android:style/Widget.Material.ImageButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight=".5"
+                    android:background="@color/cardContent"
+                    android:cropToPadding="true"
+                    android:scaleType="fitCenter"
+                    android:tint="?android:attr/colorPressedHighlight"
+                    app:srcCompat="@android:drawable/ic_menu_compass" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/SinglePortLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:orientation="vertical">
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+    </android.support.v7.widget.CardView>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <ScrollView
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+
+            <TextView
+                android:id="@+id/tvDNSResults"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/dnsResults"
+                android:textColor="@color/colorPrimary"
+                android:textStyle="bold" />
+
+        </ScrollView>
+    </LinearLayout>
 
 </LinearLayout>

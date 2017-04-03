@@ -48,12 +48,10 @@ public class MyDevice extends devices {
         initMembers();
     }
 
-
     public void initMembers() {
         interfacesList = new ArrayList<>();
         interfacesDisplayNameList = new ArrayList<>();
     }
-
 
     public void setListNetworkInterfaces() {
         try {
@@ -89,7 +87,6 @@ public class MyDevice extends devices {
     public void setInterfacesByDisplayName() {
         for (NetworkInterface i : interfacesList) { interfacesDisplayNameList.add(i.getDisplayName()); }
     }
-
 
     public void getLocalAddresses(String interfaceName) {
         try {

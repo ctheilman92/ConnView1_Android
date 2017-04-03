@@ -31,8 +31,6 @@ public class PingActivity extends AppCompatActivity {
     //endregion
 
 
-    Networker netHelper;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,7 +46,6 @@ public class PingActivity extends AppCompatActivity {
 
 
     public void initVars() {
-        netHelper = new Networker();
         tvPinger = (TextView) findViewById(R.id.tvPingTitle);
         tvPingResult = (TextView) findViewById(R.id.tvPingResults);
         TargetPing = (EditText) findViewById(R.id.etTarget);

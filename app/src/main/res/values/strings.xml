@@ -39,5 +39,10 @@
     <string name="pwRegisterPL">password</string>
     <string name="etRegisterName">Name</string>
     <string name="etRegisterEmail">Email</string>
+    <string name="tvPortScanResultsPL">Ready to scan <b>Multiple ports</b>.</string>
+    <string name="tvPortScanResultsPL2">Ready to scan <b>Single port</b>.</string>
+    <string name="tvSinglePort">Target Port:</string>
+    <string name="TargetPortPL">443</string>
+
 
 </resources>

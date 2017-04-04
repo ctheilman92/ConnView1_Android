@@ -46,7 +46,6 @@ public class PingActivity extends AppCompatActivity {
 
 
     public void initVars() {
-        tvPinger = (TextView) findViewById(R.id.tvPingTitle);
         tvPingResult = (TextView) findViewById(R.id.tvPingResults);
         TargetPing = (EditText) findViewById(R.id.etTarget);
         PacketCount = (EditText) findViewById(R.id.etPingCount);

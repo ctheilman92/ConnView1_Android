@@ -46,6 +46,8 @@
     <string name="TargetDnsNamePL">google.com</string>
     <string name="tvTargetDnsName">Domain:</string>
     <string name="dnsResults">Awaiting DNS Query...</string>
+    <string name="recordTypePL">Record Type:</string>
+    <string name="NameServerType">Name Server</string>
 
 
 </resources>

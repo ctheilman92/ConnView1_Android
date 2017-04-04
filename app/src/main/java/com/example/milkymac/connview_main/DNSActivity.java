@@ -1,7 +1,9 @@
 package com.example.milkymac.connview_main;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.AsyncTask;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -15,6 +17,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.w3c.dom.Text;
 import org.xbill.DNS.*;
 
 import java.io.IOException;
@@ -53,6 +56,7 @@ public class DNSActivity extends AppCompatActivity {
 
     //region UI VARS
     EditText targetHostName;
+    EditText dnsRecord;
     TextView dnsResults;
     ImageButton btnDnsQuery;
     //endregion
@@ -73,12 +77,86 @@ public class DNSActivity extends AppCompatActivity {
         context = DNSActivity.this;
 
         initVars();
+        RECORD_TYPE = 0;
+        dnsRecord.setText("A RECORD");
 
     }
 
     private void initVars() {
         targetHostName = (EditText) findViewById(R.id.etTargetDNS);
         dnsResults = (TextView) findViewById(R.id.tvDNSResults);
+
+        dnsRecord = (EditText) findViewById(R.id.etRecordType);
+        dnsRecord.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                final AlertDialog TypeDialog;
+                final CharSequence[] modalItems = {"A", "TXT", "NS", "MX", "ISDN", "Reverse", "LOC", "A6" };
+
+                //CREATE MODAL DIAG
+                AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                builder.setSingleChoiceItems(modalItems, -1, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        switch(which)
+                        {
+                            case 0:
+                                RECORD_TYPE = 0;
+                                dnsRecord.setText("A RECORD");
+
+                                dialog.dismiss();
+                                break;
+                            case 1:
+                                RECORD_TYPE = 1;
+                                dnsRecord.setText("TXT RECORD");
+
+                                dialog.dismiss();
+                                break;
+                            case 2:
+                                RECORD_TYPE = 2;
+                                dnsRecord.setText("NS RECORD");
+
+                                dialog.dismiss();
+                                break;
+                            case 3:
+                                RECORD_TYPE = 4;
+                                dnsRecord.setText("MX RECORD");
+
+                                dialog.dismiss();
+                                break;
+                            case 5:
+                                RECORD_TYPE = 5;
+                                dnsRecord.setText("ISDN RECORD");
+
+                                dialog.dismiss();
+                                break;
+                            case 6:
+                                RECORD_TYPE = 6;
+                                dnsRecord.setText("Reverse");
+
+                                dialog.dismiss();
+                                break;
+                            case 7:
+                                RECORD_TYPE = 7;
+                                dnsRecord.setText("LOC RECORD");
+
+                                dialog.dismiss();
+                                break;
+                            case 8:
+                                RECORD_TYPE = 8;
+                                dnsRecord.setText("A6 RECORD");
+
+                                dialog.dismiss();
+                                break;
+                        }
+                    }
+                });
+                TypeDialog = builder.create();
+                TypeDialog.show();
+            }
+        });
 
         btnDnsQuery = (ImageButton) findViewById(R.id.btnQueryDNS);
         btnDnsQuery.setOnClickListener(new View.OnClickListener() {
@@ -88,6 +166,8 @@ public class DNSActivity extends AppCompatActivity {
             }
         });
     }
+
+
 
     public class tasker extends AsyncTask {
 
@@ -162,7 +242,7 @@ public class DNSActivity extends AppCompatActivity {
 
         for (int i = 0; i < records.length; i++) {
             ARecord a = (ARecord) records[i];
-            appendResults(a.toString());
+            appendResults("\n"+a.toString());
         }
     }
 
@@ -199,11 +279,8 @@ public class DNSActivity extends AppCompatActivity {
             return;
         }
 
-        //TODO: finish ui for record selection type
-        //FOR NOW - default to NS records
-        RECORD_TYPE = 2;
 
-        //TODO: INPUT HEADERS FOR OUTPUT -> NAME SERV RECORDS:
+        //TODO: WRITE HEADERS FOR OUTPUT -> NAME SERV RECORDS:
         switch (RECORD_TYPE) {
             case (0):
                 getA();
@@ -229,6 +306,8 @@ public class DNSActivity extends AppCompatActivity {
                 getA6();
                 break;
         }
+
+        appendResults("\n--------------\n");
     }
 
 

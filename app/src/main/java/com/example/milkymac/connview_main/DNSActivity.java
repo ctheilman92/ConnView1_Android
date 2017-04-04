@@ -1,9 +1,11 @@
 package com.example.milkymac.connview_main;
 
+import android.content.Context;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -11,6 +13,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.xbill.DNS.*;
 
@@ -55,6 +58,7 @@ public class DNSActivity extends AppCompatActivity {
     //endregion
 
     private static int RECORD_TYPE;
+    Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +70,7 @@ public class DNSActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        context = DNSActivity.this;
 
         initVars();
 
@@ -89,8 +94,10 @@ public class DNSActivity extends AppCompatActivity {
         @Override
         protected Object doInBackground(Object[] params) {
             try {
-                getTXT();
+                dnsQuery();
             } catch (TextParseException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
                 e.printStackTrace();
             }
             return this;
@@ -124,7 +131,7 @@ public class DNSActivity extends AppCompatActivity {
     }
 
     public void getNS() throws TextParseException {
-        Record[] records = new Lookup("gmail.com", Type.NS).run();
+        Record[] records = new Lookup(targetHostName.getText().toString(), Type.NS).run();
 
         for (int i = 0; i < records.length; i++) {
             NSRecord ns = (NSRecord) records[i];
@@ -133,7 +140,7 @@ public class DNSActivity extends AppCompatActivity {
     }
 
     public void getTXT() throws TextParseException {
-        Record[] records = new Lookup("gmail.com", Type.TXT).run();
+        Record[] records = new Lookup(targetHostName.getText().toString(), Type.TXT).run();
 
         for (int i = 0; i < records.length; i++) {
             TXTRecord txt = (TXTRecord) records[i];
@@ -142,7 +149,7 @@ public class DNSActivity extends AppCompatActivity {
     }
 
     public void getMX() throws TextParseException {
-        Record[] records = new Lookup("gmail.com", Type.MX).run();
+        Record[] records = new Lookup(targetHostName.getText().toString(), Type.MX).run();
 
         for (int i = 0; i < records.length; i++) {
             MXRecord mx = (MXRecord) records[i];
@@ -151,7 +158,7 @@ public class DNSActivity extends AppCompatActivity {
     }
 
     public void getA() throws TextParseException {
-        Record[] records = new Lookup("gmail.com", Type.A).run();
+        Record[] records = new Lookup(targetHostName.getText().toString(), Type.A).run();
 
         for (int i = 0; i < records.length; i++) {
             ARecord a = (ARecord) records[i];
@@ -160,7 +167,7 @@ public class DNSActivity extends AppCompatActivity {
     }
 
     public void getA6() throws TextParseException {
-        Record[] records = new Lookup("gmail.com", Type.AAAA).run();
+        Record[] records = new Lookup(targetHostName.getText().toString(), Type.AAAA).run();
 
         for (int i = 0; i < records.length; i++) {
             AAAARecord a6 = (AAAARecord) records[i];
@@ -169,7 +176,7 @@ public class DNSActivity extends AppCompatActivity {
     }
 
     public void getISDN() throws TextParseException {
-        Record[] records = new Lookup("gmail.com", Type.ISDN).run();
+        Record[] records = new Lookup(targetHostName.getText().toString(), Type.ISDN).run();
 
             for (int i = 0; i < records.length; i++) {
                 ISDNRecord isdn = (ISDNRecord) records[i];
@@ -178,7 +185,7 @@ public class DNSActivity extends AppCompatActivity {
     }
 
     public void getLOC() throws TextParseException {
-        Record[] records = new Lookup("gmail.com", Type.LOC).run();
+        Record[] records = new Lookup(targetHostName.getText().toString(), Type.LOC).run();
 
             for (int i = 0; i < records.length; i++) {
                 LOCRecord loc = (LOCRecord) records[i];
@@ -187,8 +194,14 @@ public class DNSActivity extends AppCompatActivity {
     }
 
     public void dnsQuery() throws IOException {
-        String domain = targetHostName.getText().toString().trim();
+        if (TextUtils.isEmpty(targetHostName.getText().toString())) {
+            Toast.makeText(context, "ERR, domain is empty.", Toast.LENGTH_LONG).show();
+            return;
+        }
 
+        //TODO: finish ui for record selection type
+        //FOR NOW - default to NS records
+        RECORD_TYPE = 2;
 
         //TODO: INPUT HEADERS FOR OUTPUT -> NAME SERV RECORDS:
         switch (RECORD_TYPE) {

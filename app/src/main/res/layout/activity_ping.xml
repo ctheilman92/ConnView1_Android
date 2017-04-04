@@ -49,7 +49,8 @@
                         android:paddingEnd="8dp"
                         android:text="@string/tvTargetPing"
                         android:textColor="@color/textContent"
-                        android:textSize="@dimen/text_conform1" />
+                        android:textSize="@dimen/text_conform1"
+                        android:textStyle="bold" />
 
                     <EditText
                         android:id="@+id/etTarget"
@@ -90,7 +91,8 @@
                         android:layout_height="wrap_content"
                         android:text="@string/tvPacketCount"
                         android:textColor="@color/textContent"
-                        android:textSize="@dimen/text_conform1" />
+                        android:textSize="@dimen/text_conform1"
+                        android:textStyle="bold" />
 
                     <EditText
                         android:id="@+id/etPingCount"

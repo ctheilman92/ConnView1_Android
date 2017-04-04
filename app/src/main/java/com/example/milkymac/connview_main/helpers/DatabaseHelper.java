@@ -23,19 +23,19 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String DATABASE_TABLE_NAME = "User";
 
     //region User COLUMNS
-    private static final String COLUMN_USER_ID = "user_id";
-    private static final String COLUMN_USER_NAME = "user_name";
-    private static final String COLUMN_USER_EMAIL = "user_email";
-    private static final String COLUMN_USER_PASSWORD= "user_password";
+    private static final String COLUMN_USER_ID = "UID";
+    private static final String COLUMN_USER_NAME = "Name";
+    private static final String COLUMN_USER_EMAIL = "Email";
+    private static final String COLUMN_USER_PASSWORD= "Password";
     //endregion
 
 
     //CREATE USER TABLE
-    private String CREATE_USER_TABLE = "CREATE TABLE " + DATABASE_TABLE_NAME + "("
+    public static final String CREATE_USER_TABLE = "CREATE TABLE " + DATABASE_TABLE_NAME + "("
             + COLUMN_USER_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
-            + COLUMN_USER_NAME + " TEXT,"
-            + COLUMN_USER_EMAIL + " TEXT,"
-            + COLUMN_USER_PASSWORD + " TEXT)";
+            + COLUMN_USER_NAME + " TEXT NOT NULL,"
+            + COLUMN_USER_EMAIL + " TEXT NOT NULL,"
+            + COLUMN_USER_PASSWORD + " TEXT NOT NULL)";
 
     private String DROP_USER_TABLE = "DROP TABLE IF EXISTS" + DATABASE_TABLE_NAME;
 
@@ -95,8 +95,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 
     public void addUser(User user) {
-
-
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();

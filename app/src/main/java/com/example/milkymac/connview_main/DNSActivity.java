@@ -12,9 +12,9 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
 import org.xbill.DNS.*;
 
+import java.io.IOException;
 import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -24,14 +24,28 @@ import java.net.UnknownHostException;
 /*
 
 *
+*
+* MODEL AFTER THIS PAGE: https://www.ultratools.com/tools/dnsLookupResult
+*
+*
 * Using Popular DNSJAVA Library for dns record lookup.
 * Possibly creating DNS Server (Cyber Sec future notes)
 * http://www.dnsjava.org/
 *
-
+*
+* RELEVANT RECORD TYPES
+*   A - ipv4
+*   AAAA - ipv6
+*   MX - mail
+*   NS - Nameserver
+*   ISDN - isdn address for host
+*   PTR - lookup by IP address (reverse dns query)
+*
  */
 
+
 public class DNSActivity extends AppCompatActivity {
+
 
 
     //region UI VARS
@@ -39,6 +53,8 @@ public class DNSActivity extends AppCompatActivity {
     TextView dnsResults;
     ImageButton btnDnsQuery;
     //endregion
+
+    private static int RECORD_TYPE;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +65,7 @@ public class DNSActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.dns_toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
 
         initVars();
 
@@ -72,30 +89,133 @@ public class DNSActivity extends AppCompatActivity {
         @Override
         protected Object doInBackground(Object[] params) {
             try {
-                dnsQuery();
-            }
-            catch (UnknownHostException e) {
+                getTXT();
+            } catch (TextParseException e) {
                 e.printStackTrace();
             }
             return this;
         }
     }
 
+    public void validateDomain() {
+        String d = targetHostName.getText().toString();
+        //check for '.' and an upper level domain & lower level domain name [lower-domain].[upper-domain]
+    }
 
-    public void dnsQuery() throws UnknownHostException {
-        String host = targetHostName.getText().toString().trim();
+    public void getReverse(String ip) throws IOException {
+        Record opt = null;
+        Resolver res = new ExtendedResolver();
 
-        //get IP associated with name
-        InetAddress addr = InetAddress.getByName(host);
-        String ip = addr.getHostAddress();
-        if (addr instanceof Inet4Address) {
-            ip = addr.getHostAddress();
+        Name name = ReverseMap.fromAddress(ip);
+
+        //@param Type.ptr = int => record type (reverse lookup)
+        //@param Dclass.IN => inbound
+        Record rec = Record.newRecord(name, Type.PTR, DClass.IN);
+
+        Message query = Message.newQuery(rec);
+        Message response = res.send(query);
+
+        Record[] callbacks = response.getSectionArray(Section.ANSWER);
+
+        if (callbacks.length == 0)
+            appendResults("NO ANSWERS FOR: " + ip);
+        else
+            appendResults(callbacks[0].toString());
+    }
+
+    public void getNS() throws TextParseException {
+        Record[] records = new Lookup("gmail.com", Type.NS).run();
+
+        for (int i = 0; i < records.length; i++) {
+            NSRecord ns = (NSRecord) records[i];
+            appendResults(ns.toString());
         }
-        else {
-            ip = addr.getHostAddress();
-        }
+    }
 
-        appendResults("QUERY FOR " + host + " (" + ip + ")...");
+    public void getTXT() throws TextParseException {
+        Record[] records = new Lookup("gmail.com", Type.TXT).run();
+
+        for (int i = 0; i < records.length; i++) {
+            TXTRecord txt = (TXTRecord) records[i];
+            appendResults(txt.toString());
+        }
+    }
+
+    public void getMX() throws TextParseException {
+        Record[] records = new Lookup("gmail.com", Type.MX).run();
+
+        for (int i = 0; i < records.length; i++) {
+            MXRecord mx = (MXRecord) records[i];
+            appendResults(mx.toString());
+        }
+    }
+
+    public void getA() throws TextParseException {
+        Record[] records = new Lookup("gmail.com", Type.A).run();
+
+        for (int i = 0; i < records.length; i++) {
+            ARecord a = (ARecord) records[i];
+            appendResults(a.toString());
+        }
+    }
+
+    public void getA6() throws TextParseException {
+        Record[] records = new Lookup("gmail.com", Type.AAAA).run();
+
+        for (int i = 0; i < records.length; i++) {
+            AAAARecord a6 = (AAAARecord) records[i];
+            appendResults(a6.toString());
+        }
+    }
+
+    public void getISDN() throws TextParseException {
+        Record[] records = new Lookup("gmail.com", Type.ISDN).run();
+
+            for (int i = 0; i < records.length; i++) {
+                ISDNRecord isdn = (ISDNRecord) records[i];
+                appendResults(isdn.toString());
+            }
+    }
+
+    public void getLOC() throws TextParseException {
+        Record[] records = new Lookup("gmail.com", Type.LOC).run();
+
+            for (int i = 0; i < records.length; i++) {
+                LOCRecord loc = (LOCRecord) records[i];
+                appendResults(loc.toString());
+            }
+    }
+
+    public void dnsQuery() throws IOException {
+        String domain = targetHostName.getText().toString().trim();
+
+
+        //TODO: INPUT HEADERS FOR OUTPUT -> NAME SERV RECORDS:
+        switch (RECORD_TYPE) {
+            case (0):
+                getA();
+                break;
+            case (1):
+                getTXT();
+                break;
+            case (2):
+                getNS();
+                break;
+            case (3):
+                getMX();
+                break;
+            case (4):
+                getISDN();
+                break;
+            case (5):
+                getReverse("8.8.8.8");
+                break;
+            case (7):
+                getLOC();
+            default:
+                getA6();
+                break;
+        }
     }
 
 

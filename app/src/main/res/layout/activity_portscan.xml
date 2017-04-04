@@ -55,7 +55,8 @@
                     android:paddingEnd="8dp"
                     android:text="@string/tvTargetPing"
                     android:textColor="@color/textContent"
-                    android:textSize="@dimen/text_conform1" />
+                    android:textSize="@dimen/text_conform1"
+                    android:textStyle="bold" />
 
 
                 <EditText
@@ -97,7 +98,8 @@
                     android:paddingEnd="8dp"
                     android:text="@string/tvSinglePort"
                     android:textColor="@color/textContent"
-                    android:textSize="@dimen/text_conform2" />
+                    android:textSize="@dimen/text_conform2"
+                    android:textStyle="bold" />
 
                 <EditText
                     android:id="@+id/etTargetPort"
@@ -126,7 +128,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="10dp"
                     android:text="Multi/Single Port(s) : "
-                    android:textColor="@color/textContent" />
+                    android:textColor="@color/textContent"
+                    android:textStyle="bold" />
 
             </LinearLayout>
 

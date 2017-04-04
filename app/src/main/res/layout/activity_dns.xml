@@ -51,7 +51,8 @@
                     android:paddingEnd="8dp"
                     android:text="@string/tvTargetDnsName"
                     android:textColor="@color/textContent"
-                    android:textSize="@dimen/text_conform1" />
+                    android:textSize="@dimen/text_conform1"
+                    android:textStyle="bold" />
 
 
                 <EditText

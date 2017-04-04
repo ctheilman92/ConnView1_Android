@@ -44,7 +44,7 @@
     <string name="tvSinglePort">Target Port:</string>
     <string name="TargetPortPL">443</string>
     <string name="TargetDnsNamePL">google.com</string>
-    <string name="tvTargetDnsName">Target Name:</string>
+    <string name="tvTargetDnsName">Domain:</string>
     <string name="dnsResults">Awaiting DNS Query...</string>
 
 

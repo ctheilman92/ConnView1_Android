@@ -79,7 +79,7 @@ public class DNSActivity extends AppCompatActivity {
         initVars();
         RECORD_TYPE = 0;
         dnsRecord.setText("A RECORD");
-
+        Log.d("RECORD_TYPE", String.valueOf(RECORD_TYPE));
     }
 
     private void initVars() {
@@ -94,14 +94,12 @@ public class DNSActivity extends AppCompatActivity {
                 final AlertDialog TypeDialog;
                 final CharSequence[] modalItems = {"A", "TXT", "NS", "MX", "ISDN", "Reverse", "LOC", "A6" };
 
-                //CREATE MODAL DIAG
                 AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                builder.setSingleChoiceItems(modalItems, -1, new DialogInterface.OnClickListener() {
+                builder.setTitle("Select Record Type");
+                builder.setItems(modalItems, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-
-                        switch(which)
-                        {
+                        switch(which) {
                             case 0:
                                 RECORD_TYPE = 0;
                                 dnsRecord.setText("A RECORD");
@@ -121,31 +119,31 @@ public class DNSActivity extends AppCompatActivity {
                                 dialog.dismiss();
                                 break;
                             case 3:
-                                RECORD_TYPE = 4;
+                                RECORD_TYPE = 3;
                                 dnsRecord.setText("MX RECORD");
+
+                                dialog.dismiss();
+                                break;
+                            case 4:
+                                RECORD_TYPE = 4;
+                                dnsRecord.setText("ISDN RECORD");
 
                                 dialog.dismiss();
                                 break;
                             case 5:
                                 RECORD_TYPE = 5;
-                                dnsRecord.setText("ISDN RECORD");
+                                dnsRecord.setText("Reverse");
 
                                 dialog.dismiss();
                                 break;
                             case 6:
                                 RECORD_TYPE = 6;
-                                dnsRecord.setText("Reverse");
+                                dnsRecord.setText("LOC RECORD");
 
                                 dialog.dismiss();
                                 break;
                             case 7:
                                 RECORD_TYPE = 7;
-                                dnsRecord.setText("LOC RECORD");
-
-                                dialog.dismiss();
-                                break;
-                            case 8:
-                                RECORD_TYPE = 8;
                                 dnsRecord.setText("A6 RECORD");
 
                                 dialog.dismiss();
@@ -184,12 +182,16 @@ public class DNSActivity extends AppCompatActivity {
         }
     }
 
-    public void validateDomain() {
-        String d = targetHostName.getText().toString();
+    public boolean validateDomain(String domain) {
         //check for '.' and an upper level domain & lower level domain name [lower-domain].[upper-domain]
+        return true;
     }
 
-    public void getReverse(String ip) throws IOException {
+
+
+    //region record type methods
+    public void getReverse() throws IOException {
+        String ip = targetHostName.getText().toString();
         Record opt = null;
         Resolver res = new ExtendedResolver();
 
@@ -213,67 +215,109 @@ public class DNSActivity extends AppCompatActivity {
     public void getNS() throws TextParseException {
         Record[] records = new Lookup(targetHostName.getText().toString(), Type.NS).run();
 
-        for (int i = 0; i < records.length; i++) {
-            NSRecord ns = (NSRecord) records[i];
-            appendResults(ns.toString());
+        if (records != null) {
+            for (int i = 0; i < records.length; i++) {
+                NSRecord ns = (NSRecord) records[i];
+                appendResults(ns.toString());
+            }
+        }
+        else {
+            appendResults("NO NS RECORDS RETURNED \n");
         }
     }
 
     public void getTXT() throws TextParseException {
         Record[] records = new Lookup(targetHostName.getText().toString(), Type.TXT).run();
 
-        for (int i = 0; i < records.length; i++) {
-            TXTRecord txt = (TXTRecord) records[i];
-            appendResults(txt.toString());
+        if (records != null) {
+            for (int i = 0; i < records.length; i++) {
+                TXTRecord txt = (TXTRecord) records[i];
+                appendResults(txt.toString());
+            }
+        }
+        else {
+            appendResults("NO TXT RECORDS RETURNED \n");
         }
     }
 
     public void getMX() throws TextParseException {
         Record[] records = new Lookup(targetHostName.getText().toString(), Type.MX).run();
 
-        for (int i = 0; i < records.length; i++) {
-            MXRecord mx = (MXRecord) records[i];
-            appendResults(mx.toString());
+        if (records != null) {
+            for (int i = 0; i < records.length; i++) {
+                MXRecord mx = (MXRecord) records[i];
+                appendResults(mx.toString());
+            }
+        }
+        else {
+            appendResults("NO MX RECORDS RETURNED \n");
         }
     }
 
     public void getA() throws TextParseException {
         Record[] records = new Lookup(targetHostName.getText().toString(), Type.A).run();
 
-        for (int i = 0; i < records.length; i++) {
-            ARecord a = (ARecord) records[i];
-            appendResults("\n"+a.toString());
+        if (records != null) {
+            for (int i = 0; i < records.length; i++) {
+                ARecord a = (ARecord) records[i];
+                appendResults("\n"+a.toString());
+            }
         }
+        else {
+            appendResults("NO A RECORDS RETURNED \n");
+        }
+
     }
 
     public void getA6() throws TextParseException {
         Record[] records = new Lookup(targetHostName.getText().toString(), Type.AAAA).run();
 
-        for (int i = 0; i < records.length; i++) {
-            AAAARecord a6 = (AAAARecord) records[i];
-            appendResults(a6.toString());
+        if (records != null) {
+            if (records != null) {
+                for (int i = 0; i < records.length; i++) {
+                    AAAARecord a6 = (AAAARecord) records[i];
+                    appendResults(a6.toString());
+                }
+            }
+        }
+        else {
+            appendResults("NO A6 RECORDS RETURNED \n");
         }
     }
 
     public void getISDN() throws TextParseException {
         Record[] records = new Lookup(targetHostName.getText().toString(), Type.ISDN).run();
 
+        if (records != null) {
             for (int i = 0; i < records.length; i++) {
                 ISDNRecord isdn = (ISDNRecord) records[i];
                 appendResults(isdn.toString());
             }
+        }
+        else {
+            appendResults("NO ISDN RECORDS RETURNED \n");
+        }
     }
 
     public void getLOC() throws TextParseException {
         Record[] records = new Lookup(targetHostName.getText().toString(), Type.LOC).run();
 
+        if (records != null) {
             for (int i = 0; i < records.length; i++) {
                 LOCRecord loc = (LOCRecord) records[i];
                 appendResults(loc.toString());
             }
+        }
+        else {
+            appendResults("NO LOCATION RECORDS RETURNED \n");
+        }
     }
 
+    //endregion
+
     public void dnsQuery() throws IOException {
+        Log.d("RECORD_TYPE", String.valueOf(RECORD_TYPE));
+
         if (TextUtils.isEmpty(targetHostName.getText().toString())) {
             Toast.makeText(context, "ERR, domain is empty.", Toast.LENGTH_LONG).show();
             return;
@@ -298,7 +342,7 @@ public class DNSActivity extends AppCompatActivity {
                 getISDN();
                 break;
             case (5):
-                getReverse("8.8.8.8");
+                getReverse();
                 break;
             case (7):
                 getLOC();

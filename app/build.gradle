@@ -36,4 +36,5 @@ dependencies {
     testCompile 'junit:junit:4.12'
     annotationProcessor 'org.parceler:parceler:1.1.6'
     compile files('libs/dnsjava-2.1.7.jar')
+    compile files('libs/commons-net-3.6.jar')
 }

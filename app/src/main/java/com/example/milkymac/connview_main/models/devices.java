@@ -37,6 +37,17 @@ public class devices extends AsyncTask implements Serializable{
 
     }
 
+    public devices(String devname, boolean isV4, String ip, String mac, boolean isup, String type, String SSID) {
+        this.devName = devname;
+        this.mac = mac;
+        this.isUp = isup;
+        this.Type = type;
+        this.SSID = SSID;
+
+        if (isV4) { this.ip = ip; }
+        else { this.ipv6 = ip; }
+    }
+
 
     //region SETS
     public void setState(boolean status) { isUp = status; }

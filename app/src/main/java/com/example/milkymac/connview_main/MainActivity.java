@@ -70,8 +70,8 @@ public class MainActivity extends AppCompatActivity
         tabLayout.setupWithViewPager(mViewPager);
     }
 
+    //TODO: TEST THOROUGHLY
     public void netSniff() {
-
         listDevices = new ArrayList<devices>();
 
         String TAG = "SNIFF_NET";

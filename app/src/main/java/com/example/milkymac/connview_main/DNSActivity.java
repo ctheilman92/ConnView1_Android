@@ -182,10 +182,6 @@ public class DNSActivity extends AppCompatActivity {
         }
     }
 
-    public boolean validateDomain(String domain) {
-        //check for '.' and an upper level domain & lower level domain name [lower-domain].[upper-domain]
-        return true;
-    }
 
 
 

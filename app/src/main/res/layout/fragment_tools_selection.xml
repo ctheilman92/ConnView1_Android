@@ -121,7 +121,7 @@
                     android:background="@color/cardContent"
                     android:elevation="0dp"
                     android:gravity="center"
-                    android:text="TraceRoute"
+                    android:text="@string/title_activity_traceroute"
                     android:textAlignment="center"
                     android:textAllCaps="false"
                     android:textColor="@color/textContent"

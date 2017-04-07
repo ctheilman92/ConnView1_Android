@@ -106,19 +106,6 @@
                     android:textSize="@dimen/text_conform2"
                     android:textStyle="bold" />
 
-                <!--<Button-->
-                    <!--android:layout_width="wrap_content"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:id="@+id/btnRecordType"-->
-                    <!--android:layout_marginEnd="25dp"-->
-                    <!--android:background="@color/cardContent"-->
-                    <!--android:ems="6"-->
-                    <!--android:inputType="textPersonName"-->
-                    <!--android:paddingStart="8dp"-->
-                    <!--android:text="@string/NameServerType"-->
-                    <!--android:textColor="@color/textContent"-->
-                    <!--android:textSize="@dimen/text_conform2"/>-->
-
 
                 <EditText
                     android:id="@+id/etRecordType"

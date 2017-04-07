@@ -88,7 +88,7 @@ public class ToolsSelectionFragment extends Fragment {
         btnTraceRoute.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), TracerouteActivity.class);
+                Intent intent = new Intent(getActivity(), WhoisActivity.class);
                 startActivity(intent);
             }
         });

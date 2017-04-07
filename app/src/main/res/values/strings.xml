@@ -32,7 +32,7 @@
     <string name="title_activity_dnslookup">DNSLookup</string>
     <string name="title_activity_ping">Pinger</string>
     <string name="title_activity_portscan">PortScanner</string>
-    <string name="title_activity_traceroute">TraceRoute</string>
+    <string name="title_activity_traceroute">WhoIs</string>
     <string name="loginEmailPL">Email</string>
     <string name="lblRegistration">Register Your Account!</string>
     <string name="loginContextLabel">Get to know your network.</string>
@@ -48,6 +48,11 @@
     <string name="dnsResults">Awaiting DNS Query...</string>
     <string name="recordTypePL">Record Type:</string>
     <string name="NameServerType">Name Server</string>
+    <string name="tvTargetWhois">Domain:</string>
+    <string name="etTargetWhoisPL">google.com</string>
+    <string name="whoisResults">Awaiting Whois Results...</string>
+    <string name="etServerPL">internic.net</string>
+    <string name="tvServerPL">Server:</string>
 
 
 </resources>

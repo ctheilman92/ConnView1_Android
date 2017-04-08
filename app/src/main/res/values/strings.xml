@@ -51,7 +51,7 @@
     <string name="tvTargetWhois">Domain:</string>
     <string name="etTargetWhoisPL">google.com</string>
     <string name="whoisResults">Awaiting Whois Results...</string>
-    <string name="etServerPL">internic.net</string>
+    <string name="etServerPL">whois.internic.net</string>
     <string name="tvServerPL">Server:</string>
 
 

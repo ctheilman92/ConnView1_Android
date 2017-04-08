@@ -112,12 +112,13 @@
 
                 <ImageButton
                     android:id="@+id/btnServerInfo"
-                    style="@android:style/Widget.Material.ImageButton"
+                    style="@android:style/Widget.DeviceDefault.ImageButton"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
+                    android:adjustViewBounds="true"
                     android:background="@color/cardContent"
-                    android:cropToPadding="true"
-                    android:tint="?android:attr/colorBackground"
+                    android:scaleType="matrix"
+                    android:tint="@color/common_google_signin_btn_text_dark_disabled"
                     app:srcCompat="@android:drawable/ic_menu_info_details" />
             </LinearLayout>
 

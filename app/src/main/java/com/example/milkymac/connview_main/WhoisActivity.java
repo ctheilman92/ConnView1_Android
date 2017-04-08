@@ -74,8 +74,7 @@ public class WhoisActivity extends AppCompatActivity {
         put("whois.educause.net", "EDUCAUSE Whois Server:\n\nAccepted Queries: Educational TLD's (.EDU)\n\nVisit: https://net.educause.edu/edudomain/index.asp");
     }};
     private static final Set<String> SERVER_KEYS = SERVER_DESC.keySet();
-
-
+    
     //for regex
     private static Pattern pattern;
     private Matcher matcher;

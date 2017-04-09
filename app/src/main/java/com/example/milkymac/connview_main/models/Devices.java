@@ -18,11 +18,11 @@ import java.util.List;
 
 /*
 
-**** PARCELER REQUIRES ALL PUBLIC CLASSES.....EH.
+**** PARCELER REQUIRES ALL PUBLIC CLASSES....
  */
 
 @Parcel
-public class devices extends AsyncTask implements Serializable{
+public class Devices implements Serializable{
 
     public String devName;
     public String SSID;
@@ -33,11 +33,11 @@ public class devices extends AsyncTask implements Serializable{
     public boolean isUp;   //connected to WiFi
 
 
-    public devices() {
+    public Devices() {
 
     }
 
-    public devices(String devname, boolean isV4, String ip, String mac, boolean isup, String type, String SSID) {
+    public Devices(String devname, boolean isV4, String ip, String mac, boolean isup, String type, String SSID) {
         this.devName = devname;
         this.mac = mac;
         this.isUp = isup;
@@ -65,10 +65,5 @@ public class devices extends AsyncTask implements Serializable{
     public String getMac() { return mac; }
     public String getSSID() { return SSID; }
     public boolean getState() { return isUp; }
-
-    @Override
-    protected Object doInBackground(Object[] params) {
-        return null;
-    }
 
 }

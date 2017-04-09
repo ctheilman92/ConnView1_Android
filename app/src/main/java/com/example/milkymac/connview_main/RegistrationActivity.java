@@ -11,6 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.ContentFrameLayout;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -103,15 +104,22 @@ public class RegistrationActivity extends AppCompatActivity {
                 }
             }
         });
-        etPassword2.setOnClickListener(new View.OnClickListener() {
+        etPassword.setOnKeyListener(new View.OnKeyListener() {
             @Override
-            public void onClick(View v) {
-                if (!password2IsEdited) {
-                    etPassword2.setText("");
-                    password2IsEdited = true;
-                }
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (keyCode == 66) { etPassword2.requestFocus(); etPassword2.setText(""); }
+                return false;
             }
         });
+//        etPassword2.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                if (!password2IsEdited) {
+//                    etPassword2.setText("");
+//                    password2IsEdited = true;
+//                }
+//            }
+//        });
 
         btnRegister.setOnClickListener(new View.OnClickListener() {
             @Override

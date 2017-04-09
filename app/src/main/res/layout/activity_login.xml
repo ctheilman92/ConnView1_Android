@@ -59,6 +59,7 @@
             android:textColor="@color/textContent"
             android:layout_marginBottom="5dp"
             android:inputType="textPersonName"
+            android:nextFocusDown="@+id/etPassword"
             android:theme="@style/EditTextTheme"
             android:text="@string/loginEmailPL" />
 

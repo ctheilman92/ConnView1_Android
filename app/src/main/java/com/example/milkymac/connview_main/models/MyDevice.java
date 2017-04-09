@@ -1,6 +1,5 @@
 package com.example.milkymac.connview_main.models;
 import android.content.Context;
-import android.net.Network;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.util.Log;
@@ -28,7 +27,7 @@ import java.util.Enumeration;
 */
 
 @org.parceler.Parcel
-public class MyDevice extends devices {
+public class MyDevice extends Devices {
 
     public transient ArrayList<NetworkInterface> interfacesList;
     public transient ArrayList<String> interfacesDisplayNameList;

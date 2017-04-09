@@ -1,12 +1,7 @@
 package com.example.milkymac.connview_main;
 
-import android.content.Context;
 import android.content.Intent;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.net.Uri;
-import android.net.wifi.WifiInfo;
-import android.net.wifi.WifiManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Parcelable;
@@ -17,23 +12,20 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.text.format.Formatter;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.example.milkymac.connview_main.dummy.DummyContent;
+import com.example.milkymac.connview_main.helpers.NetHelper;
+import com.example.milkymac.connview_main.models.Devices;
 import com.example.milkymac.connview_main.models.MyDevice;
-import com.example.milkymac.connview_main.models.devices;
+import com.example.milkymac.connview_main.models.Network;
 
 import org.parceler.Parcels;
 
-import java.net.Inet4Address;
-import java.net.InetAddress;
-import java.net.NetworkInterface;
-import java.net.SocketException;
+import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 
 public class MainActivity extends AppCompatActivity
         implements devicesFragment.OnListFragmentInteractionListener,
@@ -45,7 +37,9 @@ public class MainActivity extends AppCompatActivity
     private ViewPager mViewPager;
 
     private MyDevice mydev;
-    private ArrayList<devices> listDevices;
+    private Network myNet;
+    private ArrayList<Devices> listDevices;
+    public NetHelper nethelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +48,9 @@ public class MainActivity extends AppCompatActivity
 
 
         mydev = new MyDevice(this);
-        new NetworkOperation().execute();
+        nethelper = new NetHelper(this);
+        new MyDeviceWorker().execute();
+        new MyNetWorker().execute();
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -69,75 +65,7 @@ public class MainActivity extends AppCompatActivity
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
     }
-
-    //TODO: TEST THOROUGHLY
-    public void netSniff() {
-        listDevices = new ArrayList<devices>();
-
-        String TAG = "SNIFF_NET";
-        Log.d(TAG, "begin sniffing network... ");
-        Context context = this;
-
-        try {
-            ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-            NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-            WifiManager manager = (WifiManager) context.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
-            WifiInfo connectionInfo = manager.getConnectionInfo();
-
-            String ip = Formatter.formatIpAddress(connectionInfo.getIpAddress());
-
-            Log.d(TAG, "Active Network: " + String.valueOf(activeNetwork));
-            Log.d(TAG, "IP_ADDR: " + String.valueOf(ip));
-
-            //substring for the net prefix
-            String prefix = ip.substring(0, ip.lastIndexOf(".") + 1);
-            Log.d(TAG, "prefix: " + prefix);
-
-
-            //TODO: revise depending on data tests
-            for (int i = 0; i < 255; i++) {
-                String testIP = prefix + String.valueOf(i);
-                InetAddress getAddr = InetAddress.getByName(testIP);
-                boolean isReachable = getAddr.isReachable(1000);
-                String hostname = getAddr.getCanonicalHostName();
-
-
-                if (isReachable) {
-                    Log.d(TAG, "HOST: " + String.valueOf(hostname) + "(" + String.valueOf(testIP) + ") - STATUS: UP");
-                    NetworkInterface netInt = NetworkInterface.getByInetAddress(getAddr);
-
-                    boolean isv4 = (getAddr instanceof Inet4Address) ? true : false;
-                    listDevices.add(new devices(hostname, isv4, getAddr.getHostAddress(), assignMAC(netInt), true, "TYPE", "SSID NOT FOUND"));
-                    Log.d("ADD_2DEVLIST", "adding"+ hostname + " to devicesList");
-
-                }
-            }
-
-        } catch (Exception e) {
-            Log.d("EXEC_ERR", e.toString());
-        }
-    }
-
-    public String assignMAC(NetworkInterface intf) throws SocketException {
-        byte[] macAddr = intf.getHardwareAddress();
-
-        if (macAddr == null) {
-            return "UNDEFINED";
-        }
-
-        StringBuilder res1 = new StringBuilder();
-        for (byte b : macAddr) {
-            res1.append(Integer.toHexString(b & 0xFF) + ":");
-        }
-
-        if (res1.length() > 0) {
-            res1.deleteCharAt(res1.length() - 1);
-        }
-
-        Log.d("MAC_ADDRESS_FORMATTED", res1.toString());
-
-        return (res1.toString());
-    }
+    
 
     public void setActionBarTitle(String title){
         getSupportActionBar().setTitle(title);
@@ -172,10 +100,10 @@ public class MainActivity extends AppCompatActivity
     }
     //endregion
 
-    //region ASYNCTASK_RUNNER
+    //region ASYNCTASK_RUNNERS
 
     //HANDLE BACKGROUND NETWORK OPERATIONS
-    private class NetworkOperation extends AsyncTask {
+    private class MyDeviceWorker extends AsyncTask {
 
         @Override
         protected Object doInBackground(Object[] params) {
@@ -184,11 +112,30 @@ public class MainActivity extends AppCompatActivity
             mydev.setInterfacesByDisplayName();
             mydev.getSSIDName();
             mydev.getLocalAddresses("wlan0");
-
-            netSniff();
+            
             return this;
         }
     }
+    
+    private class MyNetWorker extends AsyncTask {
+
+        @Override
+        protected Object doInBackground(Object[] params) {
+            
+            try {
+                nethelper.netSniff();
+                myNet = nethelper.getNetInfo();
+                listDevices = (ArrayList<Devices>) nethelper.getListDevices();
+            }
+            catch (IOException e) {
+                e.printStackTrace();
+                Log.d("IO_EXCEPTION", e.toString());
+            }
+            
+            return this;
+        }
+    }
+    
     //endregion
 
 

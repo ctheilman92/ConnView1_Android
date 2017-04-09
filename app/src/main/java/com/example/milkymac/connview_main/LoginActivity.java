@@ -8,9 +8,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -97,18 +99,26 @@ public class LoginActivity extends AppCompatActivity {
 
 
     public void registerFocusListeners() {
-        etEmail.setOnClickListener(new View.OnClickListener() {
+        etEmail.setOnKeyListener(new View.OnKeyListener() {
             @Override
-            public void onClick(View v) {
-                if (!unIsEdited) { etEmail.setText(""); unIsEdited = true; }
-
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (keyCode == 66) {
+                    etPassword.requestFocus();
+                    etPassword.setText("");
+                }
+                return false;
             }
         });
 
-        etPassword.setOnClickListener(new View.OnClickListener() {
+
+        etPassword.setOnKeyListener(new View.OnKeyListener() {
             @Override
-            public void onClick(View v) {
-                if (!pwIsEdited) { etPassword.setText(""); pwIsEdited = true; }
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (keyCode == 66) {
+                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(etPassword.getWindowToken(), 0);
+                }
+                return false;
             }
         });
     }

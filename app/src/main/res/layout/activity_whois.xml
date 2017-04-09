@@ -104,7 +104,7 @@
                     android:layout_marginEnd="5dp"
                     android:ems="8"
                     android:inputType="textPersonName"
-                    android:paddingStart="8dp"
+                    android:paddingStart="10dp"
                     android:text="@string/etServerPL"
                     android:textColor="@color/textContent"
                     android:textSize="@dimen/text_conform2"

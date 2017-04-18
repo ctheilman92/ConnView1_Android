@@ -1,94 +1,293 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/backgroundContent"
     tools:context="com.example.milkymac.connview_main.IPInfoFragment">
 
     <ScrollView
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:clipToPadding="false"
         android:padding="20dp"
         android:scrollbarStyle="insideOverlay">
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="horizontal">
+            android:orientation="vertical">
 
-            <GridLayout
+            <android.support.v7.widget.CardView
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="wrap_content"
+                app:cardBackgroundColor="@color/cardContent">
 
-                <TextView
-                    android:id="@+id/lblStatus"
-                    android:layout_row="1"
-                    android:layout_column="1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text="Status: "
-                    android:textAppearance="@style/TextAppearance.AppCompat.Display1"
-                    android:textColor="@color/textContent"
-                    android:textStyle="bold"
-                    android:typeface="normal" />
-
-                <TextView
-                    android:id="@+id/lblisConnected"
-                    android:layout_row="1"
-                    android:layout_column="2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text="@string/txtIsConnected"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Display1"
-                    android:textColor="@color/textContent"
-                    android:textSize="32sp"
-                    android:typeface="normal" />
-
-                <TextView
-                    android:id="@+id/tvLabelIP"
-                    android:layout_row="2"
-                    android:layout_column="1"
-                    android:textColor="@color/textContent"
-                    android:textSize="@dimen/text_conform1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/tvTitleIP" />
-
-                <TextView
-                    android:id="@+id/tvPersonalIP"
-                    android:layout_row="2"
-                    android:layout_column="2"
-                    android:textColor="@color/textContent"
-                    android:textSize="@dimen/text_conform1"
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Disc" />
+                    android:layout_height="match_parent"
+                    android:layout_margin="8dp"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginBottom="10dp"
+
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/lblStatus"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_column="1"
+                            android:layout_row="1"
+                            android:gravity="center"
+                            android:text="Status: "
+                            android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+                            android:textColor="@color/textContent"
+                            android:textSize="30sp"
+                            android:textStyle="bold"
+                            android:typeface="normal" />
+
+                        <TextView
+                            android:id="@+id/lblisConnected"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_column="2"
+                            android:layout_row="1"
+                            android:gravity="center"
+                            android:text="@string/txtIsConnected"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+                            android:textColor="@color/textContent"
+                            android:textSize="24sp"
+                            android:typeface="normal" />
+                    </LinearLayout>
 
 
-                <TextView
-                    android:id="@+id/tvLabelMAC"
-                    android:layout_row="3"
-                    android:layout_column="1"
-                    android:textColor="@color/textContent"
-                    android:textSize="@dimen/text_conform1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/tvTitleMAC" />
+                    <GridLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="15dp">
 
-                <TextView
-                    android:id="@+id/tvPersonalMAC"
-                    android:layout_row="3"
-                    android:layout_column="2"
-                    android:textColor="@color/textContent"
-                    android:textSize="@dimen/text_conform1"
+
+                        <TextView
+                            android:id="@+id/tvLabelIP"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_column="1"
+                            android:layout_row="2"
+                            android:text="@string/tvTitleIP"
+                            android:textColor="@color/textContent"
+                            android:textSize="@dimen/text_conform1"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/tvPersonalIP"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_column="2"
+                            android:layout_row="2"
+                            android:text="Disc"
+                            android:textColor="@color/textContent"
+                            android:textSize="@dimen/text_conform1" />
+
+
+                        <TextView
+                            android:id="@+id/tvLabelMAC"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_column="1"
+                            android:layout_row="3"
+                            android:text="@string/tvTitleMAC"
+                            android:textColor="@color/textContent"
+                            android:textSize="@dimen/text_conform1"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/tvPersonalMAC"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_column="2"
+                            android:layout_row="3"
+                            android:text="Disc"
+                            android:textColor="@color/textContent"
+                            android:textSize="@dimen/text_conform1" />
+
+                    </GridLayout>
+
+                </LinearLayout>
+            </android.support.v7.widget.CardView>
+
+            <android.support.v7.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                app:cardBackgroundColor="@color/cardContent">
+
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Disc" />
+                    android:layout_height="match_parent"
+                    android:layout_margin="10dp"
+                    android:orientation="vertical">
 
-            </GridLayout>
+
+                    <TextView
+                        android:id="@+id/lblNetSummary"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        android:text="@string/titleipInfoNetwork"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+                        android:textColor="@color/textContent"
+                        android:textSize="30sp"
+                        android:textStyle="bold"
+                        android:typeface="normal" />
+
+                    <GridLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="15dp">
+
+                        <TextView
+                            android:id="@+id/lblSSID"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_column="1"
+                            android:layout_marginEnd="8dp"
+                            android:layout_row="1"
+                            android:layout_marginBottom="6dp"
+                            android:text="@string/labelSSID"
+                            android:textColor="@color/textContent"
+                            android:textSize="@dimen/text_conform1"
+                            android:textStyle="bold" />
+
+
+                        <TextView
+                            android:id="@+id/tvSSID"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_column="2"
+                            android:layout_row="1"
+                            android:text="@string/tvNullNetPL"
+                            android:textColor="@color/textContent" />
+
+                        <TextView
+                            android:id="@+id/lblNetMask"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_column="1"
+                            android:layout_marginBottom="6dp"
+                            android:layout_marginEnd="8dp"
+                            android:layout_row="2"
+                            android:text="@string/labelNetmask"
+                            android:textColor="@color/textContent"
+                            android:textSize="@dimen/text_conform1"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/tvNetMask"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_column="2"
+                            android:layout_row="2"
+                            android:text="@string/tvNullNetPL"
+                            android:textColor="@color/textContent" />
+
+                        <TextView
+                            android:id="@+id/lblFrequency"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_column="1"
+                            android:layout_marginEnd="8dp"
+                            android:layout_marginBottom="6dp"
+                            android:layout_row="3"
+                            android:text="@string/labelFrequency"
+                            android:textColor="@color/textContent"
+                            android:textSize="@dimen/text_conform1"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/tvFrequency"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_column="2"
+                            android:layout_row="3"
+                            android:text="@string/tvNullNetPL"
+                            android:textColor="@color/textContent" />
+
+                        <TextView
+                            android:id="@+id/lblSignal"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_column="1"
+                            android:layout_marginEnd="8dp"
+                            android:layout_marginBottom="6dp"
+                            android:layout_row="4"
+                            android:text="@string/labelSignal"
+                            android:textColor="@color/textContent"
+                            android:textSize="@dimen/text_conform1"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/tvSignal"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_column="2"
+                            android:layout_row="4"
+                            android:text="@string/tvNullNetPL"
+                            android:textColor="@color/textContent" />
+
+                        <TextView
+                            android:id="@+id/lblBroadCast"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_column="1"
+                            android:layout_marginBottom="6dp"
+                            android:layout_marginEnd="8dp"
+                            android:layout_row="5"
+                            android:text="@string/labelBroadCast"
+                            android:textColor="@color/textContent"
+                            android:textSize="@dimen/text_conform1"
+                            android:textStyle="bold" />
+
+
+                        <TextView
+                            android:id="@+id/tvBroadCast"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_column="2"
+                            android:layout_row="5"
+                            android:text="@string/tvNullNetPL"
+                            android:textColor="@color/textContent" />
+
+                        <TextView
+                            android:id="@+id/lblBSSID"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_column="1"
+                            android:layout_marginBottom="6dp"
+                            android:layout_marginEnd="14dp"
+                            android:layout_row="6"
+                            android:text="@string/labelBSSID"
+                            android:textColor="@color/textContent"
+                            android:textSize="@dimen/text_conform1"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/tvBSSID"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_column="2"
+                            android:layout_row="6"
+                            android:text="@string/tvNullNetPL"
+                            android:textColor="@color/textContent" />
+
+                    </GridLayout>
+
+                </LinearLayout>
+
+            </android.support.v7.widget.CardView>
 
         </LinearLayout>
 

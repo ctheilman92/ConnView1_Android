@@ -66,13 +66,13 @@ public class MydevicesRecyclerViewAdapter extends RecyclerView.Adapter<Mydevices
 //                    mListener.onListFragmentInteraction(holder.mItem);
 //                }
 
+                String isup = (holder.mItem.getState()) ? "UP" : "DOWN";
+
                 final AlertDialog TypeDialog;
                 AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
                 builder.setTitle("Device Details");
 
-                builder.setMessage("HostName: "+ holder.mItem.getDevName()
-                    +"\nIPV6: " + holder.mItem.ipv6
-                    +"\nSTATUS: " + holder.mItem.getState()
+                builder.setMessage("("+isup+") "+" IP: "+ holder.mItem.getIp()
                     +"\nMAC: " + holder.mItem.getMac()
                     +"\nTYPE: " + holder.mItem.getType());
 

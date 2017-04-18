@@ -1,6 +1,7 @@
 package com.example.milkymac.connview_main;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.os.StrictMode;
@@ -12,9 +13,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.example.milkymac.connview_main.helpers.NetHelper;
+import com.example.milkymac.connview_main.helpers.myResultReceiver;
 import com.example.milkymac.connview_main.models.MyDevice;
+import com.example.milkymac.connview_main.models.Network;
+import com.google.gson.Gson;
 
 import org.parceler.Parcels;
+import org.w3c.dom.Text;
 
 import java.io.Serializable;
 import java.net.InetAddress;
@@ -23,7 +29,7 @@ import java.net.SocketException;
 import java.util.Enumeration;
 
 
-public class IPInfoFragment extends Fragment implements Serializable {
+public class IPInfoFragment extends Fragment implements Serializable, myResultReceiver.Receiver  {
 
 
     //region UI VARS
@@ -31,11 +37,20 @@ public class IPInfoFragment extends Fragment implements Serializable {
     TextView tvPrivateIP;
     TextView tvPrivateMAC;
     TextView tvConnectionStatus;
+    TextView tvSSID;
+    TextView tvNetMask;
+    TextView tvFrequency;
+    TextView tvSignal;
+    TextView tvBroadcast;
+    TextView tvBSSID;
     //endregion
+
+    public myResultReceiver mReceiver;
 
     public static String PrivateIP;
     public static String PrivateMAC;
     public MyDevice mydev;
+    public Network mynet;
 
 
 
@@ -57,8 +72,6 @@ public class IPInfoFragment extends Fragment implements Serializable {
         Bundle args = new Bundle();
         args.putInt(ARG_SECTION_NUMBER, sectionNumber);
         args.putParcelable(MYDEV_KEY, wrappedDev);
-//        args.putSerializable(MYDEV_KEY, thisdev);
-
 
         fragment.setArguments(args);
         return fragment;
@@ -83,17 +96,36 @@ public class IPInfoFragment extends Fragment implements Serializable {
         View v = inflater.inflate(R.layout.fragment_ipinfo, container, false);
         ((MainActivity) getActivity()).setActionBarTitle("IP Info");
 
+
+        launchNetworkSniffer(1);
         ViewPager mViewPager = (ViewPager) v.findViewById(R.id.container);
 
         mydev = Parcels.unwrap(getArguments().getParcelable(MYDEV_KEY));
 
         PrivateIP = mydev.getIp();
         PrivateMAC = mydev.getMac();
+
         initVar(v);
 
         return v;
     }
 
+
+    //TODO: USE BROADCAST RECEIVER TO MANAGE WIFI CONNECTIVITY STATUS
+    //TODO: SETUP RECEIVER TO RELAY LIST OF DEVICES BACK TO ACTIVITY...
+    //TODO: AFTER LIST OF CONNECTED DEVICES IS COMPLETE, SAVE LIST FOR ALL ACTIVITIES
+    public void launchNetworkSniffer(int opr) {
+        Intent serviceIntent = new Intent(getActivity(), NetHelper.class);
+
+        //setup resultReceiver for service callbacks
+        mReceiver = new myResultReceiver(new android.os.Handler());
+        mReceiver.setReceiver(this);
+
+
+        serviceIntent.putExtra(NetHelper.BUNDLE_RECEIVER2, mReceiver);
+        serviceIntent.putExtra("OPR", opr);
+        getActivity().startService(serviceIntent);
+    }
 
 
     @Override
@@ -110,6 +142,34 @@ public class IPInfoFragment extends Fragment implements Serializable {
         mListener = null;
     }
 
+    @Override
+    public void onReceiveResult(int resultCode, Bundle resultData) {
+        Log.d("NET_DATA_RECEIVED", "processing...");
+
+        String newnetjson = resultData.getString("DATA_");
+        Log.d("DATA_", newnetjson);
+
+        Gson gson = new Gson();
+        mynet = gson.fromJson(newnetjson, Network.class);
+
+        if (mynet.getState()) { tvConnectionStatus.setText("Connected."); }
+        else { tvConnectionStatus.setText("Disconnected"); }
+
+        tvSSID.setText(mynet.getSSID());
+        tvBroadcast.setText(mynet.getBroadcast());
+
+        if (mynet.getFrequency() == 0) { tvFrequency.setText("----"); }
+        else { tvFrequency.setText(String.valueOf(mynet.getFrequency())); }
+
+        tvBSSID.setText(mynet.getBSSID());
+
+        if (mynet.getNetMask() == 0)  { tvNetMask.setText("----"); }
+        else { tvNetMask.setText(String.valueOf(mynet.getNetMask())); }
+
+        if (mynet.getSignal() == 0) { tvSignal.setText("----"); }
+        else { tvSignal.setText(String.valueOf(mynet.getSignal())); }
+    }
+
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(String title);
@@ -118,10 +178,15 @@ public class IPInfoFragment extends Fragment implements Serializable {
 
 
     public void initVar(View v) {
-        tvStatus = (TextView) v.findViewById(R.id.lblisConnected);
         tvPrivateIP = (TextView) v.findViewById(R.id.tvPersonalIP);
         tvPrivateMAC = (TextView) v.findViewById(R.id.tvPersonalMAC);
         tvConnectionStatus = (TextView) v.findViewById(R.id.lblisConnected);
+        tvSSID = (TextView) v.findViewById(R.id.tvSSID);
+        tvBSSID = (TextView) v.findViewById(R.id.tvBSSID);
+        tvNetMask = (TextView) v.findViewById(R.id.tvNetMask);
+        tvFrequency = (TextView) v.findViewById(R.id.tvFrequency);
+        tvSignal = (TextView) v.findViewById(R.id.tvSignal);
+        tvBroadcast = (TextView) v.findViewById(R.id.tvBroadCast);
 
         tvPrivateIP.setText(PrivateIP);
         tvPrivateMAC.setText(PrivateMAC);

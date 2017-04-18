@@ -48,9 +48,7 @@ public class MainActivity extends AppCompatActivity
 
 
         mydev = new MyDevice(this);
-
         new MyDeviceWorker().execute();
-        launchNetworkSniffer(1);
 
 
 
@@ -90,7 +88,11 @@ public class MainActivity extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            return true;
+            //clear shared-preferences
+
+            Intent logoutIntent = new Intent(MainActivity.this, LoginActivity.class);
+            finish();
+            startActivity(logoutIntent);
         }
 
         if (id == R.id.action_profile) {
@@ -103,7 +105,6 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onListFragmentInteraction(Devices device) {
-        Log.d("FRAGMENT_LISTENER", "ASDFHAISJDGFOV1YASDFQHJ4EGRHEWHFARF");
     }
     //endregion
 
@@ -124,24 +125,19 @@ public class MainActivity extends AppCompatActivity
     }
 
 
-    //TODO: USE BROADCAST RECEIVER TO MANAGE WIFI CONNECTIVITY STATUS
-    //TODO: SETUP RECEIVER TO RELAY LIST OF DEVICES BACK TO ACTIVITY...
-    //TODO: AFTER LIST OF CONNECTED DEVICES IS COMPLETE, SAVE LIST FOR ALL ACTIVITIES
-    public void launchNetworkSniffer(int opr) {
-        Intent serviceIntent = new Intent(getApplicationContext(), NetHelper.class);
-
-        serviceIntent.putExtra("OPR", opr);
-        startService(serviceIntent);
-    }
+//    //TODO: USE BROADCAST RECEIVER TO MANAGE WIFI CONNECTIVITY STATUS
+//    //TODO: SETUP RECEIVER TO RELAY LIST OF DEVICES BACK TO ACTIVITY...
+//    //TODO: AFTER LIST OF CONNECTED DEVICES IS COMPLETE, SAVE LIST FOR ALL ACTIVITIES
+//    public void launchNetworkSniffer(int opr) {
+//        Intent serviceIntent = new Intent(getApplicationContext(), NetHelper.class);
+//
+//        serviceIntent.putExtra("OPR", opr);
+//        startService(serviceIntent);
+//    }
     
     //endregion
 
 
-    //region FRAGMENT INTERACTION IMPLEMENTERS
-//    @Override
-//    public void onListFragmentInteraction(DummyContent.DummyItem item) {
-//
-//    }
 
     @Override
     public void onFragmentInteraction(String title) {

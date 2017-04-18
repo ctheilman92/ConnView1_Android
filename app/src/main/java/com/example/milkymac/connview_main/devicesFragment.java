@@ -4,8 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.ResultReceiver;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -14,15 +12,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
 import java.util.ArrayList;
-import java.util.List;
-
 import com.example.milkymac.connview_main.helpers.NetHelper;
 import com.example.milkymac.connview_main.helpers.myResultReceiver;
 import com.example.milkymac.connview_main.models.Devices;
-
-
 import com.google.gson.Gson;
 
 
@@ -63,6 +56,8 @@ public class devicesFragment extends Fragment implements myResultReceiver.Receiv
         }
     }
 
+
+    //TODO: populate devices list with a sharedPreferences list and double check there. also split up subnet into multiple threads to work faster.
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_devices_list, container, false);

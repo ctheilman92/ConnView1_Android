@@ -10,7 +10,7 @@
     <string name="targetPingPlaceHolder">127.0.0.1</string>
     <string name="tvTitleIP">Internal IP:</string>
     <string name="tvTitlePubIP">External IP:</string>
-    <string name="tvTitleMAC">MAC Address:</string>
+    <string name="tvTitleMAC">MAC: </string>
 
 
     <string name="title_activity_main2">Main2Activity</string>
@@ -53,6 +53,14 @@
     <string name="whoisResults">Awaiting Whois Results...</string>
     <string name="etServerPL">whois.internic.net</string>
     <string name="tvServerPL">Server:</string>
+    <string name="titleipInfoNetwork">Network Summary</string>
+    <string name="labelSSID">SSID:    </string>
+    <string name="labelNetmask">Mask:    </string>
+    <string name="tvNullNetPL">----</string>
+    <string name="labelFrequency">Freq:    </string>
+    <string name="labelSignal">Signal:    </string>
+    <string name="labelBroadCast">Bcast:    </string>
+    <string name="labelBSSID">BSSID:    </string>
 
 
 </resources>

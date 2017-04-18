@@ -77,6 +77,7 @@ public class NetHelper extends IntentService{
     private static String MYNET_IP;
     private static String IP_LASTOF_PREFIX;
     public static final String BUNDLE_RECEIVER = "receiver";
+    public static final String BUNDLE_RECEIVER2 = "netreceiver";
 
 
     SharedPreferences netprefs;
@@ -233,11 +234,6 @@ public class NetHelper extends IntentService{
         //if intent-int == 1: run getNetInfo
         int OPR = intent.getIntExtra("OPR", 0); //0 is default value...
 
-        //result receiver for callback use
-        Bundle params = intent.getExtras();
-        receiver = params.getParcelable(NetHelper.BUNDLE_RECEIVER);
-        b = new Bundle();
-
 
         //long running operation is netsniff
         listDevices = new ArrayList<Devices>();
@@ -262,6 +258,11 @@ public class NetHelper extends IntentService{
         //TODO: SEE IF BUNDLE RESULTRECEIVER EVEN WORKS
         if (OPR == 0) {
 
+            //result receiver for callback use
+            Bundle params = intent.getExtras();
+            receiver = params.getParcelable(NetHelper.BUNDLE_RECEIVER);
+            b = new Bundle();
+
             try {
                 netSniff();
 
@@ -271,13 +272,19 @@ public class NetHelper extends IntentService{
             }
         }
         else if (OPR == 1) {
+
+            Bundle params = intent.getExtras();
+            receiver = params.getParcelable(NetHelper.BUNDLE_RECEIVER2);
+            b = new Bundle();
+
             try {
                 myNet = getNetInfo();
                 Gson gson = new Gson();
+                String netToJson = gson.toJson(myNet);
 
-                String json = gson.toJson(myNet);
-                editor.putString("NetworkObj", json);
-                editor.commit();
+                b.putString("DATA_", netToJson);
+                receiver.send(0, b);
+
             }
             catch (SocketException e) {
                 e.printStackTrace();

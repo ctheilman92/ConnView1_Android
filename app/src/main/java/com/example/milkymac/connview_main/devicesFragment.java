@@ -147,7 +147,7 @@ public class devicesFragment extends Fragment implements myResultReceiver.Receiv
     //receiver implemented methods
     @Override
     public void onReceiveResult(int resultCode, Bundle resultData) {
-        Log.d("DATA_RECEIVED******", "processing...");
+        Log.d("DATA_RECEIVED", "processing...");
 
         String newdevjson = resultData.getString("DATA_");
         Log.d("DATA_", newdevjson);

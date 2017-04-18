@@ -103,7 +103,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onListFragmentInteraction(Devices device) {
-
+        Log.d("FRAGMENT_LISTENER", "ASDFHAISJDGFOV1YASDFQHJ4EGRHEWHFARF");
     }
     //endregion
 

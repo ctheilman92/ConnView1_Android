@@ -1,13 +1,16 @@
 package com.example.milkymac.connview_main;
 
 import android.content.Intent;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.content.Context;
+import android.widget.Toast;
 
 
 import com.example.milkymac.connview_main.devicesFragment.OnListFragmentInteractionListener;
@@ -40,31 +43,47 @@ public class MydevicesRecyclerViewAdapter extends RecyclerView.Adapter<Mydevices
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.fragment_devices, parent, false);
+
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
-//        holder.mIdView.setText(mValues.get(position).Type);
 
         if (holder.mItem.getType().equals("DESKTOP")) { holder.mIdView.setImageResource(R.drawable.ic_monitor); }
         else { holder.mIdView.setImageResource(R.drawable.ic_phone); }
 
         holder.mContentView.setText(mValues.get(position).getIp());
 
+
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (null != mListener) {
-                    // Notify the active callbacks interface (the activity, if the
-                    // fragment is attached to one) that an item has been selected.
+//                if (null != mListener) {
+//                    // Notify the active callbacks interface (the activity, if the
+//                    // fragment is attached to one) that an item has been selected.
 //                    mListener.onListFragmentInteraction(holder.mItem);
-                    
-                }
+//                }
+
+                final AlertDialog TypeDialog;
+                AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
+                builder.setTitle("Device Details");
+
+                builder.setMessage("HostName: "+ holder.mItem.getDevName()
+                    +"\nIPV6: " + holder.mItem.ipv6
+                    +"\nSTATUS: " + holder.mItem.getState()
+                    +"\nMAC: " + holder.mItem.getMac()
+                    +"\nTYPE: " + holder.mItem.getType());
+
+                TypeDialog = builder.create();
+                TypeDialog.show();
             }
         });
     }
+
+
+
 
     @Override
     public int getItemCount() {
@@ -73,7 +92,6 @@ public class MydevicesRecyclerViewAdapter extends RecyclerView.Adapter<Mydevices
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         public final View mView;
-//        public final TextView mIdView;
         public final ImageView mIdView;
         public final TextView mContentView;
         public Devices mItem;

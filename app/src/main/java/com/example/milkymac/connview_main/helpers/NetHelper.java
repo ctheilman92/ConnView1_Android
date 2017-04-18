@@ -18,6 +18,16 @@ import com.example.milkymac.connview_main.models.Devices;
 import com.example.milkymac.connview_main.models.Network;
 import com.google.gson.Gson;
 
+import org.xbill.DNS.Address;
+import org.xbill.DNS.ExtendedResolver;
+import org.xbill.DNS.Lookup;
+import org.xbill.DNS.Name;
+import org.xbill.DNS.PTRRecord;
+import org.xbill.DNS.Record;
+import org.xbill.DNS.Resolver;
+import org.xbill.DNS.ReverseMap;
+import org.xbill.DNS.Type;
+
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -27,6 +37,7 @@ import java.net.InetAddress;
 import java.net.InterfaceAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Enumeration;
 
@@ -128,16 +139,18 @@ public class NetHelper extends IntentService{
         Log.d(TAG, "IP_ADDR: " + String.valueOf(MYNET_IP));
 
 
-
+        //if connected to wifi....
         if (!MYNET_IP.equals("0.0.0.0")) {
 
             for (int i = 0; i < 255; i++) {
                 String testIP = IP_LASTOF_PREFIX + String.valueOf(i);
                 InetAddress getAddr = InetAddress.getByName(testIP);
                 boolean isReachable = getAddr.isReachable(1000);
-                String hostname = getAddr.getHostName();
+//                String hostname = getAddr.getCanonicalHostName();
+//                String hostname= Address.getHostName(InetAddress.getByName(testIP));
 
                 if (isReachable && !testIP.equals(MYNET_IP)) {
+                    String hostname = getHostByIP(testIP);
                     Log.d(TAG, "HOST: " + String.valueOf(hostname) + "(" + String.valueOf(testIP) + ") - STATUS: UP");
                     String mac = getMacFromArpCache(testIP);
                     Log.d(TAG, "MAC_ADDRESS: " + mac);
@@ -193,7 +206,25 @@ public class NetHelper extends IntentService{
     //region INTENT-SERVICE IMP. METHODS
 
 
+    //TODO: figure out WHY THE HELL ReverseMap includes a trailing period at thend end of the arpa zone.
+        //should be 5.0.168.192.in-addr.arpa......
+    public String getHostByIP(String addr) throws UnknownHostException {
+        Name name = ReverseMap.fromAddress(addr);
+        Log.d("REVERSE_IP?", name.toString());
 
+        //open DNS
+        final String[] openDNS = new String[] {"208.67.222.222", "208.67.220.220"};
+        final Resolver resolver = new ExtendedResolver(openDNS);
+        final Lookup lookup = new Lookup(name, Type.PTR);
+
+        lookup.setResolver(resolver);
+        Record[] records = lookup.run();
+        if (records == null) {
+            return addr;
+        }
+        return ((PTRRecord) records[0]).getTarget().toString();
+
+    }
 
     @Override
     protected void onHandleIntent(@Nullable Intent intent) {

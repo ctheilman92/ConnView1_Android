@@ -73,6 +73,9 @@
                 android:value="com.example.milkymac.connview_main.MainActivity" />
         </activity>
         <activity android:name=".RegistrationActivity"></activity>
+        <service
+            android:name=".helpers.NetHelper"
+            android:exported="false"/>
     </application>
 
 </manifest>

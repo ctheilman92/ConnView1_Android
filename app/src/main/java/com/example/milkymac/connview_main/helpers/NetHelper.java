@@ -1,16 +1,22 @@
 package com.example.milkymac.connview_main.helpers;
 
+import android.app.IntentService;
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
+import android.os.Bundle;
+import android.os.ResultReceiver;
+import android.support.annotation.Nullable;
 import android.text.format.Formatter;
 import android.util.Log;
 
 import com.example.milkymac.connview_main.models.Devices;
-import com.example.milkymac.connview_main.models.MyDevice;
 import com.example.milkymac.connview_main.models.Network;
+import com.google.gson.Gson;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -23,69 +29,59 @@ import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.Enumeration;
-import java.util.List;
 
 /**
  * Created by milkymac on 4/8/17.
  *
  * /**
  * Try to extract a hardware MAC address from a given IP address using the
- * ARP cache (/proc/net/arp).<br>
- * <br>
+ * ARP cache (/proc/net/arp).
+ *
  * We assume that the file has this structure:<br>
- * <br>
+ *
  * IP address       HW type     Flags       HW address            Mask     Device
  * 192.168.18.11    0x1         0x2         00:04:20:06:55:1a     *        eth0
  * 192.168.18.36    0x1         0x2         00:22:43:ab:2a:5b     *        eth0
  *
- * @param "ip"
  * @return the MAC from the ARP cache
  *
  **/
 
-public class NetHelper {
+public class NetHelper extends IntentService{
 
     private ConnectivityManager cm;
     private WifiManager manager;
     private WifiInfo connectionInfo;
     private NetworkInfo activeNetwork;
-    private transient Context myContext;
+
+
+    public Context myContext;
+    public ResultReceiver receiver;
+    public Bundle b;
 
     private static final String TAG = "SNIFF_NET";
+    private static final String NET_TAG = "NET_INFO";
     private static String NET_IP;
     private static short NET_PREFIX;
     private static String MYNET_IP;
     private static String IP_LASTOF_PREFIX;
-    
+    public static final String BUNDLE_RECEIVER = "receiver";
 
-    private List<Devices> listDevices;
+
+    SharedPreferences netprefs;
+    SharedPreferences.Editor editor;
+
+
+    private String ACTION = "com.example.milkymac.connview_main.helpers.NetHelper";
+
+    private ArrayList<Devices> listDevices;
     private Network myNet;
 
 
+    //used to name worker thread (DEBUG SPECIFIC)
+    public NetHelper() { super("network-helper"); }
 
-    public NetHelper() {
-        listDevices = new ArrayList<Devices>();
-    }
-
-
-    public NetHelper(Context context) {
-        listDevices = new ArrayList<Devices>();
-        this.myContext = context;
-
-        cm = (ConnectivityManager) myContext.getSystemService(Context.CONNECTIVITY_SERVICE);
-        activeNetwork = cm.getActiveNetworkInfo();
-        manager = (WifiManager) myContext.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
-        connectionInfo = manager.getConnectionInfo();
-        MYNET_IP = Formatter.formatIpAddress(connectionInfo.getIpAddress());
-        IP_LASTOF_PREFIX = MYNET_IP.substring(0, MYNET_IP.lastIndexOf(".") + 1);
-        //TODO: CORRECTLY JUSTIFY THIS (ONLY SUPPORTS /24 NETWORKS)
-        NET_IP = IP_LASTOF_PREFIX + "0";
-    }
-
-
-    public String getSSID() {
-        return (!connectionInfo.getHiddenSSID()) ? connectionInfo.getSSID() : "<hidden ssid>";
-    }
+    public String getSSID() { return (!connectionInfo.getHiddenSSID()) ? connectionInfo.getSSID() : "<hidden ssid>"; }
 
     //this sets the subnet variable along with returning broadcast ip...hm
     public InetAddress getSubnetBroadcast() throws SocketException {
@@ -110,43 +106,54 @@ public class NetHelper {
         return null;
     }
 
+
     /* build network obj with nethelper.getNetInfo(); */
     public Network getNetInfo() throws SocketException {
+        Log.d(NET_TAG, "beginning to gather network info");
         boolean connected = (connectionInfo.getSupplicantState().equals("COMPLETED")) ? true : false;
+        Log.d(NET_TAG, connectionInfo.getSupplicantState().toString());
+
 
         if (!connected) { return new Network(connected); }
         else {
             return new Network(connectionInfo.getSSID(), connectionInfo.getBSSID(), connectionInfo.getRssi(), connectionInfo.getFrequency(), MYNET_IP, getSubnetBroadcast().toString(), NET_PREFIX); }
     }
 
+
+
+
     public void netSniff() throws IOException {
         Log.d(TAG, "begin sniffing network on network: "+ NET_IP);
-        //TODO: find non-deprecated version later. but hey it works.
         Log.d(TAG, "Active Network: " + String.valueOf(activeNetwork));
         Log.d(TAG, "IP_ADDR: " + String.valueOf(MYNET_IP));
 
-        for (int i = 0; i < 255; i++) {
-            String testIP = IP_LASTOF_PREFIX + String.valueOf(i);
-            InetAddress getAddr = InetAddress.getByName(testIP);
-            boolean isReachable = getAddr.isReachable(1000);
-            String hostname = getAddr.getHostName();
 
-            if (isReachable && !testIP.equals(MYNET_IP)) {
-                Log.d(TAG, "HOST: " + String.valueOf(hostname) + "(" + String.valueOf(testIP) + ") - STATUS: UP");
-                String mac = getMacFromArpCache(testIP);
-                Log.d(TAG, "MAC_ADDRESS: " + mac);
 
-                boolean isv4 = (getAddr instanceof Inet4Address) ? true : false;
-                listDevices.add(new Devices(hostname, isv4, testIP, mac, true, "TYPE", getSSID()));
-                Log.d("ADD_2DEVLIST", "adding" + hostname + " to devicesList");
+        if (!MYNET_IP.equals("0.0.0.0")) {
+
+            for (int i = 0; i < 255; i++) {
+                String testIP = IP_LASTOF_PREFIX + String.valueOf(i);
+                InetAddress getAddr = InetAddress.getByName(testIP);
+                boolean isReachable = getAddr.isReachable(1000);
+                String hostname = getAddr.getHostName();
+
+                if (isReachable && !testIP.equals(MYNET_IP)) {
+                    Log.d(TAG, "HOST: " + String.valueOf(hostname) + "(" + String.valueOf(testIP) + ") - STATUS: UP");
+                    String mac = getMacFromArpCache(testIP);
+                    Log.d(TAG, "MAC_ADDRESS: " + mac);
+
+                    boolean isv4 = (getAddr instanceof Inet4Address) ? true : false;
+                    Devices newd = new Devices(hostname, isv4, testIP, mac, true, "DESKTOP", getSSID());
+                    listDevices.add(newd);
+                    Log.d("ADD_2DEVLIST", "adding" + hostname + " to devicesList");
+
+                    String jsonList = new Gson().toJson(newd);
+                    b.putString("DATA_", jsonList);
+                    receiver.send(0, b);
+                }
             }
         }
     }
-
-    public List<Devices> getListDevices() {
-        return listDevices;
-    }
-
 
     public String getMacFromArpCache(String ip) throws FileNotFoundException {
         if (ip.isEmpty()) { return null; }
@@ -182,5 +189,71 @@ public class NetHelper {
         }
         return null;
     }
-    
+
+    //region INTENT-SERVICE IMP. METHODS
+
+
+
+
+    @Override
+    protected void onHandleIntent(@Nullable Intent intent) {
+
+        //if intent-int == 0: run netsniff
+        //if intent-int == 1: run getNetInfo
+        int OPR = intent.getIntExtra("OPR", 0); //0 is default value...
+
+        //result receiver for callback use
+        Bundle params = intent.getExtras();
+        receiver = params.getParcelable(NetHelper.BUNDLE_RECEIVER);
+        b = new Bundle();
+
+
+        //long running operation is netsniff
+        listDevices = new ArrayList<Devices>();
+        myContext = getApplicationContext();
+
+
+        //application based storing of values
+        netprefs = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
+        editor = netprefs.edit();
+
+        cm = (ConnectivityManager) myContext.getSystemService(Context.CONNECTIVITY_SERVICE);
+        activeNetwork = cm.getActiveNetworkInfo();
+        manager = (WifiManager) myContext.getSystemService(Context.WIFI_SERVICE);
+        connectionInfo = manager.getConnectionInfo();
+
+        MYNET_IP = Formatter.formatIpAddress(connectionInfo.getIpAddress());
+        IP_LASTOF_PREFIX = MYNET_IP.substring(0, MYNET_IP.lastIndexOf(".") + 1);
+        //TODO: CORRECTLY JUSTIFY THIS (ONLY SUPPORTS /24 NETWORKS)
+        NET_IP = IP_LASTOF_PREFIX + "0";
+
+
+        //TODO: SEE IF BUNDLE RESULTRECEIVER EVEN WORKS
+        if (OPR == 0) {
+
+            try {
+                netSniff();
+
+            } catch (IOException e) {
+                e.printStackTrace();
+                Log.d(TAG, e.toString());
+            }
+        }
+        else if (OPR == 1) {
+            try {
+                myNet = getNetInfo();
+                Gson gson = new Gson();
+
+                String json = gson.toJson(myNet);
+                editor.putString("NetworkObj", json);
+                editor.commit();
+            }
+            catch (SocketException e) {
+                e.printStackTrace();
+            }
+        }
+
+    }
+
+    //endregion
 }

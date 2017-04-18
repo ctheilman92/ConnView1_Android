@@ -1,57 +1,50 @@
 package com.example.milkymac.connview_main;
 
 import android.content.Context;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
-import android.net.wifi.WifiInfo;
-import android.net.wifi.WifiManager;
-import android.os.AsyncTask;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.provider.SyncStateContract;
+import android.os.Handler;
+import android.os.ResultReceiver;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.res.TypedArrayUtils;
-import android.support.v4.net.ConnectivityManagerCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.format.Formatter;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.milkymac.connview_main.dummy.DummyContent;
-import com.example.milkymac.connview_main.dummy.DummyContent.DummyItem;
-
-import java.lang.ref.WeakReference;
-import java.math.BigInteger;
-import java.net.InetAddress;
+import java.util.ArrayList;
 import java.util.List;
 
-/**
- * A fragment representing a list of Items.
- * <p/>
- * Activities containing this fragment MUST implement the {@link OnListFragmentInteractionListener}
- * interface.
- */
-public class devicesFragment extends Fragment {
+import com.example.milkymac.connview_main.helpers.NetHelper;
+import com.example.milkymac.connview_main.helpers.myResultReceiver;
+import com.example.milkymac.connview_main.models.Devices;
+
+
+import com.google.gson.Gson;
+
+
+
+public class devicesFragment extends Fragment implements myResultReceiver.Receiver {
+    public myResultReceiver mReceiver;
     OnListFragmentInteractionListener mlistener;
     Context context;
+    MydevicesRecyclerViewAdapter mydevAdapter;
+
+    private static ArrayList<Devices> devlist;
+    SharedPreferences netprefs;
 
     // TODO: Customize parameter argument names
     private static final String ARG_COLUMN_COUNT = "column-count";
-    // TODO: Customize parameters
     private int mColumnCount = 1;
     private OnListFragmentInteractionListener mListener;
 
-    /**
-     * Mandatory empty constructor for the fragment manager to instantiate the
-     * fragment (e.g. upon screen orientation changes).
-     */
+
     public devicesFragment() {
     }
     // TODO: Customize parameter initialization
-    @SuppressWarnings("unused")
     public static devicesFragment newInstance(int columnCount) {
         devicesFragment fragment = new devicesFragment();
         Bundle args = new Bundle();
@@ -59,6 +52,7 @@ public class devicesFragment extends Fragment {
         fragment.setArguments(args);
         return fragment;
     }
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -75,74 +69,57 @@ public class devicesFragment extends Fragment {
         ((MainActivity) getActivity()).setActionBarTitle("Net Scan");
 
 
-//        new NetworkSniffTask(context).execute();
+        devlist = new ArrayList<>();
+        devlist.add(new Devices("TEST_DEVICE", true, "192.168.100.199", "00:00:00:00:00:00", true, "MOBILE", "meeseeks box"));
+        devlist.add(new Devices("TEST_DEVICE2", true, "74.16.248.777", "11:11:11:11:11:11", true, "DESKTOP", "meeseeks box"));
 
 
-
+        launchNetworkSniffer(0);
         // Set the adapter
         if (view instanceof RecyclerView) {
-
             Context context = view.getContext();
+
+
             RecyclerView recyclerView = (RecyclerView) view;
             if (mColumnCount <= 1) {
                 recyclerView.setLayoutManager(new LinearLayoutManager(context));
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            recyclerView.setAdapter(new MydevicesRecyclerViewAdapter(DummyContent.ITEMS, mListener));
+            mydevAdapter = new MydevicesRecyclerViewAdapter(devlist, mListener);
+            recyclerView.setAdapter(mydevAdapter);
         }
         return view;
     }
 
 
-//    static class NetworkSniffTask extends AsyncTask {
-//
-//        Context context;
-//        NetworkSniffTask(Context myContext) {
-//            this.context = myContext;
-//        }
-//
-//        private final String TAG = "EXEC_NETSNIFF";
-//
-//        @Override
-//        protected Object doInBackground(Object[] params) {
-//            {
-//                Log.d(TAG, "begin sniffing network... ");
-//
-//                try {
-//                    ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-//                    NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-//                    WifiManager manager = (WifiManager) context.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
-//                    WifiInfo connectionInfo = manager.getConnectionInfo();
-//
-//                    String ip = Formatter.formatIpAddress(connectionInfo.getIpAddress());
-//
-//                    Log.d(TAG, "Active Network: " + String.valueOf(activeNetwork));
-//                    Log.d(TAG, "IP_ADDR: " + String.valueOf(ip));
-//
-//                    //substring for the net prefix
-//                    String prefix = ip.substring(0, ip.lastIndexOf(".") + 1);
-//                    Log.d(TAG, "prefix: " + prefix);
-//
-//                    for (int i = 0; i < 255; i++) {
-//                        String getIP = prefix + String.valueOf(i);
-//
-//                        InetAddress getAddr = InetAddress.getByName(getIP);
-//                        boolean isReachable = getAddr.isReachable(1000);
-//                        String hostname = getAddr.getCanonicalHostName();
-//
-//                        if (isReachable) {
-//                            Log.d(TAG, "HOST: " + String.valueOf(hostname) + "(" + String.valueOf(getIP) + ") - STATUS: UP");
-//                        }
-//                    }
-//
-//                } catch (Exception e) {
-//                    Log.d("EXEC_ERR", e.toString());
-//                }
-//                return null;
-//            }
-//        }
-//    }
+    //NetHelper intent service class startup
+    //discover network info, and get a list of devices
+    public void launchNetworkSniffer(int opr) {
+        Intent serviceIntent = new Intent(getActivity(), NetHelper.class);
+
+        //setup resultReceiver for service callbacks
+        mReceiver = new myResultReceiver(new android.os.Handler());
+        mReceiver.setReceiver(this);
+
+        serviceIntent.putExtra(NetHelper.BUNDLE_RECEIVER, mReceiver);
+        serviceIntent.putExtra("OPR", opr);
+        getActivity().startService(serviceIntent);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mReceiver.setReceiver(this);
+    }
+
+    //avoid leaks with result receiver
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        mReceiver.setReceiver(null);
+    }
 
 
     @Override
@@ -165,18 +142,35 @@ public class devicesFragment extends Fragment {
         mListener = null;
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p/>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
+
+
+    //receiver implemented methods
+    @Override
+    public void onReceiveResult(int resultCode, Bundle resultData) {
+        Log.d("DATA_RECEIVED******", "processing...");
+
+        String newdevjson = resultData.getString("DATA_");
+        Log.d("DATA_", newdevjson);
+
+        Gson gson = new Gson();
+        Devices newd = gson.fromJson(newdevjson, Devices.class);
+
+        if (devlist != null) {
+            for (Devices i : devlist) {
+                if (i.getIp().equals(newd.getIp())) {
+                    return;
+                }
+            }
+            Log.d("ADDING_FRAGDEVICE", newd.devName);
+            devlist.add(newd);
+            mydevAdapter.notifyItemInserted(devlist.size() -1);
+            mydevAdapter.notifyDataSetChanged();
+        }
+    }
+
+
     public interface OnListFragmentInteractionListener {
         // TODO: Update argument type and name
-        void onListFragmentInteraction(DummyItem item);
+        void onListFragmentInteraction(Devices device);
     }
 }

@@ -52,6 +52,7 @@ public class Devices implements Serializable{
     //region SETS
     public void setState(boolean status) { isUp = status; }
     public void setDevName(String name) { devName = name; }
+    public void setType(String type) { Type = type; }
     public void setIp(String getip) { ip = getip; }
     public void setIpv6(String getip) { ipv6 = getip; }
     public void setMac(String getmac) { mac = getmac; }
@@ -60,6 +61,7 @@ public class Devices implements Serializable{
 
     //region GETS
     public String getDevName() { return devName; }
+    public String getType() { return Type; }
     public String getIp() { return ip; }
     public String getIpv6() { return ipv6; }
     public String getMac() { return mac; }

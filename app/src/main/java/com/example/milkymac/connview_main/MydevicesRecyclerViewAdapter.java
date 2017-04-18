@@ -5,12 +5,14 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.content.Context;
 
 
 import com.example.milkymac.connview_main.devicesFragment.OnListFragmentInteractionListener;
 import com.example.milkymac.connview_main.dummy.DummyContent.DummyItem;
+import com.example.milkymac.connview_main.models.Devices;
 
 import java.util.List;
 
@@ -22,10 +24,12 @@ import java.util.List;
 public class MydevicesRecyclerViewAdapter extends RecyclerView.Adapter<MydevicesRecyclerViewAdapter.ViewHolder> {
 
     private Context context;
-    private final List<DummyItem> mValues;
+    private final List<Devices> mValues;
     private final OnListFragmentInteractionListener mListener;
 
-    public MydevicesRecyclerViewAdapter(List<DummyItem> items, OnListFragmentInteractionListener listener) {
+    private List<Devices> mDevices;
+
+    public MydevicesRecyclerViewAdapter(List<Devices> items, OnListFragmentInteractionListener listener) {
         mValues = items;
         mListener = listener;
     }
@@ -42,8 +46,12 @@ public class MydevicesRecyclerViewAdapter extends RecyclerView.Adapter<Mydevices
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
-        holder.mIdView.setText(mValues.get(position).id);
-        holder.mContentView.setText(mValues.get(position).content);
+//        holder.mIdView.setText(mValues.get(position).Type);
+
+        if (holder.mItem.getType().equals("DESKTOP")) { holder.mIdView.setImageResource(R.drawable.ic_monitor); }
+        else { holder.mIdView.setImageResource(R.drawable.ic_phone); }
+
+        holder.mContentView.setText(mValues.get(position).getIp());
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -51,7 +59,7 @@ public class MydevicesRecyclerViewAdapter extends RecyclerView.Adapter<Mydevices
                 if (null != mListener) {
                     // Notify the active callbacks interface (the activity, if the
                     // fragment is attached to one) that an item has been selected.
-                    mListener.onListFragmentInteraction(holder.mItem);
+//                    mListener.onListFragmentInteraction(holder.mItem);
                     
                 }
             }
@@ -65,14 +73,15 @@ public class MydevicesRecyclerViewAdapter extends RecyclerView.Adapter<Mydevices
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         public final View mView;
-        public final TextView mIdView;
+//        public final TextView mIdView;
+        public final ImageView mIdView;
         public final TextView mContentView;
-        public DummyItem mItem;
+        public Devices mItem;
 
         public ViewHolder(View view) {
             super(view);
             mView = view;
-            mIdView = (TextView) view.findViewById(R.id.id);
+            mIdView = (ImageView) view.findViewById(R.id.id);
             mContentView = (TextView) view.findViewById(R.id.content);
         }
 

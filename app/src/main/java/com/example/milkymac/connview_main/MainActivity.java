@@ -48,9 +48,11 @@ public class MainActivity extends AppCompatActivity
 
 
         mydev = new MyDevice(this);
-        nethelper = new NetHelper(this);
+
         new MyDeviceWorker().execute();
-        new MyNetWorker().execute();
+        launchNetworkSniffer(1);
+
+
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -98,10 +100,14 @@ public class MainActivity extends AppCompatActivity
 
         return super.onOptionsItemSelected(item);
     }
+
+    @Override
+    public void onListFragmentInteraction(Devices device) {
+
+    }
     //endregion
 
     //region ASYNCTASK_RUNNERS
-
     //HANDLE BACKGROUND NETWORK OPERATIONS
     private class MyDeviceWorker extends AsyncTask {
 
@@ -116,34 +122,26 @@ public class MainActivity extends AppCompatActivity
             return this;
         }
     }
-    
-    private class MyNetWorker extends AsyncTask {
 
-        @Override
-        protected Object doInBackground(Object[] params) {
-            
-            try {
-                nethelper.netSniff();
-                myNet = nethelper.getNetInfo();
-                listDevices = (ArrayList<Devices>) nethelper.getListDevices();
-            }
-            catch (IOException e) {
-                e.printStackTrace();
-                Log.d("IO_EXCEPTION", e.toString());
-            }
-            
-            return this;
-        }
+
+    //TODO: USE BROADCAST RECEIVER TO MANAGE WIFI CONNECTIVITY STATUS
+    //TODO: SETUP RECEIVER TO RELAY LIST OF DEVICES BACK TO ACTIVITY...
+    //TODO: AFTER LIST OF CONNECTED DEVICES IS COMPLETE, SAVE LIST FOR ALL ACTIVITIES
+    public void launchNetworkSniffer(int opr) {
+        Intent serviceIntent = new Intent(getApplicationContext(), NetHelper.class);
+
+        serviceIntent.putExtra("OPR", opr);
+        startService(serviceIntent);
     }
     
     //endregion
 
 
     //region FRAGMENT INTERACTION IMPLEMENTERS
-    @Override
-    public void onListFragmentInteraction(DummyContent.DummyItem item) {
-
-    }
+//    @Override
+//    public void onListFragmentInteraction(DummyContent.DummyItem item) {
+//
+//    }
 
     @Override
     public void onFragmentInteraction(String title) {

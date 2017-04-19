@@ -43,7 +43,7 @@ public class LoginActivity extends AppCompatActivity {
     
 
     private User CurrentUser;
-    private DatabaseHelper dbhelper;
+    public DatabaseHelper dbhelper;
 
     Context context;
 
@@ -55,7 +55,6 @@ public class LoginActivity extends AppCompatActivity {
 
         context = LoginActivity.this;
 
-        dbhelper = new DatabaseHelper(context);
         prefs = getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
         editor = prefs.edit();
         initVars();
@@ -169,6 +168,8 @@ public class LoginActivity extends AppCompatActivity {
 
 
     public void validateLogin() {
+//        dbhelper = new DatabaseHelper(getApplicationContext());
+//
 //        Log.d("CHECK_EMAIL: ", etEmail.getText().toString().trim());
 //        Log.d("CHECK_PASS: ", etPassword.getText().toString().trim());
 //

@@ -6,4 +6,5 @@
     <color name="cardContent">#1c191a</color>
     <color name="backgroundContent">#2e3238</color>
     <color name="textContent">#ffffff</color>
+    <color name="txtReturnInfo">#e55b24</color>
 </resources>

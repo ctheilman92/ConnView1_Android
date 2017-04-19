@@ -9,24 +9,6 @@
     android:fitsSystemWindows="true"
     tools:context="com.example.milkymac.connview_main.PingActivity">
 
-    <android.support.design.widget.AppBarLayout
-        android:id="@+id/ping_appBar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingTop="@dimen/appbar_padding_top"
-        android:theme="@style/AppTheme.AppBarOverlay">
-
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/ping_toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="?attr/colorPrimary"
-            app:layout_scrollFlags="scroll|enterAlways"
-            app:popupTheme="@style/AppTheme.PopupOverlay"></android.support.v7.widget.Toolbar>
-
-    </android.support.design.widget.AppBarLayout>
-
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -36,7 +18,8 @@
         <android.support.v7.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:cardBackgroundColor="@color/cardContent">
+            app:cardBackgroundColor="@color/cardContent"
+            app:cardCornerRadius="@dimen/appbar_padding_top">
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -135,4 +118,23 @@
                 android:textSize="18sp" />
         </ScrollView>
     </LinearLayout>
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/ping_appBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="@dimen/appbar_padding_top"
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/ping_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="?attr/colorPrimary"
+            app:layout_scrollFlags="scroll|enterAlways"
+            app:popupTheme="@style/AppTheme.PopupOverlay"></android.support.v7.widget.Toolbar>
+
+    </android.support.design.widget.AppBarLayout>
+
+
 </LinearLayout>

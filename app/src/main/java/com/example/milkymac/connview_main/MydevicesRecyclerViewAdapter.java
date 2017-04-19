@@ -14,16 +14,11 @@ import android.widget.Toast;
 
 
 import com.example.milkymac.connview_main.devicesFragment.OnListFragmentInteractionListener;
-import com.example.milkymac.connview_main.dummy.DummyContent.DummyItem;
 import com.example.milkymac.connview_main.models.Devices;
 
 import java.util.List;
 
-/**
- * {@link RecyclerView.Adapter} that can display a {@link DummyItem} and makes a call to the
- * specified {@link OnListFragmentInteractionListener}.
- * TODO: Replace the implementation with code for your data type.
- */
+
 public class MydevicesRecyclerViewAdapter extends RecyclerView.Adapter<MydevicesRecyclerViewAdapter.ViewHolder> {
 
     private Context context;
@@ -60,12 +55,6 @@ public class MydevicesRecyclerViewAdapter extends RecyclerView.Adapter<Mydevices
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                if (null != mListener) {
-//                    // Notify the active callbacks interface (the activity, if the
-//                    // fragment is attached to one) that an item has been selected.
-//                    mListener.onListFragmentInteraction(holder.mItem);
-//                }
-
                 String isup = (holder.mItem.getState()) ? "UP" : "DOWN";
 
                 final AlertDialog TypeDialog;

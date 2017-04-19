@@ -12,11 +12,9 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.example.milkymac.connview_main.dummy.DummyContent;
 import com.example.milkymac.connview_main.helpers.NetHelper;
 import com.example.milkymac.connview_main.models.Devices;
 import com.example.milkymac.connview_main.models.MyDevice;
@@ -24,7 +22,6 @@ import com.example.milkymac.connview_main.models.Network;
 
 import org.parceler.Parcels;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity

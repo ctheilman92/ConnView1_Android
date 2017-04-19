@@ -122,7 +122,8 @@ public class NetHelper extends IntentService{
     /* build network obj with nethelper.getNetInfo(); */
     public Network getNetInfo() throws SocketException {
         Log.d(NET_TAG, "beginning to gather network info");
-        boolean connected = (connectionInfo.getSupplicantState().equals("COMPLETED")) ? true : false;
+        boolean connected = (String.valueOf(connectionInfo.getSupplicantState()).equals("COMPLETED")) ? true : false;
+        Log.d(NET_TAG, String.valueOf(connected));
         Log.d(NET_TAG, connectionInfo.getSupplicantState().toString());
 
 
@@ -147,11 +148,11 @@ public class NetHelper extends IntentService{
                 String testIP = IP_LASTOF_PREFIX + String.valueOf(i);
                 InetAddress getAddr = InetAddress.getByName(testIP);
                 boolean isReachable = getAddr.isReachable(1000);
-//                String hostname = getAddr.getCanonicalHostName();
+                String hostname = getAddr.getCanonicalHostName();
 //                String hostname= Address.getHostName(InetAddress.getByName(testIP));
 
                 if (isReachable && !testIP.equals(MYNET_IP)) {
-                    String hostname = getHostByIP(testIP);
+//                    String hostname = getHostByIP(testIP);
                     Log.d(TAG, "HOST: " + String.valueOf(hostname) + "(" + String.valueOf(testIP) + ") - STATUS: UP");
                     String mac = getMacFromArpCache(testIP);
                     Log.d(TAG, "MAC_ADDRESS: " + mac);

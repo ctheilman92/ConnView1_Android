@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import com.example.milkymac.connview_main.models.User;
 
@@ -47,7 +48,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
+        Log.d("DB_HELPER_ONCREATE", "executing create table and insert root");
         db.execSQL(CREATE_USER_TABLE);
+        db.execSQL("INSERT INTO  " + DATABASE_TABLE_NAME + "(" + COLUMN_USER_ID + "," + COLUMN_USER_NAME + ","
+                + COLUMN_USER_EMAIL + "," + COLUMN_USER_PASSWORD + ") values(999, 'root', 'Root@root.com', 'root')");
     }
 
     @Override
@@ -153,13 +157,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public boolean checkUserExistsEmail(String email) {
         SQLiteDatabase db = this.getReadableDatabase();
 
-
-        String col[] = { COLUMN_USER_ID };
         String Criteria = COLUMN_USER_EMAIL + "= ?";
         String SelectArgs[] = { email };
 
         Cursor cursor = db.query(DATABASE_TABLE_NAME,
-                col, Criteria, SelectArgs,
+                null, Criteria, SelectArgs,
                 null, null, null);
 
         int count = cursor.getCount();

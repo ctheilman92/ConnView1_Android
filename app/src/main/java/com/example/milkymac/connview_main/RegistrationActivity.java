@@ -52,7 +52,7 @@ public class RegistrationActivity extends AppCompatActivity {
 
         context = RegistrationActivity.this;
         prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
-        dbhelper = new DatabaseHelper(context);
+        dbhelper = new DatabaseHelper(getApplicationContext());
         editor = prefs.edit();
 
 
@@ -111,15 +111,6 @@ public class RegistrationActivity extends AppCompatActivity {
                 return false;
             }
         });
-//        etPassword2.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                if (!password2IsEdited) {
-//                    etPassword2.setText("");
-//                    password2IsEdited = true;
-//                }
-//            }
-//        });
 
         btnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -167,7 +158,7 @@ public class RegistrationActivity extends AppCompatActivity {
                         editor.commit();
                     }
                     catch (Exception ex) {
-                        Log.d("EXCEPTION_CONN2_DB", ex.toString());
+                        Log.d("EXCEPTION_CONN2_DBbbbb", ex.toString());
                     }
                 }
             }

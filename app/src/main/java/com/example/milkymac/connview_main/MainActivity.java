@@ -1,6 +1,7 @@
 package com.example.milkymac.connview_main;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -33,6 +34,9 @@ public class MainActivity extends AppCompatActivity
     private SectionsPagerAdapter mSectionsPagerAdapter;
     private ViewPager mViewPager;
 
+    private SharedPreferences myprefs;
+    private SharedPreferences.Editor editor;
+
     private MyDevice mydev;
     private Network myNet;
     private ArrayList<Devices> listDevices;
@@ -46,7 +50,6 @@ public class MainActivity extends AppCompatActivity
 
         mydev = new MyDevice(this);
         new MyDeviceWorker().execute();
-
 
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);

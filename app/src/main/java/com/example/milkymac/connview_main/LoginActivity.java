@@ -168,42 +168,45 @@ public class LoginActivity extends AppCompatActivity {
 
 
     public void validateLogin() {
-//        dbhelper = new DatabaseHelper(getApplicationContext());
-//
-//        Log.d("CHECK_EMAIL: ", etEmail.getText().toString().trim());
-//        Log.d("CHECK_PASS: ", etPassword.getText().toString().trim());
-//
-//        if (dbhelper.checkUserExists(etEmail.getText().toString().trim(), etPassword.getText().toString().trim())) {
-//            String validEmail = etEmail.getText().toString().trim();
-//
-//
-//            if (!dbhelper.checkUserExistsEmail(validEmail))
-//                Toast.makeText(context, "add user failed...", Toast.LENGTH_LONG);
-//
-//            List<User> getDBUsers = dbhelper.listAllUsers();
-//
-//
-//            //email and password work. find user by email
-//            for (User u : getDBUsers) {
-//                Log.d("NEXT_USER", u.getName().toString());
-//                if (u.getEmail().equals(validEmail)) {
-//
-//                    CurrentUser = new User(u.getUID(), u.getName(), u.getEmail(), u.getPassword());
-//                    editor.putString("EMAIL_KEY", CurrentUser.getEmail());
-//                    editor.putInt("UID_KEY", CurrentUser.getUID());
-//                    editor.putString("USERNAME_KEY", CurrentUser.getName());
-//                    editor.putString("USERPASS_KEY", CurrentUser.getPassword());
-//                    editor.commit();
-//                    Log.d("LOGGED_IN_USER", CurrentUser.getName().toString());
-//                }
-//            }
-//            if (CurrentUser != null)
-//                launchMain();
+        dbhelper = new DatabaseHelper(getApplicationContext());
+
+        Log.d("CHECK_EMAIL: ", etEmail.getText().toString().trim());
+        Log.d("CHECK_PASS: ", etPassword.getText().toString().trim());
+//      //DEBUG
+//        List<User> newlist = dbhelper.listAllUsers();
+//        for (User u : newlist) {
+//            Log.d("GRAB_USER", u.getEmail() + "______" + u.getPassword());
 //        }
-//        else {
-//            Toast.makeText(context, "User with these credentials does not exist!", Toast.LENGTH_SHORT).show();
-//        }
-        launchMain();
+        if (dbhelper.checkUserExists(etEmail.getText().toString().trim(), etPassword.getText().toString().trim())) {
+            String validEmail = etEmail.getText().toString().trim();
+
+
+            if (!dbhelper.checkUserExistsEmail(validEmail))
+                Toast.makeText(context, "add user failed...", Toast.LENGTH_LONG);
+
+            List<User> getDBUsers = dbhelper.listAllUsers();
+
+
+            //email and password work. find user by email
+            for (User u : getDBUsers) {
+                Log.d("NEXT_USER", u.getName().toString());
+                if (u.getEmail().equals(validEmail)) {
+
+                    CurrentUser = new User(u.getUID(), u.getName(), u.getEmail(), u.getPassword());
+                    editor.putString("EMAIL_KEY", CurrentUser.getEmail());
+                    editor.putInt("UID_KEY", CurrentUser.getUID());
+                    editor.putString("USERNAME_KEY", CurrentUser.getName());
+                    editor.putString("USERPASS_KEY", CurrentUser.getPassword());
+                    editor.commit();
+                    Log.d("LOGGED_IN_USER", CurrentUser.getName().toString());
+                }
+            }
+            if (CurrentUser != null)
+                launchMain();
+        }
+        else {
+            Toast.makeText(context, "User with these credentials does not exist!", Toast.LENGTH_SHORT).show();
+        }
     }
 
     public void launchRegister() {

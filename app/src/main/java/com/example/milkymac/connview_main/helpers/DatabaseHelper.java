@@ -19,8 +19,8 @@ import java.util.List;
 public class DatabaseHelper extends SQLiteOpenHelper {
 
 
-    private static final int DATABASE_VERSION = 1;
-    private static final String DATABASE_NAME = "UserManager.db";
+    private static final int DATABASE_VERSION = 4;
+    private static final String DATABASE_NAME = "UserManager";
     private static final String DATABASE_TABLE_NAME = "User";
 
     //region User COLUMNS
@@ -38,7 +38,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             + COLUMN_USER_EMAIL + " TEXT NOT NULL,"
             + COLUMN_USER_PASSWORD + " TEXT NOT NULL)";
 
-    private String DROP_USER_TABLE = "DROP TABLE IF EXISTS" + DATABASE_TABLE_NAME;
+    private String DROP_USER_TABLE = "DROP TABLE IF EXISTS " + DATABASE_TABLE_NAME;
 
 
 
@@ -48,7 +48,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        Log.d("DB_HELPER_ONCREATE", "executing create table and insert root");
         db.execSQL(CREATE_USER_TABLE);
         db.execSQL("INSERT INTO  " + DATABASE_TABLE_NAME + "(" + COLUMN_USER_ID + "," + COLUMN_USER_NAME + ","
                 + COLUMN_USER_EMAIL + "," + COLUMN_USER_PASSWORD + ") values(999, 'root', 'Root@root.com', 'root')");
@@ -65,6 +64,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 
     public List<User> listAllUsers() {
+        Log.d("DATABASE_HELPER", "BEGIN LIST OF ALL USERS");
         String[] cols = {
                 COLUMN_USER_ID,
                 COLUMN_USER_NAME,
@@ -73,11 +73,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         };
 
         // sorting orders
-        String sortOrder = COLUMN_USER_NAME + " ASC";
+//        String sortOrder = COLUMN_USER_NAME + " ASC";
         List<User> userList = new ArrayList<User>();
 
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.query(DATABASE_TABLE_NAME, cols, null, null, null, null, sortOrder);
+        Cursor cursor = db.query(DATABASE_TABLE_NAME, cols, null, null, null, null, null);
 
 
         //row traversal -> add to userList
@@ -136,18 +136,21 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     /* BY EMAIL & PASSWORD COMBINATION */
     public boolean checkUserExists(String email, String password) {
+        Log.d("DATABASE_HELPER", "CHECKING IF USER EXISTS BY EMAIL!!!!");
+
         SQLiteDatabase db = this.getReadableDatabase();
 
 
-        String col[] = { COLUMN_USER_ID };
+        String col[] = new String[]{ COLUMN_USER_ID };
         String Criteria = COLUMN_USER_EMAIL + "= ? AND " + COLUMN_USER_PASSWORD + "= ?";
         String SelectArgs[] = {email, password};
 
-        Cursor cursor = db.query(DATABASE_TABLE_NAME,
-                col, Criteria, SelectArgs,
-                null, null, null);
+        Cursor c = db.query(DATABASE_TABLE_NAME, col, Criteria, new String[] {email, password}, null, null, null);
 
-        int count = cursor.getCount();
+
+
+        int count = c.getCount();
+        Log.d("DATABASE_HELPER", "ROW COUNT"+ String.valueOf(count));
         db.close();
 
         return (count > 0) ? true : false;
@@ -155,6 +158,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     /* BY EMAIL ONLY */
     public boolean checkUserExistsEmail(String email) {
+        Log.d("DATABASE_HELPER", "CHECKING IF USER EXISTS BY EMAIL!!!!");
+        boolean exists = false;
         SQLiteDatabase db = this.getReadableDatabase();
 
         String Criteria = COLUMN_USER_EMAIL + "= ?";
@@ -166,7 +171,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         int count = cursor.getCount();
         db.close();
-
         return (count > 0) ? true : false;
     }
 }

@@ -132,13 +132,13 @@ public class RegistrationActivity extends AppCompatActivity {
     public void registerNewUser() {
         if (validateForm()) {
             try {
-                if (dbhelper.checkUserExistsEmail(etEmail.toString().trim())) {
+                if (dbhelper.checkUserExistsEmail(etEmail.getText().toString())) {
                     Toast.makeText(context, "A user is already present in Database.", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 else {
                     try {
-                        newUser = new User(etName.getText().toString().trim(), etEmail.getText().toString().trim(), etPassword.getText().toString().trim());
+                        newUser = new User(etName.getText().toString(), etEmail.getText().toString(), etPassword.getText().toString().trim());
                         dbhelper.addUser(newUser);
 
                         //come back and insert UID for user
@@ -151,14 +151,14 @@ public class RegistrationActivity extends AppCompatActivity {
                                 }
                             }
                         }
-//                        Toast.makeText(context, "WELCOME TO THE FAMILY "+newUser.getName(), Toast.LENGTH_LONG).show();
+                        Toast.makeText(context, "WELCOME TO THE FAMILY "+newUser.getName(), Toast.LENGTH_LONG).show();
                         editor.putString("EMAIL_KEY",newUser.getEmail());
                         editor.putInt("UID_KEY", newUser.getUID());
                         editor.putString("USERNAME_KEY", newUser.getName());
                         editor.commit();
                     }
                     catch (Exception ex) {
-                        Log.d("EXCEPTION_CONN2_DBbbbb", ex.toString());
+                        Log.d("EXCEPTION_CONN2_DB", ex.toString());
                     }
                 }
             }

@@ -37,11 +37,6 @@ public class RegistrationActivity extends AppCompatActivity {
     EditText etPassword2;
     Button btnRegister;
 
-    boolean nameIsedited;
-    boolean emailIsedited;
-    boolean password1IsEdited;
-    boolean password2IsEdited;
-
     User newUser;
     DatabaseHelper dbhelper;
     Context context;
@@ -70,11 +65,6 @@ public class RegistrationActivity extends AppCompatActivity {
         etPassword = (EditText) findViewById(R.id.etRegPassword);
         etPassword2 = (EditText) findViewById(R.id.etPasswordVerif);
         btnRegister = (Button) findViewById(R.id.btnRegister);
-
-        nameIsedited = false;
-        emailIsedited = false;
-        password1IsEdited = false;
-        password2IsEdited = false;
     }
 
 

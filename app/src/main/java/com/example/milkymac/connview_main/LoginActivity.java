@@ -8,7 +8,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.GestureDetector;
 import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -25,7 +27,7 @@ import java.util.List;
 
 public class LoginActivity extends AppCompatActivity {
 
-    private final String PREFS_NAME = "userPrefs";
+    public final String PREFS_NAME = "userPrefs";
 
     //region UI
     private TextView tvlogo;
@@ -35,8 +37,6 @@ public class LoginActivity extends AppCompatActivity {
     private EditText etPassword;
     //endregion
 
-    private boolean unIsEdited = false;
-    private boolean pwIsEdited = false;
 
     SharedPreferences prefs;
     SharedPreferences.Editor editor;
@@ -98,26 +98,44 @@ public class LoginActivity extends AppCompatActivity {
 
 
     public void registerFocusListeners() {
-        etEmail.setOnKeyListener(new View.OnKeyListener() {
-            @Override
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
-                if (keyCode == 66) {
-                    etPassword.requestFocus();
-                    etPassword.setText("");
+        etEmail.setOnTouchListener(new View.OnTouchListener() {
+            private GestureDetector gestureDetector = new GestureDetector(LoginActivity.this, new GestureDetector.SimpleOnGestureListener() {
+                @Override
+                public boolean onDoubleTap(MotionEvent e) {
+                    etEmail.requestFocus();
+                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.toggleSoftInput(InputMethodManager.SHOW_FORCED,0);
+                    Log.d("TEST", "onDoubleTap");
+                    etEmail.setText("");
+                    return super.onDoubleTap(e);
                 }
-                return false;
+            });
+
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                etEmail.requestFocus();
+                gestureDetector.onTouchEvent(event);
+                return true;
             }
         });
 
-
-        etPassword.setOnKeyListener(new View.OnKeyListener() {
-            @Override
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
-                if (keyCode == 66) {
+        etPassword.setOnTouchListener(new View.OnTouchListener() {
+            private GestureDetector gestureDetector = new GestureDetector(LoginActivity.this, new GestureDetector.SimpleOnGestureListener() {
+                @Override
+                public boolean onDoubleTap(MotionEvent e) {
+                    etPassword.requestFocus();
                     InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(etPassword.getWindowToken(), 0);
+                    imm.toggleSoftInput(InputMethodManager.SHOW_FORCED,0);
+                    etPassword.setText("");
+                    return super.onDoubleTap(e);
                 }
-                return false;
+            });
+
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                etPassword.requestFocus();
+                gestureDetector.onTouchEvent(event);
+                return true;
             }
         });
     }
@@ -169,15 +187,7 @@ public class LoginActivity extends AppCompatActivity {
 
     public void validateLogin() {
         dbhelper = new DatabaseHelper(getApplicationContext());
-
-        Log.d("CHECK_EMAIL: ", etEmail.getText().toString().trim());
-        Log.d("CHECK_PASS: ", etPassword.getText().toString().trim());
-//      //DEBUG
-//        List<User> newlist = dbhelper.listAllUsers();
-//        for (User u : newlist) {
-//            Log.d("GRAB_USER", u.getEmail() + "______" + u.getPassword());
-//        }
-        if (dbhelper.checkUserExists(etEmail.getText().toString().trim(), etPassword.getText().toString().trim())) {
+        if (dbhelper.checkUserExists(etEmail.getText().toString(), etPassword.getText().toString())) {
             String validEmail = etEmail.getText().toString().trim();
 
 
@@ -186,19 +196,15 @@ public class LoginActivity extends AppCompatActivity {
 
             List<User> getDBUsers = dbhelper.listAllUsers();
 
-
-            //email and password work. find user by email
             for (User u : getDBUsers) {
                 Log.d("NEXT_USER", u.getName().toString());
                 if (u.getEmail().equals(validEmail)) {
-
                     CurrentUser = new User(u.getUID(), u.getName(), u.getEmail(), u.getPassword());
+                    Log.d("SHARED_PREFS_UID_GET", String.valueOf(u.getUID()));
                     editor.putString("EMAIL_KEY", CurrentUser.getEmail());
-                    editor.putInt("UID_KEY", CurrentUser.getUID());
                     editor.putString("USERNAME_KEY", CurrentUser.getName());
                     editor.putString("USERPASS_KEY", CurrentUser.getPassword());
                     editor.commit();
-                    Log.d("LOGGED_IN_USER", CurrentUser.getName().toString());
                 }
             }
             if (CurrentUser != null)

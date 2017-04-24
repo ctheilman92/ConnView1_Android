@@ -35,7 +35,7 @@ public class User {
     public void setName(String n) { this.Name = n; }
     public String getEmail() { return Email; }
     public void setEmail(String n) { this.Email = n; }
-    public String getPassword() { return Name; }
+    public String getPassword() { return Password; }
     public void setPassword(String n) { this.Password = n; }
 
 }

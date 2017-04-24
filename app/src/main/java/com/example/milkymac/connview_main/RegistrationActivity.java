@@ -11,8 +11,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.ContentFrameLayout;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.GestureDetector;
 import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -76,41 +79,98 @@ public class RegistrationActivity extends AppCompatActivity {
 
 
     public void registerListeners() {
-        etName.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!nameIsedited) {
-                    etName.setText("");
-                    nameIsedited = true;
-                }
-            }
-        });
-        etEmail.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!emailIsedited) {
-                    etEmail.setText("");
-                    emailIsedited = true;
-                }
+        etName.setOnTouchListener(new View.OnTouchListener() {
+            private GestureDetector gestureDetector = new GestureDetector(RegistrationActivity.this, new GestureDetector.SimpleOnGestureListener() {
+                @Override
+                public boolean onDoubleTap(MotionEvent e) {
+                    etName.requestFocus();
+                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.toggleSoftInput(InputMethodManager.SHOW_FORCED,0);
 
-            }
-        });
-        etPassword.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!password1IsEdited) {
-                    etPassword.setText("");
-                    password1IsEdited = true;
+                    etName.setText("");
+                    return super.onDoubleTap(e);
                 }
-            }
-        });
-        etPassword.setOnKeyListener(new View.OnKeyListener() {
+            });
+
             @Override
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
-                if (keyCode == 66) { etPassword2.requestFocus(); etPassword2.setText(""); }
-                return false;
+            public boolean onTouch(View v, MotionEvent event) {
+                etName.requestFocus();
+                gestureDetector.onTouchEvent(event);
+
+                return true;
             }
         });
+
+        etEmail.setOnTouchListener(new View.OnTouchListener() {
+            private GestureDetector gestureDetector = new GestureDetector(RegistrationActivity.this, new GestureDetector.SimpleOnGestureListener() {
+                @Override
+                public boolean onDoubleTap(MotionEvent e) {
+                    etEmail.requestFocus();
+                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.toggleSoftInput(InputMethodManager.SHOW_FORCED,0);
+
+                    etEmail.setText("");
+                    return super.onDoubleTap(e);
+                }
+            });
+
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                etEmail.requestFocus();
+                gestureDetector.onTouchEvent(event);
+
+                return true;
+            }
+        });
+
+
+        etPassword.setOnTouchListener(new View.OnTouchListener() {
+            private GestureDetector gestureDetector = new GestureDetector(RegistrationActivity.this, new GestureDetector.SimpleOnGestureListener() {
+                @Override
+                public boolean onDoubleTap(MotionEvent e) {
+                    etPassword.requestFocus();
+                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.toggleSoftInput(InputMethodManager.SHOW_FORCED,0);
+
+                    etPassword.setText("");
+                    return super.onDoubleTap(e);
+                }
+            });
+
+
+
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                etPassword.requestFocus();
+                gestureDetector.onTouchEvent(event);
+
+                return true;
+            }
+        });
+
+
+        etPassword2.setOnTouchListener(new View.OnTouchListener() {
+            private GestureDetector gestureDetector = new GestureDetector(RegistrationActivity.this, new GestureDetector.SimpleOnGestureListener() {
+                @Override
+                public boolean onDoubleTap(MotionEvent e) {
+                    etPassword2.requestFocus();
+                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.toggleSoftInput(InputMethodManager.SHOW_FORCED,0);
+                    Log.d("TEST", "onDoubleTap");
+                    etPassword2.setText("");
+                    return super.onDoubleTap(e);
+                }
+            });
+
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                etPassword2.requestFocus();
+                gestureDetector.onTouchEvent(event);
+
+                return true;
+            }
+        });
+
 
         btnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -138,7 +198,7 @@ public class RegistrationActivity extends AppCompatActivity {
                 }
                 else {
                     try {
-                        newUser = new User(etName.getText().toString(), etEmail.getText().toString(), etPassword.getText().toString().trim());
+                        newUser = new User(etName.getText().toString(), etEmail.getText().toString(), etPassword2.getText().toString());
                         dbhelper.addUser(newUser);
 
                         //come back and insert UID for user

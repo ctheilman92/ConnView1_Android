@@ -73,7 +73,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         };
 
         // sorting orders
-//        String sortOrder = COLUMN_USER_NAME + " ASC";
         List<User> userList = new ArrayList<User>();
 
         SQLiteDatabase db = this.getReadableDatabase();
@@ -99,6 +98,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 
     public void addUser(User user) {
+        Log.d("ADD_USER_CHECK", "Adding user " + user.getPassword());
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
@@ -141,11 +141,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
 
 
-        String col[] = new String[]{ COLUMN_USER_ID };
         String Criteria = COLUMN_USER_EMAIL + "= ? AND " + COLUMN_USER_PASSWORD + "= ?";
         String SelectArgs[] = {email, password};
 
-        Cursor c = db.query(DATABASE_TABLE_NAME, col, Criteria, new String[] {email, password}, null, null, null);
+        Cursor c = db.query(DATABASE_TABLE_NAME, null, Criteria, new String[] {email, password}, null, null, null);
 
 
 

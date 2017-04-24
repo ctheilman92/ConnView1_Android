@@ -1,6 +1,8 @@
 package com.example.milkymac.connview_main;
 
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.provider.ContactsContract;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -23,6 +25,10 @@ import java.io.Serializable;
 public class ProfileActivity extends AppCompatActivity {
 
 
+    SharedPreferences myprefs;
+    SharedPreferences.Editor editor;
+    public final String PREFS_NAME = "userPrefs";
+
     private SectionsPagerAdapter mSectionsPagerAdapter;
     private ViewPager mViewPager;
 
@@ -30,6 +36,9 @@ public class ProfileActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
+
+        myprefs = getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        editor = myprefs.edit();
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.profile_toolbar);
         setSupportActionBar(toolbar);
@@ -60,7 +69,11 @@ public class ProfileActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            return true;
+            //clear shared-preferences
+            editor.clear();
+            Intent logoutIntent = new Intent(ProfileActivity.this, LoginActivity.class);
+            finish();
+            startActivity(logoutIntent);
         }
 
         return super.onOptionsItemSelected(item);

@@ -1,5 +1,6 @@
 package com.example.milkymac.connview_main;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
@@ -36,6 +37,7 @@ public class MainActivity extends AppCompatActivity
 
     private SharedPreferences myprefs;
     private SharedPreferences.Editor editor;
+    private final String PREFS_NAME = "userPrefs";
 
     private MyDevice mydev;
     private Network myNet;
@@ -50,7 +52,8 @@ public class MainActivity extends AppCompatActivity
 
         mydev = new MyDevice(this);
         new MyDeviceWorker().execute();
-
+        myprefs = getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        editor = myprefs.edit();
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -89,7 +92,7 @@ public class MainActivity extends AppCompatActivity
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             //clear shared-preferences
-
+            editor.clear();
             Intent logoutIntent = new Intent(MainActivity.this, LoginActivity.class);
             finish();
             startActivity(logoutIntent);

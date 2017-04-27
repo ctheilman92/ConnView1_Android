@@ -6,15 +6,15 @@ package com.example.milkymac.connview_main.models;
 
 public class Network {
 
-    private String SSID;
-    private String BSSID;
-    private int Signal;
-    private String NetIP;
-    private short NetMask;
-    private String Broadcast;
-    private int LinkSpeed;
-    private int Frequency;
-    private boolean isUP;
+    String SSID;
+    String BSSID;
+    int Signal;
+    String NetIP;
+    short NetMask;
+    String Broadcast;
+    int LinkSpeed;
+    int Frequency;
+    boolean isUP;
 
 
     public Network() {

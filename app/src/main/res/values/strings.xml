@@ -61,6 +61,7 @@
     <string name="labelSignal">Signal:    </string>
     <string name="labelBroadCast">Bcast:    </string>
     <string name="labelBSSID">BSSID:    </string>
+    <string name="labelNetIP">Net Address:</string>
 
 
 </resources>

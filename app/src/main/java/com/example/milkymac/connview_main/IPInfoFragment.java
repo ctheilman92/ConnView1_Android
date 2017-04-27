@@ -2,9 +2,11 @@ package com.example.milkymac.connview_main;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.os.StrictMode;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
@@ -13,10 +15,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.example.milkymac.connview_main.helpers.DatabaseHelper;
 import com.example.milkymac.connview_main.helpers.NetHelper;
 import com.example.milkymac.connview_main.helpers.myResultReceiver;
 import com.example.milkymac.connview_main.models.MyDevice;
+import com.example.milkymac.connview_main.models.MyNet;
 import com.example.milkymac.connview_main.models.Network;
+import com.example.milkymac.connview_main.models.User;
 import com.google.gson.Gson;
 
 import org.parceler.Parcels;
@@ -43,14 +48,23 @@ public class IPInfoFragment extends Fragment implements Serializable, myResultRe
     TextView tvSignal;
     TextView tvBroadcast;
     TextView tvBSSID;
+    TextView tvNetIP;
     //endregion
 
     public myResultReceiver mReceiver;
+    public DatabaseHelper dbhelper;
 
     public static String PrivateIP;
     public static String PrivateMAC;
     public MyDevice mydev;
     public Network mynet;
+    public MyNet personalNet;
+    public User currentUser;
+
+
+    public final String PREFS_NAME = "userPrefs";
+    public SharedPreferences myprefs;
+    public SharedPreferences.Editor editor;
 
 
 
@@ -86,6 +100,7 @@ public class IPInfoFragment extends Fragment implements Serializable, myResultRe
         StrictMode.setThreadPolicy(policy);
     }
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         if (container == null) {
@@ -95,6 +110,12 @@ public class IPInfoFragment extends Fragment implements Serializable, myResultRe
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_ipinfo, container, false);
         ((MainActivity) getActivity()).setActionBarTitle("IP Info");
+
+
+        //keep track of current user
+        myprefs = getActivity().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        currentUser = new User(myprefs.getString("USERNAME_KEY", "---"), myprefs.getString("EMAIL_KEY", "---"), myprefs.getString("USERPASS_KEY", "---"));
+
 
 
         launchNetworkSniffer(1);
@@ -142,6 +163,7 @@ public class IPInfoFragment extends Fragment implements Serializable, myResultRe
         mListener = null;
     }
 
+
     @Override
     public void onReceiveResult(int resultCode, Bundle resultData) {
         Log.d("NET_DATA_RECEIVED", "processing...");
@@ -152,6 +174,31 @@ public class IPInfoFragment extends Fragment implements Serializable, myResultRe
         Gson gson = new Gson();
         mynet = gson.fromJson(newnetjson, Network.class);
 
+        //region DATABASE WORK
+        //confusing naming conventions but whatever, It's crunch time.
+        personalNet = new MyNet(currentUser.getName(), mynet.getSSID(), mynet.getBSSID(), mynet.getSignal(), mynet.getFrequency(), mynet.getNetIP(), mynet.getBroadcast(), mynet.getNetMask());
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                dbhelper = new DatabaseHelper(getActivity().getApplicationContext());
+
+                //if returns true, a record exists - so just update teh times connected counter
+                if (dbhelper.checkNetworkHistory(currentUser.getName(), mynet.getSSID())) {
+                    Log.d("DB_IPINFO_OP", "updating user history record for this network");
+                    dbhelper.updateNetCounter(personalNet);
+                }
+                else {
+                    Log.d("DB_IPINFO_OP", "adding new network to user history");
+                    dbhelper.addUserNetwork(personalNet);
+                }
+
+            }
+        }).start();
+
+
+
+        //region FILL UI
         if (mynet.getState()) { tvConnectionStatus.setText("Connected."); }
         else { tvConnectionStatus.setText("Disconnected"); }
 
@@ -163,11 +210,14 @@ public class IPInfoFragment extends Fragment implements Serializable, myResultRe
 
         tvBSSID.setText(mynet.getBSSID());
 
+        tvNetIP.setText(mynet.getNetIP());
+
         if (mynet.getNetMask() == 0)  { tvNetMask.setText("----"); }
         else { tvNetMask.setText(String.valueOf(mynet.getNetMask())); }
 
         if (mynet.getSignal() == 0) { tvSignal.setText("----"); }
         else { tvSignal.setText(String.valueOf(mynet.getSignal())); }
+        //endregion
     }
 
     public interface OnFragmentInteractionListener {
@@ -187,6 +237,7 @@ public class IPInfoFragment extends Fragment implements Serializable, myResultRe
         tvFrequency = (TextView) v.findViewById(R.id.tvFrequency);
         tvSignal = (TextView) v.findViewById(R.id.tvSignal);
         tvBroadcast = (TextView) v.findViewById(R.id.tvBroadCast);
+        tvNetIP = (TextView) v.findViewById(R.id.tvNetIP);
 
         tvPrivateIP.setText(PrivateIP);
         tvPrivateMAC.setText(PrivateMAC);

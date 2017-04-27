@@ -197,7 +197,6 @@ public class LoginActivity extends AppCompatActivity {
             List<User> getDBUsers = dbhelper.listAllUsers();
 
             for (User u : getDBUsers) {
-                Log.d("NEXT_USER", u.getName().toString());
                 if (u.getEmail().equals(validEmail)) {
                     CurrentUser = new User(u.getUID(), u.getName(), u.getEmail(), u.getPassword());
                     Log.d("SHARED_PREFS_UID_GET", String.valueOf(u.getUID()));

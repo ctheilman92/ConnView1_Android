@@ -17,14 +17,11 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.example.milkymac.connview_main.helpers.NetHelper;
 import com.example.milkymac.connview_main.models.Devices;
 import com.example.milkymac.connview_main.models.MyDevice;
-import com.example.milkymac.connview_main.models.Network;
 
 import org.parceler.Parcels;
 
-import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity
         implements devicesFragment.OnListFragmentInteractionListener,
@@ -32,17 +29,14 @@ public class MainActivity extends AppCompatActivity
                     ToolsSelectionFragment.OnFragmentInteractionListener
 {
 
-    private SectionsPagerAdapter mSectionsPagerAdapter;
-    private ViewPager mViewPager;
+    public SectionsPagerAdapter mSectionsPagerAdapter;
+    public ViewPager mViewPager;
 
     private SharedPreferences myprefs;
     private SharedPreferences.Editor editor;
     private final String PREFS_NAME = "userPrefs";
 
     private MyDevice mydev;
-    private Network myNet;
-    private ArrayList<Devices> listDevices;
-    public NetHelper nethelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,7 +106,6 @@ public class MainActivity extends AppCompatActivity
     //endregion
 
     //region ASYNCTASK_RUNNERS
-    //HANDLE BACKGROUND NETWORK OPERATIONS
     private class MyDeviceWorker extends AsyncTask {
 
         @Override
@@ -126,22 +119,7 @@ public class MainActivity extends AppCompatActivity
             return this;
         }
     }
-
-
-//    //TODO: USE BROADCAST RECEIVER TO MANAGE WIFI CONNECTIVITY STATUS
-//    //TODO: SETUP RECEIVER TO RELAY LIST OF DEVICES BACK TO ACTIVITY...
-//    //TODO: AFTER LIST OF CONNECTED DEVICES IS COMPLETE, SAVE LIST FOR ALL ACTIVITIES
-//    public void launchNetworkSniffer(int opr) {
-//        Intent serviceIntent = new Intent(getApplicationContext(), NetHelper.class);
-//
-//        serviceIntent.putExtra("OPR", opr);
-//        startService(serviceIntent);
-//    }
-    
     //endregion
-
-
-
     @Override
     public void onFragmentInteraction(String title) {
 
@@ -154,10 +132,6 @@ public class MainActivity extends AppCompatActivity
     //endregion
 
     //region PAGE ADAPTER
-    /**
-     * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
-     * one of the sections/tabs/pages.
-     */
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
         public SectionsPagerAdapter(FragmentManager fm) {

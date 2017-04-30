@@ -6,8 +6,8 @@
     android:name="com.example.milkymac.connview_main.devicesFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginLeft="16dp"
-    android:layout_marginRight="16dp"
+    android:layout_marginLeft="@dimen/devicesListSideMargins"
+    android:layout_marginRight="@dimen/devicesListSideMargins"
     app:layoutManager="LinearLayoutManager"
     tools:context="com.example.milkymac.connview_main.devicesFragment"
     tools:listitem="@layout/fragment_devices" />

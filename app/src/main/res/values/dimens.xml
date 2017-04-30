@@ -9,4 +9,7 @@
     <dimen name="text_conform1">18sp</dimen>
     <dimen name="text_conform2">15sp</dimen>
     <dimen name="registerLogoTextSize">32dp</dimen>
+    <dimen name="appBarLayoutTopPadding">30dp</dimen>
+    <dimen name="devicesListSideMargins">16dp</dimen>
+    <dimen name="devicesCardItemMargin">10dp</dimen>
 </resources>

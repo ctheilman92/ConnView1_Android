@@ -21,7 +21,7 @@ import java.util.List;
 public class DatabaseHelper extends SQLiteOpenHelper {
 
 
-    private static final int DATABASE_VERSION = 9;
+    private static final int DATABASE_VERSION = 10;
     private static final String DATABASE_NAME = "UserManager";
     private static final String DATABASE_TABLE_NAME = "User";
 
@@ -73,7 +73,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         //super user. I never claimed to be a good person.
         db.execSQL("INSERT INTO  " + DATABASE_TABLE_NAME + "(" + COLUMN_USER_ID + "," + COLUMN_USER_NAME + ","
-                + COLUMN_USER_EMAIL + "," + COLUMN_USER_PASSWORD + ") values(999, 'root', 'Root@root.com', 'root')");
+                + COLUMN_USER_EMAIL + "," + COLUMN_USER_PASSWORD + ") values(999, 'root', 'root@root.com', 'root')");
         db.execSQL(CREATE_NETWORKS_TABLE);
     }
 

@@ -105,7 +105,6 @@ public class LoginActivity extends AppCompatActivity {
                     etEmail.requestFocus();
                     InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                     imm.toggleSoftInput(InputMethodManager.SHOW_FORCED,0);
-                    Log.d("TEST", "onDoubleTap");
                     etEmail.setText("");
                     return super.onDoubleTap(e);
                 }
@@ -179,11 +178,6 @@ public class LoginActivity extends AppCompatActivity {
     }
     //endregion
 
-    public void emptyInput() {
-        etPassword.setText("");
-        etEmail.setText("");
-    }
-
 
     public void validateLogin() {
         dbhelper = new DatabaseHelper(getApplicationContext());
@@ -197,7 +191,7 @@ public class LoginActivity extends AppCompatActivity {
             List<User> getDBUsers = dbhelper.listAllUsers();
 
             for (User u : getDBUsers) {
-                if (u.getEmail().equals(validEmail)) {
+                if (u.getEmail().toLowerCase().equals(validEmail.toLowerCase())) {
                     CurrentUser = new User(u.getUID(), u.getName(), u.getEmail(), u.getPassword());
                     Log.d("SHARED_PREFS_UID_GET", String.valueOf(u.getUID()));
                     editor.putString("EMAIL_KEY", CurrentUser.getEmail());

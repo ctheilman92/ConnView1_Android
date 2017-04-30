@@ -130,9 +130,8 @@ public class NetHelper extends IntentService{
 
         if (!connected) { return new Network(connected); }
         else {
-            return new Network(connectionInfo.getSSID(), connectionInfo.getBSSID(), connectionInfo.getRssi(), connectionInfo.getFrequency(), NET_IP, getSubnetBroadcast().toString(), NET_PREFIX); }
+            return new Network(connectionInfo.getSSID(), connectionInfo.getBSSID(), connectionInfo.getRssi(), connectionInfo.getFrequency(), NET_IP, getSubnetBroadcast().toString().substring(1), NET_PREFIX); }
     }
-
 
 
 

@@ -226,15 +226,13 @@ public class IPInfoFragment extends Fragment implements Serializable, myResultRe
         else { tvConnectionStatus.setText("Disconnected"); }
 
         tvSSID.setText(mynet.getSSID());
+        tvBroadcast.setText(mynet.getBroadcast());
 
-        String parseBroadcast = mynet.getBroadcast().substring(1);
-        tvBroadcast.setText(parseBroadcast);
 
         if (mynet.getFrequency() == 0) { tvFrequency.setText("----"); }
         else { tvFrequency.setText(String.valueOf(mynet.getFrequency())); }
 
         tvBSSID.setText(mynet.getBSSID());
-
         tvNetIP.setText(mynet.getNetIP());
 
         if (mynet.getNetMask() == 0)  { tvNetMask.setText("----"); }

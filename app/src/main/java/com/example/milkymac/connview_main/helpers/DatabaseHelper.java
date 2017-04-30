@@ -232,7 +232,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         ContentValues values = new ContentValues();
         values.put(COLUMN_USER_NAME, user.getName());
-        values.put(COLUMN_USER_EMAIL, user.getEmail());
+        values.put(COLUMN_USER_EMAIL, user.getEmail().toLowerCase());
         values.put(COLUMN_USER_PASSWORD, user.getPassword());
 
         db.insert(DATABASE_TABLE_NAME, null, values);
@@ -244,7 +244,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         ContentValues values = new ContentValues();
         values.put(COLUMN_USER_NAME, user.getName());
-        values.put(COLUMN_USER_EMAIL, user.getEmail());
+        values.put(COLUMN_USER_EMAIL, user.getEmail().toLowerCase());
         values.put(COLUMN_USER_PASSWORD, user.getPassword());
 
         db.update(DATABASE_TABLE_NAME, values, COLUMN_USER_ID +
@@ -270,9 +270,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 
         String Criteria = COLUMN_USER_EMAIL + "= ? AND " + COLUMN_USER_PASSWORD + "= ?";
-        String SelectArgs[] = { email, password };
-
-        Cursor c = db.query(DATABASE_TABLE_NAME, null, Criteria, new String[] {email, password}, null, null, null);
+        Cursor c = db.query(DATABASE_TABLE_NAME, null, Criteria, new String[] {email.toLowerCase(), password}, null, null, null);
 
 
 
@@ -290,7 +288,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
 
         String Criteria = COLUMN_USER_EMAIL + "= ?";
-        String SelectArgs[] = { email };
+        String SelectArgs[] = { email.toLowerCase() };
 
         Cursor cursor = db.query(DATABASE_TABLE_NAME,
                 null, Criteria, SelectArgs,

@@ -1,5 +1,7 @@
 package com.example.milkymac.connview_main.models;
 
+import java.util.Date;
+
 /**
  * Created by milkymac on 4/25/17.
  */

@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.design.widget.TabLayout;
@@ -36,6 +35,9 @@ public class MainActivity extends AppCompatActivity
     private SharedPreferences.Editor editor;
     private final String PREFS_NAME = "userPrefs";
 
+    private MyDevice mydev;
+
+
     private final FragmentManager.OnBackStackChangedListener mOnBackStackChangedListener = new FragmentManager.OnBackStackChangedListener() {
 
         @Override
@@ -49,7 +51,6 @@ public class MainActivity extends AppCompatActivity
         }
     };
 
-    private MyDevice mydev;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

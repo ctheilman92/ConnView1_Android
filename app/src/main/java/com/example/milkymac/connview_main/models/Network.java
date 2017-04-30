@@ -1,10 +1,17 @@
 package com.example.milkymac.connview_main.models;
 
+
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 /**
  * Created by milkymac on 4/8/17.
  */
 
 public class Network {
+    private static final DateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 
     String SSID;
     String BSSID;
@@ -15,6 +22,7 @@ public class Network {
     int LinkSpeed;
     int Frequency;
     boolean isUP;
+    Date lastConnected;
 
 
     public Network() {
@@ -22,40 +30,46 @@ public class Network {
     }
 
     public Network(String ssid, String bssid, int signal, int frequency, String netip, String broadcast, short netmask) {
-        this.Frequency = frequency;
-        this.isUP = true;
-        this.BSSID = bssid;
-        this.SSID = ssid;
-        this.NetIP = netip;
-        this.NetMask = netmask;
-        this.Broadcast = broadcast;
-        this.Signal = signal;
+        Frequency = frequency;
+        BSSID = bssid;
+        SSID = ssid;
+        NetIP = netip;
+        NetMask = netmask;
+        Broadcast = broadcast;
+        Signal = signal;
+
+        //excluded from params
+        isUP = true;
+        lastConnected = new Date();
     }
 
     public Network(boolean isup) {
         if (!isup) {
-            this.isUP = false;
-            this.SSID = "----";
-            this.NetIP = "----";
-            this.NetMask = 0;
-            this.Broadcast = "----";
-            this.Signal = 0;
-            this.BSSID = "----";
-            this.LinkSpeed = 0;
+            isUP = false;
+            SSID = "----";
+            NetIP = "----";
+            NetMask = 0;
+            Broadcast = "----";
+            Signal = 0;
+            BSSID = "----";
+            LinkSpeed = 0;
         }
-        else this.isUP = true;
+        else isUP = true;
     }
 
-    public void setFrequency(int f) { this.Frequency = f; }
-    public void setLinkSpeed(int speed) { this.LinkSpeed = speed; }
-    public void setBSSID(String bssid) { this.BSSID = bssid; }
-    public void setSSID(String ssid) { this.SSID = ssid; }
-    public void setSignal(int signal) { this.Signal = signal; }
-    public void setNetIP(String netip) { this.NetIP = netip; }
-    public void setNetMask(short netmask) { this.NetMask = netmask; }
-    public void setBroadcast(String broadcast) { this.Broadcast = broadcast; }
-    public void setState(boolean isup) { this.isUP = isup; }
+    public void setLastConnected() { Date date = new Date(); }
+    public void setFrequency(int f) { Frequency = f; }
+    public void setLinkSpeed(int speed) { LinkSpeed = speed; }
+    public void setBSSID(String bssid) { BSSID = bssid; }
+    public void setSSID(String ssid) { SSID = ssid; }
+    public void setSignal(int signal) { Signal = signal; }
+    public void setNetIP(String netip) { NetIP = netip; }
+    public void setNetMask(short netmask) { NetMask = netmask; }
+    public void setBroadcast(String broadcast) { Broadcast = broadcast; }
+    public void setState(boolean isup) { isUP = isup; }
 
+
+    public String getLastConnected() { return sdf.format(lastConnected); }
     public int getLinkSpeed() { return LinkSpeed; }
     public String getBSSID() { return BSSID; }
     public String getSSID() { return SSID; }

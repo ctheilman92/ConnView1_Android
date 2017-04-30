@@ -10,7 +10,8 @@ import android.os.Parcelable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -26,8 +27,7 @@ import org.parceler.Parcels;
 public class MainActivity extends AppCompatActivity
         implements devicesFragment.OnListFragmentInteractionListener,
                     IPInfoFragment.OnFragmentInteractionListener,
-                    ToolsSelectionFragment.OnFragmentInteractionListener
-{
+                    ToolsSelectionFragment.OnFragmentInteractionListener {
 
     public SectionsPagerAdapter mSectionsPagerAdapter;
     public ViewPager mViewPager;
@@ -35,6 +35,19 @@ public class MainActivity extends AppCompatActivity
     private SharedPreferences myprefs;
     private SharedPreferences.Editor editor;
     private final String PREFS_NAME = "userPrefs";
+
+    private final FragmentManager.OnBackStackChangedListener mOnBackStackChangedListener = new FragmentManager.OnBackStackChangedListener() {
+
+        @Override
+        public void onBackStackChanged() {
+            FragmentManager fm = getSupportFragmentManager();
+            Fragment fr = fm.findFragmentById(R.id.container);
+
+            if (fr != null) {
+                fr.onResume();
+            }
+        }
+    };
 
     private MyDevice mydev;
 
@@ -45,15 +58,19 @@ public class MainActivity extends AppCompatActivity
 
 
         mydev = new MyDevice(this);
-        new MyDeviceWorker().execute();
         myprefs = getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
         editor = myprefs.edit();
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        // Create the adapter that will return a fragment fors each of the three
+
+        // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+
+        FragmentManager fm = getSupportFragmentManager();
+        fm.addOnBackStackChangedListener(mOnBackStackChangedListener);
+        FragmentTransaction ft = fm.beginTransaction();
 
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
@@ -105,21 +122,7 @@ public class MainActivity extends AppCompatActivity
     }
     //endregion
 
-    //region ASYNCTASK_RUNNERS
-    private class MyDeviceWorker extends AsyncTask {
 
-        @Override
-        protected Object doInBackground(Object[] params) {
-
-            mydev.setListNetworkInterfaces();
-            mydev.setInterfacesByDisplayName();
-            mydev.getSSIDName();
-            mydev.getLocalAddresses("wlan0");
-            
-            return this;
-        }
-    }
-    //endregion
     @Override
     public void onFragmentInteraction(String title) {
 
@@ -132,7 +135,7 @@ public class MainActivity extends AppCompatActivity
     //endregion
 
     //region PAGE ADAPTER
-    public class SectionsPagerAdapter extends FragmentPagerAdapter {
+    public class SectionsPagerAdapter extends FragmentStatePagerAdapter {
 
         public SectionsPagerAdapter(FragmentManager fm) {
             super(fm);
@@ -145,11 +148,11 @@ public class MainActivity extends AppCompatActivity
             switch (position) {
                 case 0:
                     Parcelable wrapped = Parcels.wrap(mydev);
-                    return IPInfoFragment.newInstance(position + 1, wrapped);
+                    return IPInfoFragment.newInstance(position, wrapped);
                 case 1:
                     return devicesFragment.newInstance(position);
                 case 2:
-                    return ToolsSelectionFragment.newInstance(position + 1);
+                    return ToolsSelectionFragment.newInstance(position);
                 default:
                     Parcelable wrappeddefault = Parcels.wrap(mydev);
                     return IPInfoFragment.newInstance(position + 1, wrappeddefault);

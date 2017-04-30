@@ -90,6 +90,7 @@ public class MyDevice extends Devices {
     public void getLocalAddresses(String interfaceName) {
         try {
             for (Enumeration<NetworkInterface> en = NetworkInterface.getNetworkInterfaces(); en.hasMoreElements(); ) {
+
                 NetworkInterface intf = en.nextElement();
 
                 if (!intf.isLoopback() && intf.isUp() && (intf.getName().equals(interfaceName))) {
@@ -99,7 +100,7 @@ public class MyDevice extends Devices {
                     //region MAC ASSIGN
                     byte[] macBytes = intf.getHardwareAddress();
                     if (macBytes == null) {
-                        setMac("UNDEFINED");
+                        setMac("00:00:00:00:00:00");
                     }
 
                     StringBuilder res1 = new StringBuilder();
@@ -133,6 +134,11 @@ public class MyDevice extends Devices {
                         }
                     }
                     //endregion
+                }
+                else {
+                    setIp("0.0.0.0");
+                    setIpv6("f80::");
+                    setMac("00:00:00:00:00:00");
                 }
             }
         } catch (SocketException ex) {

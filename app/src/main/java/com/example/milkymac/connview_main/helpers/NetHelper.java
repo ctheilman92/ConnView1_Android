@@ -80,8 +80,9 @@ public class NetHelper extends IntentService{
     public static final String BUNDLE_RECEIVER2 = "netreceiver";
 
 
-    SharedPreferences netprefs;
-    SharedPreferences.Editor editor;
+    public final String PREFS_NAME = "userPrefs";
+    public SharedPreferences myprefs;
+    public SharedPreferences.Editor editor;
 
 
     private String ACTION = "com.example.milkymac.connview_main.helpers.NetHelper";
@@ -242,8 +243,8 @@ public class NetHelper extends IntentService{
 
 
         //application based storing of values
-        netprefs = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
-        editor = netprefs.edit();
+        myprefs = getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        editor = myprefs.edit();
 
         cm = (ConnectivityManager) myContext.getSystemService(Context.CONNECTIVITY_SERVICE);
         activeNetwork = cm.getActiveNetworkInfo();
@@ -282,6 +283,11 @@ public class NetHelper extends IntentService{
                 myNet = getNetInfo();
                 Gson gson = new Gson();
                 String netToJson = gson.toJson(myNet);
+
+                //save string into shared prefs
+                editor.putString("CURRENT_NET_KEY", netToJson);
+                editor.commit();
+
 
                 b.putString("DATA_", netToJson);
                 receiver.send(0, b);

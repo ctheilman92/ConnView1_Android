@@ -3,6 +3,7 @@ package com.example.milkymac.connview_main;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.os.StrictMode;
@@ -103,9 +104,9 @@ public class IPInfoFragment extends Fragment implements Serializable, myResultRe
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        if (container == null) {
-            return null;
-        }
+//        if (container == null) {
+//            return null;
+//        }
 
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_ipinfo, container, false);
@@ -117,11 +118,12 @@ public class IPInfoFragment extends Fragment implements Serializable, myResultRe
         currentUser = new User(myprefs.getString("USERNAME_KEY", "---"), myprefs.getString("EMAIL_KEY", "---"), myprefs.getString("USERPASS_KEY", "---"));
 
 
+        mydev = Parcels.unwrap(getArguments().getParcelable(MYDEV_KEY));
+        new MyDeviceWorker().execute();
 
         launchNetworkSniffer(1);
         ViewPager mViewPager = (ViewPager) v.findViewById(R.id.container);
 
-        mydev = Parcels.unwrap(getArguments().getParcelable(MYDEV_KEY));
 
         PrivateIP = mydev.getIp();
         PrivateMAC = mydev.getMac();
@@ -132,9 +134,6 @@ public class IPInfoFragment extends Fragment implements Serializable, myResultRe
     }
 
 
-    //TODO: USE BROADCAST RECEIVER TO MANAGE WIFI CONNECTIVITY STATUS
-    //TODO: SETUP RECEIVER TO RELAY LIST OF DEVICES BACK TO ACTIVITY...
-    //TODO: AFTER LIST OF CONNECTED DEVICES IS COMPLETE, SAVE LIST FOR ALL ACTIVITIES
     public void launchNetworkSniffer(int opr) {
         Intent serviceIntent = new Intent(getActivity(), NetHelper.class);
 
@@ -163,6 +162,29 @@ public class IPInfoFragment extends Fragment implements Serializable, myResultRe
         mListener = null;
     }
 
+    //region ASYNCTASK_RUNNERS
+    private class MyDeviceWorker extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            mydev.setListNetworkInterfaces();
+            mydev.setInterfacesByDisplayName();
+            mydev.getSSIDName();
+            mydev.getLocalAddresses("wlan0");
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void v) {
+
+            tvPrivateIP.setText(mydev.getIp().toString());
+            tvPrivateMAC.setText(mydev.getMac().toString());
+        }
+
+    }
+    //endregion
+
 
     @Override
     public void onReceiveResult(int resultCode, Bundle resultData) {
@@ -170,6 +192,7 @@ public class IPInfoFragment extends Fragment implements Serializable, myResultRe
 
         String newnetjson = resultData.getString("DATA_");
         Log.d("DATA_", newnetjson);
+
 
         Gson gson = new Gson();
         mynet = gson.fromJson(newnetjson, Network.class);
@@ -203,7 +226,9 @@ public class IPInfoFragment extends Fragment implements Serializable, myResultRe
         else { tvConnectionStatus.setText("Disconnected"); }
 
         tvSSID.setText(mynet.getSSID());
-        tvBroadcast.setText(mynet.getBroadcast());
+
+        String parseBroadcast = mynet.getBroadcast().substring(1);
+        tvBroadcast.setText(parseBroadcast);
 
         if (mynet.getFrequency() == 0) { tvFrequency.setText("----"); }
         else { tvFrequency.setText(String.valueOf(mynet.getFrequency())); }
@@ -239,38 +264,37 @@ public class IPInfoFragment extends Fragment implements Serializable, myResultRe
         tvBroadcast = (TextView) v.findViewById(R.id.tvBroadCast);
         tvNetIP = (TextView) v.findViewById(R.id.tvNetIP);
 
-        tvPrivateIP.setText(PrivateIP);
-        tvPrivateMAC.setText(PrivateMAC);
+        String CURRENT_NET = myprefs.getString("CURRENT_NET_KEY", "");
+
+
+            if (!CURRENT_NET.equals("")) {
+            Log.d("SDFJLASKDGQ", "sdkgjapgdiujdsf");
+
+
+            Gson gson = new Gson();
+            mynet = gson.fromJson(CURRENT_NET, Network.class);
+
+            //region FILL UI
+            if (mynet.getState()) { tvConnectionStatus.setText("Connected."); }
+            else { tvConnectionStatus.setText("Disconnected"); }
+
+            tvSSID.setText(mynet.getSSID());
+            tvBroadcast.setText(mynet.getBroadcast());
+
+            if (mynet.getFrequency() == 0) { tvFrequency.setText("----"); }
+            else { tvFrequency.setText(String.valueOf(mynet.getFrequency())); }
+
+            tvBSSID.setText(mynet.getBSSID());
+
+            tvNetIP.setText(mynet.getNetIP());
+
+            if (mynet.getNetMask() == 0)  { tvNetMask.setText("----"); }
+            else { tvNetMask.setText(String.valueOf(mynet.getNetMask())); }
+
+            if (mynet.getSignal() == 0) { tvSignal.setText("----"); }
+            else { tvSignal.setText(String.valueOf(mynet.getSignal())); }
+            //endregion
+        }
     }
 
-    //region INET-STUFF
-
-    //gets ipv6
-    public String getLocalIpAddress()
-    {
-        try
-        {
-            for (Enumeration<NetworkInterface> en = NetworkInterface.getNetworkInterfaces(); en.hasMoreElements();)
-            {
-                NetworkInterface intf = en.nextElement();
-
-
-                for (Enumeration<InetAddress> enumIpAddr = intf.getInetAddresses(); enumIpAddr.hasMoreElements();)
-                {
-                    InetAddress inetAddress = enumIpAddr.nextElement();
-                    if (!inetAddress.isLoopbackAddress())
-                    {
-                        return inetAddress.getHostAddress().toString();
-
-                    }
-                }
-            }
-        }
-        catch (SocketException ex)
-        {
-            Log.e("SRM", ex.toString());
-        }
-        return null;
-    }
-    //endregion
 }

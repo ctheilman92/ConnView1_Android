@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.os.Parcelable;
 import android.os.StrictMode;
 import android.preference.PreferenceManager;
+import android.support.design.widget.BaseTransientBottomBar;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
@@ -32,7 +33,12 @@ import java.io.Serializable;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
+import java.text.ParseException;
+import java.util.Date;
 import java.util.Enumeration;
+import java.util.List;
+
+import javax.xml.datatype.Duration;
 
 
 public class IPInfoFragment extends Fragment implements Serializable, myResultReceiver.Receiver  {
@@ -104,9 +110,6 @@ public class IPInfoFragment extends Fragment implements Serializable, myResultRe
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-//        if (container == null) {
-//            return null;
-//        }
 
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_ipinfo, container, false);
@@ -199,7 +202,7 @@ public class IPInfoFragment extends Fragment implements Serializable, myResultRe
 
         //region DATABASE WORK
         //confusing naming conventions but whatever, It's crunch time.
-        personalNet = new MyNet(currentUser.getName(), mynet.getSSID(), mynet.getBSSID(), mynet.getSignal(), mynet.getFrequency(), mynet.getNetIP(), mynet.getBroadcast(), mynet.getNetMask());
+        personalNet = new MyNet(mynet.getLastConnectedDate(), mynet.getState(),currentUser.getName(), mynet.getSSID(), mynet.getBSSID(), mynet.getSignal(), mynet.getFrequency(), mynet.getNetIP(), mynet.getBroadcast(), mynet.getNetMask());
 
         new Thread(new Runnable() {
             @Override
@@ -209,10 +212,43 @@ public class IPInfoFragment extends Fragment implements Serializable, myResultRe
                 //if returns true, a record exists - so just update teh times connected counter
                 if (dbhelper.checkNetworkHistory(currentUser.getName(), mynet.getSSID())) {
                     Log.d("DB_IPINFO_OP", "updating user history record for this network");
-                    dbhelper.updateNetCounter(personalNet);
+
+                    //if personalNet.lastConnected is within an hour of the saved connection. do nothing.
+                    //otherwise, update times connected counter.
+                    try {
+
+                        //if connection is established
+                        Log.d("ISUP_PERSONALNET", String.valueOf(personalNet.getState()));
+                        if (personalNet.getState()) {
+                            MyNet tempnet = dbhelper.getuserNetwork(currentUser.getName(), mynet.getSSID());
+
+                            Date checkDate = tempnet.getLastConnectedDate();
+                            Date myNetDate = personalNet.getLastConnectedDate();
+
+                            long diff = checkDate.getTime() - myNetDate.getTime();
+                            long seconds = diff / 1000;
+                            long minutes = seconds / 60;
+                            long hours = minutes / 60;
+                            long days = hours / 24;
+
+                            Log.d("DB_INFO_OP_TIMESTAMP", "difference in hours: " + hours);
+                            if (hours >= 1) {
+                                try {
+                                    dbhelper.updateNetCounter(personalNet);
+                                } catch (ParseException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                            else
+                                return;
+                        }
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
                 }
                 else {
                     Log.d("DB_IPINFO_OP", "adding new network to user history");
+                    personalNet.setLastConnected(new Date());
                     dbhelper.addUserNetwork(personalNet);
                 }
 
@@ -263,36 +299,31 @@ public class IPInfoFragment extends Fragment implements Serializable, myResultRe
         tvNetIP = (TextView) v.findViewById(R.id.tvNetIP);
 
         String CURRENT_NET = myprefs.getString("CURRENT_NET_KEY", "");
+        if (!CURRENT_NET.equals("")) {
 
+        Gson gson = new Gson();
+        mynet = gson.fromJson(CURRENT_NET, Network.class);
 
-            if (!CURRENT_NET.equals("")) {
-            Log.d("SDFJLASKDGQ", "sdkgjapgdiujdsf");
+        //region FILL UI
+        if (mynet.getState()) { tvConnectionStatus.setText("Connected."); }
+        else { tvConnectionStatus.setText("Disconnected"); }
 
+        tvSSID.setText(mynet.getSSID());
+        tvBroadcast.setText(mynet.getBroadcast());
 
-            Gson gson = new Gson();
-            mynet = gson.fromJson(CURRENT_NET, Network.class);
+        if (mynet.getFrequency() == 0) { tvFrequency.setText("----"); }
+        else { tvFrequency.setText(String.valueOf(mynet.getFrequency())); }
 
-            //region FILL UI
-            if (mynet.getState()) { tvConnectionStatus.setText("Connected."); }
-            else { tvConnectionStatus.setText("Disconnected"); }
+        tvBSSID.setText(mynet.getBSSID());
 
-            tvSSID.setText(mynet.getSSID());
-            tvBroadcast.setText(mynet.getBroadcast());
+        tvNetIP.setText(mynet.getNetIP());
 
-            if (mynet.getFrequency() == 0) { tvFrequency.setText("----"); }
-            else { tvFrequency.setText(String.valueOf(mynet.getFrequency())); }
+        if (mynet.getNetMask() == 0)  { tvNetMask.setText("----"); }
+        else { tvNetMask.setText(String.valueOf(mynet.getNetMask())); }
 
-            tvBSSID.setText(mynet.getBSSID());
-
-            tvNetIP.setText(mynet.getNetIP());
-
-            if (mynet.getNetMask() == 0)  { tvNetMask.setText("----"); }
-            else { tvNetMask.setText(String.valueOf(mynet.getNetMask())); }
-
-            if (mynet.getSignal() == 0) { tvSignal.setText("----"); }
-            else { tvSignal.setText(String.valueOf(mynet.getSignal())); }
-            //endregion
+        if (mynet.getSignal() == 0) { tvSignal.setText("----"); }
+        else { tvSignal.setText(String.valueOf(mynet.getSignal())); }
+        //endregion
         }
     }
-
 }

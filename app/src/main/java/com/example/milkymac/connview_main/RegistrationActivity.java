@@ -182,22 +182,22 @@ public class RegistrationActivity extends AppCompatActivity {
     public void registerNewUser() {
         if (validateForm()) {
             try {
-                if (dbhelper.checkUserExistsEmail(etEmail.getText().toString())) {
+                if (dbhelper.checkUserExistsEmail(etEmail.getText().toString().toLowerCase())) {
                     Toast.makeText(context, "A user is already present in Database.", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 else {
                     try {
-                        newUser = new User(etName.getText().toString(), etEmail.getText().toString(), etPassword2.getText().toString());
+                        newUser = new User(etName.getText().toString(), etEmail.getText().toString().toLowerCase(), etPassword2.getText().toString());
                         dbhelper.addUser(newUser);
 
                         //come back and insert UID for user
                         List<User> tempList = dbhelper.listAllUsers();
                         if (!tempList.isEmpty()) {
                             for (User u : tempList) {
-                                if (u.getEmail() == newUser.getEmail()) {
+                                if (u.getEmail().toLowerCase().equals(newUser.getEmail().toLowerCase())) {
                                     newUser.setUID(u.getUID());
-                                    Toast.makeText(context, "Welecome: " + u.getEmail(), Toast.LENGTH_LONG).show();
+                                    Toast.makeText(context, "Welecome: " + u.getName(), Toast.LENGTH_LONG).show();
                                 }
                             }
                         }

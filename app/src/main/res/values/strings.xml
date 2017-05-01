@@ -62,6 +62,8 @@
     <string name="labelBroadCast">Bcast:    </string>
     <string name="labelBSSID">BSSID:    </string>
     <string name="labelNetIP">Net Address:</string>
+    <string name="profileFaveNetwork">Top Network:</string>
+    <string name="profileRecentNetworks">Recent Networks</string>
 
 
 </resources>

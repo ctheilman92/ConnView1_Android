@@ -29,6 +29,23 @@ public class Network {
 
     }
 
+
+    //this used for myNet to copy lastConnected date from object to object (persistence)
+    public Network(Date date, Boolean isup, String ssid, String bssid, int signal, int frequency, String netip, String broadcast, short netmask) {
+        Frequency = frequency;
+        BSSID = bssid;
+        SSID = ssid;
+        NetIP = netip;
+        NetMask = netmask;
+        Broadcast = broadcast;
+        Signal = signal;
+
+        //excluded from params
+        isUP = isup;
+        lastConnected = date;
+    }
+
+
     public Network(String ssid, String bssid, int signal, int frequency, String netip, String broadcast, short netmask) {
         Frequency = frequency;
         BSSID = bssid;
@@ -57,7 +74,7 @@ public class Network {
         else isUP = true;
     }
 
-    public void setLastConnected() { Date date = new Date(); }
+    public void setLastConnected(Date date) { lastConnected = date; }
     public void setFrequency(int f) { Frequency = f; }
     public void setLinkSpeed(int speed) { LinkSpeed = speed; }
     public void setBSSID(String bssid) { BSSID = bssid; }
@@ -69,6 +86,7 @@ public class Network {
     public void setState(boolean isup) { isUP = isup; }
 
 
+    public Date getLastConnectedDate() { return lastConnected; }
     public String getLastConnected() { return sdf.format(lastConnected); }
     public int getLinkSpeed() { return LinkSpeed; }
     public String getBSSID() { return BSSID; }

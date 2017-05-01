@@ -4,8 +4,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.support.annotation.RequiresApi;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -52,6 +54,7 @@ public class MainActivity extends AppCompatActivity
     };
 
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -78,6 +81,7 @@ public class MainActivity extends AppCompatActivity
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
+        tabLayout.setSelectedTabIndicatorColor(getResources().getColor(R.color.colorPrimary, null));
         tabLayout.setupWithViewPager(mViewPager);
     }
     
@@ -105,6 +109,7 @@ public class MainActivity extends AppCompatActivity
         if (id == R.id.action_settings) {
             //clear shared-preferences
             editor.clear();
+            editor.commit();
             Intent logoutIntent = new Intent(MainActivity.this, LoginActivity.class);
             finish();
             startActivity(logoutIntent);

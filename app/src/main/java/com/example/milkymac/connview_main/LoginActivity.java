@@ -198,6 +198,8 @@ public class LoginActivity extends AppCompatActivity {
                     editor.putString("USERNAME_KEY", CurrentUser.getName());
                     editor.putString("USERPASS_KEY", CurrentUser.getPassword());
                     editor.commit();
+
+                    Toast.makeText(context, "Welecome: " + u.getName(), Toast.LENGTH_LONG).show();
                 }
             }
             if (CurrentUser != null)

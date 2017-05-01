@@ -12,13 +12,21 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import android.widget.ListView;
 import android.widget.TextView;
+
+import com.example.milkymac.connview_main.helpers.DatabaseHelper;
+import com.example.milkymac.connview_main.models.MyNet;
+import com.example.milkymac.connview_main.models.User;
+
+import org.w3c.dom.Text;
 
 import java.io.Serializable;
 
@@ -71,6 +79,7 @@ public class ProfileActivity extends AppCompatActivity {
         if (id == R.id.action_settings) {
             //clear shared-preferences
             editor.clear();
+            editor.commit();
             Intent logoutIntent = new Intent(ProfileActivity.this, LoginActivity.class);
             finish();
             startActivity(logoutIntent);
@@ -87,21 +96,54 @@ public class ProfileActivity extends AppCompatActivity {
      **/
 
     public static class ProfileMainFragment extends Fragment {
-        /**
-         * The fragment argument representing the section number for this
-         * fragment.
-         */
+
+
+        //region UI VARS
+        public TextView profileEmail;
+        public TextView topNetwork;
+        public ListView lvRecentNetworks;
+        //endregion
+
+
         private static final String ARG_SECTION_NUMBER = "section_number";
+        public final String PREFS_NAME = "userPrefs";
+        SharedPreferences myprefs;
+        SharedPreferences.Editor editor;
+
+        DatabaseHelper dbhelper;
+
+        MyNet TopNetwork;
+        public User currentUser;
 
         public ProfileMainFragment() {
         }
 
 
         @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {
+        public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_profile, container, false);
+
+
+            myprefs = getActivity().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+            currentUser = new User(myprefs.getString("USERNAME_KEY", "---"), myprefs.getString("EMAIL_KEY", "---"), myprefs.getString("USERPASS_KEY", "---"));
+            initVars(rootView);
+
             return rootView;
+        }
+
+        private void initVars(View v) {
+            profileEmail = (TextView) v.findViewById(R.id.profileEmail);
+            topNetwork = (TextView) v.findViewById(R.id.tvTopNet);
+            lvRecentNetworks = (ListView) v.findViewById(R.id.lvRecentNet);
+
+            profileEmail.setText(currentUser.getEmail());
+        }
+
+
+        public void getTopNetwork() {
+            dbhelper = new DatabaseHelper(getActivity().getApplicationContext());
+
+
         }
 
 
@@ -117,11 +159,19 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
 
+
+
+
+
+
+
+
     public static class ConfigsFragment extends Fragment {
-        /**
-         * The fragment argument representing the section number for this
-         * fragment.
-         */
+
+        public final String PREFS_NAME = "userPrefs";
+        SharedPreferences prefs;
+        SharedPreferences.Editor editor;
+
         private static final String ARG_SECTION_NUMBER = "section_number";
 
 
@@ -130,8 +180,7 @@ public class ProfileActivity extends AppCompatActivity {
 
 
         @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {
+        public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_configs, container, false);
             return rootView;
         }
@@ -157,6 +206,8 @@ public class ProfileActivity extends AppCompatActivity {
      * one of the sections/tabs/pages.
      */
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
+
+
 
         public SectionsPagerAdapter(FragmentManager fm) {
             super(fm);

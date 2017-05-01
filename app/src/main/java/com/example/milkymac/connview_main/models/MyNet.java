@@ -13,6 +13,20 @@ public class MyNet extends Network{
     public int TimesConnected;
 
 
+    //this used for myNet to copy lastConnected date from object to object (persistence)
+    public MyNet(Date date, Boolean isup, String un, String ssid, String bssid, int signal, int frequency, String netip, String broadcast, short netmask) {
+        UserName = un;
+        Frequency = frequency;
+        isUP = isup;
+        BSSID = bssid;
+        SSID = ssid;
+        NetIP = netip;
+        NetMask = netmask;
+        Broadcast = broadcast;
+        Signal = signal;
+        lastConnected = date;
+    }
+
     public MyNet(String un, String ssid, String bssid, int signal, int frequency, String netip, String broadcast, short netmask) {
         UserName = un;
         Frequency = frequency;

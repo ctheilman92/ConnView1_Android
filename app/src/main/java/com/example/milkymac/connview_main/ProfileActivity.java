@@ -29,6 +29,8 @@ import com.example.milkymac.connview_main.models.User;
 import org.w3c.dom.Text;
 
 import java.io.Serializable;
+import java.text.ParseException;
+import java.util.List;
 
 public class ProfileActivity extends AppCompatActivity {
 
@@ -128,6 +130,13 @@ public class ProfileActivity extends AppCompatActivity {
             currentUser = new User(myprefs.getString("USERNAME_KEY", "---"), myprefs.getString("EMAIL_KEY", "---"), myprefs.getString("USERPASS_KEY", "---"));
             initVars(rootView);
 
+            try {
+                getTopNetwork();
+            }
+            catch (ParseException e) {
+                e.printStackTrace();
+            }
+
             return rootView;
         }
 
@@ -140,10 +149,24 @@ public class ProfileActivity extends AppCompatActivity {
         }
 
 
-        public void getTopNetwork() {
+        public void getTopNetwork() throws ParseException {
             dbhelper = new DatabaseHelper(getActivity().getApplicationContext());
 
+            List<MyNet> userNetworks = dbhelper.listUserNetworks(currentUser.getName());
 
+            MyNet favoriteNet = userNetworks.get(0);
+            int topCount = userNetworks.get(0).getTimesConnected();
+
+            for (MyNet mn : userNetworks) {
+                if (mn.getTimesConnected() > topCount) {
+                    favoriteNet = mn;
+                    topCount = mn.getTimesConnected();
+                }
+                Log.d("TRAVERSE_USER_NETS", "top Network is: " + mn.getSSID());
+            }
+
+            Log.d("USER_FAVE_NET", "top Network is: " + favoriteNet.getSSID());
+            topNetwork.setText(favoriteNet.getSSID());
         }
 
 

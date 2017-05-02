@@ -158,20 +158,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 
     public List<MyNet> listUserNetworks(String un) throws ParseException {
-        String[] cols = {
-                COLUMN_NETWORKS_ID,
-                COLUMN_NETWORKS_COUNTER,
-                COLUMN_NETWORKS_USER,
-                COLUMN_NETWORKS_ADDRESS,
-                COLUMN_NETWORKS_USER,
-                COLUMN_NETWORKS_LASTCONNECTED
-        };
 
-        List<MyNet> netList = new ArrayList<MyNet>();
+
+        List<MyNet> netList = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
 
         //specify where clause for specific USER ID
-        Cursor cursor = db.query(DATABASE_TABLE_NETWORKS, cols, COLUMN_NETWORKS_USER + "= ?", null, null, null, null);
+        Cursor cursor = db.query(DATABASE_TABLE_NETWORKS, null, COLUMN_NETWORKS_USER + "= ?", new String[] {un}, null, null, null);
 
         if (cursor.moveToFirst()) {
             do {
@@ -181,11 +174,26 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 mynet.setUserName(cursor.getString(cursor.getColumnIndex(COLUMN_NETWORKS_USER)));
                 mynet.setNetIP(cursor.getString(cursor.getColumnIndex(COLUMN_NETWORKS_ADDRESS)));
                 mynet.setLastConnected(new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").parse(cursor.getString(cursor.getColumnIndex(COLUMN_NETWORKS_LASTCONNECTED))));
-                netList.add(mynet);
+
+                if (!mynet.getSSID().equals("----")) { netList.add(mynet); }
+//                Log.d("DB_HELPER_USERNETLIST", "adding " + mynet.getSSID());
             } while (cursor.moveToNext());
         }
 
         return netList;
+    }
+
+    /*INCOMPLETE*/
+    public List<MyNet> listMostRecentNetworks(String un) throws ParseException {
+        SQLiteDatabase db = this.getReadableDatabase();
+        List<MyNet> allUserNetworks = listUserNetworks(un);
+        List<MyNet> recentNetworks = new ArrayList<>();
+
+        for(MyNet mn : allUserNetworks) {
+
+        }
+
+        return recentNetworks;
     }
 
     public List<MyNet> listAllSavedNetworks() {

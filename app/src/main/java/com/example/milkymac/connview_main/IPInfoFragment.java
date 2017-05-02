@@ -218,7 +218,6 @@ public class IPInfoFragment extends Fragment implements Serializable, myResultRe
                     try {
 
                         //if connection is established
-                        Log.d("ISUP_PERSONALNET", String.valueOf(personalNet.getState()));
                         if (personalNet.getState()) {
                             MyNet tempnet = dbhelper.getuserNetwork(currentUser.getName(), mynet.getSSID());
 

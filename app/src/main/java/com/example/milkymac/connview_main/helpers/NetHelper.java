@@ -152,7 +152,6 @@ public class NetHelper extends IntentService{
 //                String hostname= Address.getHostName(InetAddress.getByName(testIP));
 
                 if (isReachable && !testIP.equals(MYNET_IP)) {
-//                    String hostname = getHostByIP(testIP);
                     Log.d(TAG, "HOST: " + String.valueOf(hostname) + "(" + String.valueOf(testIP) + ") - STATUS: UP");
                     String mac = getMacFromArpCache(testIP);
                     Log.d(TAG, "MAC_ADDRESS: " + mac);

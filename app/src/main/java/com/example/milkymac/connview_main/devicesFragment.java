@@ -26,6 +26,8 @@ public class devicesFragment extends Fragment implements myResultReceiver.Receiv
     Context context;
     MydevicesRecyclerViewAdapter mydevAdapter;
 
+    Intent serviceIntent;
+
     private static ArrayList<Devices> devlist;
     SharedPreferences netprefs;
 
@@ -65,8 +67,8 @@ public class devicesFragment extends Fragment implements myResultReceiver.Receiv
 
 
         devlist = new ArrayList<>();
+        //example device.
         devlist.add(new Devices("TEST_DEVICE", true, "192.168.100.199", "00:00:00:00:00:00", true, "MOBILE", "meeseeks box"));
-        devlist.add(new Devices("TEST_DEVICE2", true, "74.16.248.777", "11:11:11:11:11:11", true, "DESKTOP", "meeseeks box"));
 
 
         launchNetworkSniffer(0);
@@ -91,7 +93,7 @@ public class devicesFragment extends Fragment implements myResultReceiver.Receiv
     //NetHelper intent service class startup
     //discover network info, and get a list of devices
     public void launchNetworkSniffer(int opr) {
-        Intent serviceIntent = new Intent(getActivity(), NetHelper.class);
+        serviceIntent = new Intent(getActivity(), NetHelper.class);
 
         //setup resultReceiver for service callbacks
         mReceiver = new myResultReceiver(new android.os.Handler());
@@ -114,6 +116,7 @@ public class devicesFragment extends Fragment implements myResultReceiver.Receiv
     public void onPause() {
         super.onPause();
         mReceiver.setReceiver(null);
+        getActivity().stopService(new Intent(getActivity(), NetHelper.class));
     }
 
 

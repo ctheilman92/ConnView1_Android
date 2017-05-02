@@ -34,24 +34,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 
-/*
-*
-*   (TLD) - TOP LEVEL DOMAINS
-*           -> COME IN A VARIETY OF TYPES. HENCE THE NEED FOR DIFFERENT WHOIS SERVERS
-*
-*           TODO: parse online xml url consisting of list of ALL whois servers
-*           TODO: include Information links for commonly used servers in list (redirect to info pages)
-*
-*           internic.net -> DEFAULT WHOIS SERVER
-*           afilias.info (.info, .lgbt, .vote, .pro ETC) -> https://afilias.info/about-us
-*           iana.org -> https://www.iana.org/domains
-*           enom.com -> https://www.enom.com/whois/default.aspx
-*           educause.net -> https://net.educause.edu/edudomain/index.asp
-*
-*
-*
-*
- */
 
 public class WhoisActivity extends AppCompatActivity {
 

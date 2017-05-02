@@ -68,7 +68,7 @@ public class devicesFragment extends Fragment implements myResultReceiver.Receiv
 
         devlist = new ArrayList<>();
         //example device.
-        devlist.add(new Devices("TEST_DEVICE", true, "192.168.100.199", "00:00:00:00:00:00", true, "MOBILE", "meeseeks box"));
+        //devlist.add(new Devices("TEST_DEVICE", true, "192.168.100.199", "00:00:00:00:00:00", true, "MOBILE", "meeseeks box"));
 
 
         launchNetworkSniffer(0);

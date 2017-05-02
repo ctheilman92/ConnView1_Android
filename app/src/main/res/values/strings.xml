@@ -64,6 +64,8 @@
     <string name="labelNetIP">Net Address:</string>
     <string name="profileFaveNetwork">Top Network:</string>
     <string name="profileRecentNetworks">Recent Networks</string>
+    <string name="profileConfigsList">Empty...</string>
+    <string name="comingSoon">Feature Comming soon....sit tight.</string>
 
 
 </resources>

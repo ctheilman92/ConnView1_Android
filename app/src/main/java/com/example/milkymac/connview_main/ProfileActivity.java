@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.net.Uri;
 import android.provider.ContactsContract;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -21,6 +22,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import android.widget.ArrayAdapter;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -219,6 +221,8 @@ public class ProfileActivity extends AppCompatActivity {
         SharedPreferences prefs;
         SharedPreferences.Editor editor;
 
+        ImageButton easterEgg;
+
         private static final String ARG_SECTION_NUMBER = "section_number";
 
 
@@ -229,9 +233,23 @@ public class ProfileActivity extends AppCompatActivity {
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_configs, container, false);
+
+            easterEgg = (ImageButton) rootView.findViewById(R.id.btnPuppies);
+            easterEgg.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    gotoSanger();
+                }
+            });
             return rootView;
         }
 
+
+        public void gotoSanger() {
+            Uri uriUrl = Uri.parse("http://asciimation.co.nz/#");
+            Intent launchBrowser = new Intent(Intent.ACTION_VIEW, uriUrl);
+            startActivity(launchBrowser);
+        }
 
         @Override
         public void onAttach(Context context) {

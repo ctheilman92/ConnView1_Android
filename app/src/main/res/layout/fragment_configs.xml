@@ -3,75 +3,32 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/backgroundContent"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:layout_gravity="center"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:weightSum="1">
 
-        <ScrollView
-            android:layout_width="match_parent"
+        <ImageButton
+            android:id="@+id/btnPuppies"
+            style="@style/Widget.AppCompat.ImageButton"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="12dp"
-            android:layout_marginRight="12dp"
-            android:layout_marginTop="20dp"
-            android:layout_centerHorizontal="true">
+            android:adjustViewBounds="false"
+            android:backgroundTint="@color/backgroundContent"
+            android:cropToPadding="false"
+            android:elevation="7dp"
+            android:scaleType="centerCrop"
+            android:src="@mipmap/oni_trycon" />
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical">
-
-                        <android.support.v7.widget.CardView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            app:cardBackgroundColor="@color/cardContent"
-                            app:cardCornerRadius="@dimen/appbar_padding_top">
-
-
-                                <LinearLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="match_parent"
-                                    android:layout_margin="11dp"
-                                    android:gravity="center"
-                                    android:layout_gravity="center"
-                                    android:orientation="vertical">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:textColor="@color/textContent"
+            android:text="@string/comingSoon"
+            android:textSize="18dp"
+            android:textStyle="bold|italic"/>
 
 
-                                        <TextView
-                                            android:id="@+id/profileEmail"
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            android:text="Root@root.com"
-                                            android:textAppearance="@style/TextAppearance.AppCompat.Display1"
-                                            android:textColor="@color/textContent"
-                                            android:textSize="30sp"
-                                            android:textStyle="bold" />
-
-
-                                        <TextView
-                                            android:id="@+id/lblisConnected"
-                                            android:layout_marginStart="5dp"
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            android:gravity="center"
-                                            android:text="@string/txtIsConnected"
-                                            android:textAppearance="@style/TextAppearance.AppCompat.Display1"
-                                            android:textColor="@color/textContent"
-                                            android:textSize="20sp"
-                                            android:typeface="normal" />
-
-                                </LinearLayout>
-                        </android.support.v7.widget.CardView>
-
-                        <android.support.v7.widget.CardView
-                            android:layout_width="match_parent"
-                            android:layout_marginTop="16dp"
-                            android:layout_height="wrap_content"
-                            app:cardBackgroundColor="@color/cardContent"
-                            app:cardCornerRadius="@dimen/appbar_padding_top">
-
-
-                        </android.support.v7.widget.CardView>
-
-                </LinearLayout>
-
-
-        </ScrollView>
 </LinearLayout>

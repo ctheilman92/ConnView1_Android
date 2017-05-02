@@ -82,8 +82,8 @@
 
                 <android.support.v7.widget.CardView
                     android:layout_width="match_parent"
-                    android:layout_marginTop="16dp"
-                    android:layout_height="185dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_height="190dp"
                     app:cardBackgroundColor="@color/cardContent"
                     app:cardCornerRadius="@dimen/appbar_padding_top">
 
@@ -100,7 +100,7 @@
                             android:id="@+id/lblProfileRecentNetworks"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginBottom="12dp"
+                            android:layout_marginBottom="20dp"
                             android:text="@string/profileRecentNetworks"
                             android:textAppearance="@style/TextAppearance.AppCompat.Display1"
                             android:textColor="@color/textContent"
@@ -119,49 +119,7 @@
                     </LinearLayout>
                 </android.support.v7.widget.CardView>
 
-                <android.support.v7.widget.CardView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    app:cardBackgroundColor="@color/cardContent"
-                    app:cardCornerRadius="@dimen/appbar_padding_top">
 
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="center"
-                        android:layout_margin="11dp"
-                        android:gravity="center"
-                        android:orientation="vertical">
-
-
-                        <TextView
-                            android:id="@+id/profileConfigs"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Saved Configurations"
-                            android:textAppearance="@style/TextAppearance.AppCompat.Display1"
-                            android:textColor="@color/textContent"
-                            android:textSize="22sp"
-                            android:textStyle="bold" />
-
-
-                        <TextView
-                            android:id="@+id/tvConfigs"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="10dp"
-                            android:gravity="center"
-                            android:text="@string/profileConfigsList"
-                            android:textAppearance="@style/TextAppearance.AppCompat.Display1"
-                            android:textColor="@color/textContent"
-                            android:textSize="22sp"
-                            android:textStyle="bold"
-                            android:typeface="normal" />
-
-                    </LinearLayout>
-                </android.support.v7.widget.CardView>
 
 
             </LinearLayout>

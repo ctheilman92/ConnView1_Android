@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.os.Build;
 import android.util.Log;
 
 import com.example.milkymac.connview_main.models.MyNet;
@@ -14,6 +15,8 @@ import com.example.milkymac.connview_main.models.User;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -176,7 +179,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 mynet.setLastConnected(new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").parse(cursor.getString(cursor.getColumnIndex(COLUMN_NETWORKS_LASTCONNECTED))));
 
                 if (!mynet.getSSID().equals("----")) { netList.add(mynet); }
-//                Log.d("DB_HELPER_USERNETLIST", "adding " + mynet.getSSID());
             } while (cursor.moveToNext());
         }
 
@@ -187,13 +189,17 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public List<MyNet> listMostRecentNetworks(String un) throws ParseException {
         SQLiteDatabase db = this.getReadableDatabase();
         List<MyNet> allUserNetworks = listUserNetworks(un);
-        List<MyNet> recentNetworks = new ArrayList<>();
 
-        for(MyNet mn : allUserNetworks) {
+            Collections.sort(allUserNetworks, new Comparator<MyNet>() {
+                @Override
+                public int compare(MyNet o1, MyNet o2) {
+                    return (o1.getLastConnectedDate().compareTo(o2.getLastConnectedDate()) > 0) ? -1 : 1;
+                }
+            });
 
-        }
 
-        return recentNetworks;
+        if (allUserNetworks.size() < 3) { return allUserNetworks.subList(0, (allUserNetworks.size())); }
+        else { return allUserNetworks.subList(0, 3); }
     }
 
     public List<MyNet> listAllSavedNetworks() {

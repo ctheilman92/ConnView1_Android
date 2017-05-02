@@ -203,7 +203,6 @@ public class IPInfoFragment extends Fragment implements Serializable, myResultRe
         //region DATABASE WORK
         //confusing naming conventions but whatever, It's crunch time.
         personalNet = new MyNet(mynet.getLastConnectedDate(), mynet.getState(),currentUser.getName(), mynet.getSSID(), mynet.getBSSID(), mynet.getSignal(), mynet.getFrequency(), mynet.getNetIP(), mynet.getBroadcast(), mynet.getNetMask());
-
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -224,6 +223,7 @@ public class IPInfoFragment extends Fragment implements Serializable, myResultRe
                             Date checkDate = tempnet.getLastConnectedDate();
                             Date myNetDate = personalNet.getLastConnectedDate();
 
+
                             long diff = checkDate.getTime() - myNetDate.getTime();
                             long seconds = diff / 1000;
                             long minutes = seconds / 60;
@@ -231,8 +231,9 @@ public class IPInfoFragment extends Fragment implements Serializable, myResultRe
                             long days = hours / 24;
 
                             Log.d("DB_INFO_OP_TIMESTAMP", "difference in hours: " + hours);
-                            if (hours >= 1) {
+                            if (hours <= -1) {
                                 try {
+                                    Log.d("UPDATING_COUNTER_NOW", "well...ya....");
                                     dbhelper.updateNetCounter(personalNet);
                                 } catch (ParseException e) {
                                     e.printStackTrace();

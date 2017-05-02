@@ -14,10 +14,13 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.stealthcopter.networktools.Ping;
+import com.stealthcopter.networktools.ping.PingNative;
 import com.stealthcopter.networktools.ping.PingResult;
 import com.stealthcopter.networktools.ping.PingStats;
+import com.stealthcopter.networktools.ping.PingTools;
 
 import java.lang.Object;
+import java.net.InetAddress;
 
 
 public class PingActivity extends AppCompatActivity {
@@ -100,6 +103,9 @@ public class PingActivity extends AppCompatActivity {
 
         //synchronous for first time
         PingResult pr = Ping.onAddress(host).setTimeOutMillis(1000).doPing();
+
+
+
 
         appendResults("pinging "+ pr.getAddress().getHostAddress());
         appendResults("Hostname: "+ pr.getAddress().getHostName());

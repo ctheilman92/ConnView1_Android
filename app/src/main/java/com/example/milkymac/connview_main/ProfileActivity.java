@@ -3,6 +3,7 @@ package com.example.milkymac.connview_main;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.provider.ContactsContract;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -19,6 +20,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -30,6 +32,7 @@ import org.w3c.dom.Text;
 
 import java.io.Serializable;
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ProfileActivity extends AppCompatActivity {
@@ -104,8 +107,13 @@ public class ProfileActivity extends AppCompatActivity {
         public TextView profileEmail;
         public TextView topNetwork;
         public ListView lvRecentNetworks;
+
+        TextView tryTv;
         //endregion
 
+        List<MyNet> recentNetworks;
+        List<String> netssids;
+        ArrayAdapter<String> recentNetworksAdapter;
 
         private static final String ARG_SECTION_NUMBER = "section_number";
         public final String PREFS_NAME = "userPrefs";
@@ -132,6 +140,7 @@ public class ProfileActivity extends AppCompatActivity {
 
             try {
                 getTopNetwork();
+                getRecentNetworks();
             }
             catch (ParseException e) {
                 e.printStackTrace();
@@ -145,7 +154,13 @@ public class ProfileActivity extends AppCompatActivity {
             topNetwork = (TextView) v.findViewById(R.id.tvTopNet);
             lvRecentNetworks = (ListView) v.findViewById(R.id.lvRecentNet);
 
+
             profileEmail.setText(currentUser.getEmail());
+
+            netssids = new ArrayList<>();
+            netssids.add("----");
+            recentNetworksAdapter = new ArrayAdapter<String>(getActivity(), R.layout.recentnetitems, netssids);
+            lvRecentNetworks.setAdapter(recentNetworksAdapter);
         }
 
 
@@ -161,14 +176,23 @@ public class ProfileActivity extends AppCompatActivity {
                 if (mn.getTimesConnected() > topCount) {
                     favoriteNet = mn;
                     topCount = mn.getTimesConnected();
+                    Log.d("TRAVERSE_USER_NETS", "new top Network is: " + mn.getSSID());
                 }
-                Log.d("TRAVERSE_USER_NETS", "top Network is: " + mn.getSSID());
             }
 
             Log.d("USER_FAVE_NET", "top Network is: " + favoriteNet.getSSID());
             topNetwork.setText(favoriteNet.getSSID());
         }
 
+
+        public void getRecentNetworks() throws ParseException {
+            dbhelper = new DatabaseHelper(getActivity().getApplicationContext());
+            if (netssids.get(0).equals("----")) { netssids.remove(0); }
+
+            recentNetworks = dbhelper.listMostRecentNetworks(currentUser.getName());
+            for (MyNet mn : recentNetworks) { Log.d("PROFILE_RECENT_NETS", mn.getSSID()); netssids.add(mn.getSSID()); }
+            recentNetworksAdapter.notifyDataSetChanged();
+        }
 
         @Override
         public void onAttach(Context context) {

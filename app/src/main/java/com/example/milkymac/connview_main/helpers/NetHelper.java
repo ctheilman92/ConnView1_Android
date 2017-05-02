@@ -17,8 +17,10 @@ import android.util.Log;
 import com.example.milkymac.connview_main.models.Devices;
 import com.example.milkymac.connview_main.models.Network;
 import com.google.gson.Gson;
+import com.stealthcopter.networktools.Ping;
+import com.stealthcopter.networktools.ping.PingResult;
+import com.stealthcopter.networktools.ping.PingTools;
 
-import org.xbill.DNS.Address;
 import org.xbill.DNS.ExtendedResolver;
 import org.xbill.DNS.Lookup;
 import org.xbill.DNS.Name;
@@ -32,6 +34,7 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.InterfaceAddress;
@@ -40,6 +43,7 @@ import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by milkymac on 4/8/17.
@@ -135,11 +139,12 @@ public class NetHelper extends IntentService{
 
 
 
-    public void netSniff() throws IOException {
+    public void netSniff() throws IOException, InterruptedException {
         Log.d(TAG, "begin sniffing network on network: "+ NET_IP);
         Log.d(TAG, "Active Network: " + String.valueOf(activeNetwork));
         Log.d(TAG, "IP_ADDR: " + String.valueOf(MYNET_IP));
 
+        Runtime runtime = Runtime.getRuntime();
 
         //if connected to wifi....
         if (!MYNET_IP.equals("0.0.0.0")) {
@@ -147,17 +152,44 @@ public class NetHelper extends IntentService{
             for (int i = 0; i < 255; i++) {
                 String testIP = IP_LASTOF_PREFIX + String.valueOf(i);
                 InetAddress getAddr = InetAddress.getByName(testIP);
-                boolean isReachable = getAddr.isReachable(1000);
+
+                PingResult pingResult = Ping.onAddress(testIP).setTimeOutMillis(1000).doPing();
+                boolean isReachable = pingResult.isReachable();
                 String hostname = getAddr.getCanonicalHostName();
+
+
+                /*TODO: GET ANDROID O ---> ANDROID STUDIO 2.4 PREVIEW (NOT MESSING WITH IT NOW)
+                    THIS ENABLES proc.waitFor(Long timeout, TimeUnit unit); override
+                    which means it won't take 10 seconds to ping every device once...
+                 */
+
+//                Process proc = runtime.exec("ping -c 1 " + testIP);
+//                proc.waitFor(1000L, TimeUnit.MILLISECONDS);
+//                int exit = proc.exitValue();
+//
+//                InputStreamReader reader = new InputStreamReader(proc.getInputStream());
+//                BufferedReader buffer = new BufferedReader(reader);
+//                String resulter = "";
+//                StringBuffer result = new StringBuffer();
+//                while ((resulter = buffer.readLine()) != null) {
+//                    result.append(resulter + "\n");
+//                }
+//
+//                Log.d("PROC_ECHO_PING_RESULT", result.toString());
+
+
 //                String hostname= Address.getHostName(InetAddress.getByName(testIP));
 
-                if (isReachable && !testIP.equals(MYNET_IP)) {
+                if (isReachable) {
                     Log.d(TAG, "HOST: " + String.valueOf(hostname) + "(" + String.valueOf(testIP) + ") - STATUS: UP");
                     String mac = getMacFromArpCache(testIP);
                     Log.d(TAG, "MAC_ADDRESS: " + mac);
 
+                    String platformType;
+                    platformType = (testIP.equals(MYNET_IP)) ? "MOBILE" : "DESKTOP";
+
                     boolean isv4 = (getAddr instanceof Inet4Address) ? true : false;
-                    Devices newd = new Devices(hostname, isv4, testIP, mac, true, "DESKTOP", getSSID());
+                    Devices newd = new Devices(hostname, isv4, testIP, mac, true, platformType, getSSID());
                     listDevices.add(newd);
                     Log.d("ADD_2DEVLIST", "adding" + hostname + " to devicesList");
 
@@ -269,6 +301,8 @@ public class NetHelper extends IntentService{
             } catch (IOException e) {
                 e.printStackTrace();
                 Log.d(TAG, e.toString());
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
         }
         else if (OPR == 1) {

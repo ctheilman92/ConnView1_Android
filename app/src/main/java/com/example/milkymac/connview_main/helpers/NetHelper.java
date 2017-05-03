@@ -79,6 +79,7 @@ public class NetHelper extends IntentService{
     private static String NET_IP;
     private static short NET_PREFIX;
     private static String MYNET_IP;
+    private static String MYNET_MAC;
     private static String IP_LASTOF_PREFIX;
     public static final String BUNDLE_RECEIVER = "receiver";
     public static final String BUNDLE_RECEIVER2 = "netreceiver";
@@ -144,10 +145,23 @@ public class NetHelper extends IntentService{
         Log.d(TAG, "Active Network: " + String.valueOf(activeNetwork));
         Log.d(TAG, "IP_ADDR: " + String.valueOf(MYNET_IP));
 
-        Runtime runtime = Runtime.getRuntime();
+//        Runtime runtime = Runtime.getRuntime();
 
         //if connected to wifi....
         if (!MYNET_IP.equals("0.0.0.0")) {
+
+            InetAddress getmyAddr = InetAddress.getByName(MYNET_IP);
+            String myhostname = getmyAddr.getCanonicalHostName();
+            PingResult mypingResult = Ping.onAddress(MYNET_IP).setTimeOutMillis(1000).doPing();
+            Devices mydev = new Devices(myhostname, true, MYNET_IP, MYNET_MAC, true, "MOBILE", getSSID());
+
+            listDevices.add(mydev);
+            Log.d("ADD_2DEVLIST", "adding" + myhostname + " to devicesList");
+
+            String mydevjsonList = new Gson().toJson(mydev);
+            b.putString("DATA_", mydevjsonList);
+            receiver.send(0, b);
+
 
             for (int i = 0; i < 255; i++) {
                 String testIP = IP_LASTOF_PREFIX + String.valueOf(i);
@@ -158,29 +172,11 @@ public class NetHelper extends IntentService{
                 String hostname = getAddr.getCanonicalHostName();
 
 
-                /*TODO: GET ANDROID O ---> ANDROID STUDIO 2.4 PREVIEW (NOT MESSING WITH IT NOW)
-                    THIS ENABLES proc.waitFor(Long timeout, TimeUnit unit); override
-                    which means it won't take 10 seconds to ping every device once...
-                 */
-
-//                Process proc = runtime.exec("ping -c 1 " + testIP);
-//                proc.waitFor(1000L, TimeUnit.MILLISECONDS);
-//                int exit = proc.exitValue();
-//
-//                InputStreamReader reader = new InputStreamReader(proc.getInputStream());
-//                BufferedReader buffer = new BufferedReader(reader);
-//                String resulter = "";
-//                StringBuffer result = new StringBuffer();
-//                while ((resulter = buffer.readLine()) != null) {
-//                    result.append(resulter + "\n");
-//                }
-//
-//                Log.d("PROC_ECHO_PING_RESULT", result.toString());
 
 
 //                String hostname= Address.getHostName(InetAddress.getByName(testIP));
 
-                if (isReachable) {
+                if (isReachable && !testIP.equals(MYNET_IP)) {
                     Log.d(TAG, "HOST: " + String.valueOf(hostname) + "(" + String.valueOf(testIP) + ") - STATUS: UP");
                     String mac = getMacFromArpCache(testIP);
                     Log.d(TAG, "MAC_ADDRESS: " + mac);
@@ -198,6 +194,18 @@ public class NetHelper extends IntentService{
                     receiver.send(0, b);
                 }
             }
+        }
+        else {
+            InetAddress getmyAddr = InetAddress.getByName(MYNET_IP);
+            String myhostname = getmyAddr.getCanonicalHostName();
+            Devices mydev = new Devices("THIS DEVICE", true, MYNET_IP, MYNET_MAC, true, "MOBILE", "----");
+
+            listDevices.add(mydev);
+            Log.d("ADD_2DEVLIST", "adding" + myhostname + " to devicesList");
+
+            String mydevjsonList = new Gson().toJson(mydev);
+            b.putString("DATA_", mydevjsonList);
+            receiver.send(0, b);
         }
     }
 
@@ -282,6 +290,7 @@ public class NetHelper extends IntentService{
         connectionInfo = manager.getConnectionInfo();
 
         MYNET_IP = Formatter.formatIpAddress(connectionInfo.getIpAddress());
+        MYNET_MAC = connectionInfo.getMacAddress();
         IP_LASTOF_PREFIX = MYNET_IP.substring(0, MYNET_IP.lastIndexOf(".") + 1);
         //TODO: CORRECTLY JUSTIFY THIS (ONLY SUPPORTS /24 NETWORKS)
         NET_IP = IP_LASTOF_PREFIX + "0";

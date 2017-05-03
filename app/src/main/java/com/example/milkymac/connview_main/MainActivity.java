@@ -65,6 +65,8 @@ public class MainActivity extends AppCompatActivity
         myprefs = getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
         editor = myprefs.edit();
 
+
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 

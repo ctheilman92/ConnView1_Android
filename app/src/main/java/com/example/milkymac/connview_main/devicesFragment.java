@@ -16,6 +16,8 @@ import java.util.ArrayList;
 import com.example.milkymac.connview_main.helpers.NetHelper;
 import com.example.milkymac.connview_main.helpers.myResultReceiver;
 import com.example.milkymac.connview_main.models.Devices;
+import com.example.milkymac.connview_main.models.MyDevice;
+import com.example.milkymac.connview_main.models.Network;
 import com.google.gson.Gson;
 
 
@@ -30,6 +32,8 @@ public class devicesFragment extends Fragment implements myResultReceiver.Receiv
 
     private static ArrayList<Devices> devlist;
     SharedPreferences netprefs;
+    public final String PREFS_NAME = "userPrefs";
+
 
     // TODO: Customize parameter argument names
     private static final String ARG_COLUMN_COUNT = "column-count";
@@ -65,10 +69,11 @@ public class devicesFragment extends Fragment implements myResultReceiver.Receiv
         View view = inflater.inflate(R.layout.fragment_devices_list, container, false);
         ((MainActivity) getActivity()).setActionBarTitle("Net Scan");
 
-
+        netprefs = getActivity().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
         devlist = new ArrayList<>();
-        //example device.
-        //devlist.add(new Devices("TEST_DEVICE", true, "192.168.100.199", "00:00:00:00:00:00", true, "MOBILE", "meeseeks box"));
+
+
+
 
 
         launchNetworkSniffer(0);

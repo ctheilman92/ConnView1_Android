@@ -118,6 +118,7 @@ public class IPInfoFragment extends Fragment implements Serializable, myResultRe
 
         //keep track of current user
         myprefs = getActivity().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        editor = myprefs.edit();
         currentUser = new User(myprefs.getString("USERNAME_KEY", "---"), myprefs.getString("EMAIL_KEY", "---"), myprefs.getString("USERPASS_KEY", "---"));
 
 
@@ -183,6 +184,7 @@ public class IPInfoFragment extends Fragment implements Serializable, myResultRe
 
             tvPrivateIP.setText(mydev.getIp().toString());
             tvPrivateMAC.setText(mydev.getMac().toString());
+
         }
 
     }
